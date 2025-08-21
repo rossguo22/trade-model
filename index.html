@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitX 交易原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0a0b0d;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* 左側導航欄 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111218;
+            border-right: 1px solid #1f2937;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "⚡";
+            font-size: 1.2rem;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 0.875rem 1.5rem;
+            color: #9ca3af;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: #1f2937;
+            color: #ffffff;
+            border-left-color: #3b82f6;
+        }
+
+        .nav-item.active {
+            background: #1e40af;
+            color: #ffffff;
+            border-left-color: #3b82f6;
+        }
+
+        .nav-icon {
+            display: inline-block;
+            width: 20px;
+            margin-right: 0.75rem;
+        }
+
+        /* 主内容区域 */
+        .main-layout {
+            margin-left: 240px;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            max-width: calc(100vw - 240px - 320px);
+        }
+
+        .container {
+            max-width: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 右側交易欄 */
+        .trading-sidebar {
+            width: 320px;
+            background: #111218;
+            border-left: 1px solid #1f2937;
+            padding: 1.5rem;
+            overflow-y: auto;
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 50;
+        }
+
+        .trading-sidebar.hidden {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .trading-header {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #1f2937;
+            margin-bottom: 1.5rem;
+        }
+
+        .trading-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .trading-subtitle {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: 1px solid #3b82f6;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: #1f2937;
+            color: #d1d5db;
+            border: 1px solid #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #374151;
+            color: #ffffff;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: 1px solid #10b981;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: 1px solid #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid;
+        }
+
+        .btn-outline.btn-success {
+            border-color: #16a34a;
+            color: #16a34a;
+        }
+
+        .btn-outline.btn-success:hover {
+            background: rgba(22, 163, 74, 0.1);
+        }
+
+        .btn-outline.btn-danger {
+            border-color: #dc2626;
+            color: #dc2626;
+        }
+
+        .btn-outline.btn-danger:hover {
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        /* 页面切换 */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* 首頁瀑布流 */
+        .waterfall {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .topic-card {
+            background: #1a1b23;
+            border: 1px solid #2d3748;
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-4px);
+            border-color: #3b82f6;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .topic-progress {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #374151;
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .topic-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .topic-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        .topic-category {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .topic-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #2d3748;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* 創建話題頁面 */
+        .create-form {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #1a1b23;
+            border: 1px solid #2d3748;
+            border-radius: 16px;
+            padding: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #111218;
+            color: #ffffff;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: #1a1b23;
+        }
+
+        .form-input::placeholder {
+            color: #6b7280;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #3b82f6;
+        }
+
+        .pump-notice {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            color: #fbbf24;
+        }
+
+        .pump-notice strong {
+            color: #f59e0b;
+        }
+
+        .options-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .add-option {
+            color: #2563eb;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* 話題詳情頁面 */
+        .topic-detail-container {
+            background: #1a1b23;
+            border: 1px solid #2d3748;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .main-content {
+            width: 100%;
+        }
+
+        .topic-title {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .topic-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.875rem;
+            color: #9ca3af;
+            align-items: center;
+        }
+
+        /* 交易界面样式 */
+        .betting-interface {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .bet-option {
+            border: 2px solid #374151;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #111218;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bet-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .bet-option:hover {
+            transform: translateY(-2px);
+            border-color: #4b5563;
+        }
+
+        .bet-option.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .bet-option.yes {
+            border-color: #059669;
+        }
+
+        .bet-option.yes.selected {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .bet-option.yes::before {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent);
+        }
+
+        .bet-option.no {
+            border-color: #dc2626;
+        }
+
+        .bet-option.no.selected {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .bet-option.no::before {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), transparent);
+        }
+
+        .bet-option.selected::before {
+            opacity: 1;
+        }
+
+        .bet-label {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bet-option.yes .bet-label {
+            color: #10b981;
+        }
+
+        .bet-option.no .bet-label {
+            color: #ef4444;
+        }
+
+        .bet-amount {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .amount-input-group {
+            display: flex;
+            gap: 0.75rem;
+            margin: 2rem 0;
+        }
+
+        .amount-input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            background: #111218;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .amount-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .amount-input::placeholder {
+            color: #6b7280;
+        }
+
+        /* 右侧交易栏内容样式 */
+        .trading-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 3px;
+            height: 16px;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            border-radius: 2px;
+        }
+
+        .pool-info {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .pool-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .pool-row:last-child {
+            margin-bottom: 0;
+            font-weight: 700;
+            padding-top: 1rem;
+            border-top: 1px solid #374151;
+            font-size: 1rem;
+        }
+
+        .pool-label {
+            color: #9ca3af;
+        }
+
+        .pool-value {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .pool-row:last-child .pool-value {
+            color: #3b82f6;
+        }
+
+        .pump-progress {
+            margin: 1.5rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(55, 65, 81, 0.5);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #374151;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 0.75rem;
+            font-size: 0.875rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .progress-text strong {
+            color: #10b981;
+        }
+
+        /* LMSR價格卡片样式 */
+        .price-card {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .price-card.yes-price::before {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+
+        .price-card.no-price::before {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+
+        .price-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .yes-price .price-label {
+            color: #34d399;
+        }
+
+        .no-price .price-label {
+            color: #f87171;
+        }
+
+        .price-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .price-unit {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            opacity: 0.8;
+        }
+
+        /* LMSR交易按钮样式 */
+        .lmsr-buy-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lmsr-buy-btn small {
+            margin-top: 0.25rem;
+        }
+
+        .trading-form {
+            margin-top: 1rem;
+        }
+
+        /* 资金池分区样式 */
+        .pool-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .pool-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #374151;
+        }
+
+        .pool-section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .pool-section-badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .pool-section-badge:not(.outer) {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .pool-section-badge.outer {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .pool-section-badge.pumped {
+            background: rgba(245, 158, 11, 0.1);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-inner {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .status-outer {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-ended {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* 個人中心樣式 */
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #1a1b23;
+            border: 1px solid #2d3748;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card.positive .value {
+            color: #10b981;
+        }
+
+        .stat-card.primary .value {
+            color: #3b82f6;
+        }
+
+        /* 持仓和交易歷史样式 */
+        .position-item, .history-item {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .position-info, .history-info {
+            flex: 1;
+        }
+
+        .position-title, .history-title {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .position-details, .history-details {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .position-value, .history-value {
+            text-align: right;
+        }
+
+        .position-amount, .history-amount {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .position-amount.positive, .history-amount.positive {
+            color: #10b981;
+        }
+
+        .position-amount.negative, .history-amount.negative {
+            color: #ef4444;
+        }
+
+        .position-amount.neutral, .history-amount.neutral {
+            color: #60a5fa;
+        }
+
+        .position-status, .history-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+        }
+
+        .status-won {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+        }
+
+        .status-lost {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6b7280;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .main-layout {
+                margin-left: 0;
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                order: -1;
+                flex-direction: row;
+                border-right: none;
+                border-bottom: 1px solid #1f2937;
+            }
+            
+            .sidebar-nav {
+                display: flex;
+                flex-direction: row;
+                padding: 0;
+            }
+            
+            .nav-item {
+                flex: 1;
+                text-align: center;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+            }
+            
+            .nav-item.active,
+            .nav-item:hover {
+                border-left: none;
+                border-bottom-color: #3b82f6;
+            }
+            
+            .trading-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-top: 1px solid #1f2937;
+            }
+            
+            .content-area {
+                max-width: 100%;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .betting-interface {
+                grid-template-columns: 1fr;
+            }
+            
+            .waterfall {
+                grid-template-columns: 1fr;
+            }
+            
+            .topic-stats {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .amount-input-group {
+                flex-direction: column;
+            }
+            
+            .profile-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 左側導航欄 -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">BitX 交易原型</div>
+        </div>
+        <div class="sidebar-nav">
+            <a href="#" class="nav-item active" onclick="showPage('home')">
+                <span class="nav-icon">🏠</span>熱門話題
+            </a>
+            <a href="#" class="nav-item" onclick="showPage('inner')">
+                <span class="nav-icon">📊</span>內盤話題(演示)
+            </a>
+            <a href="#" class="nav-item" onclick="showPage('create')">
+                <span class="nav-icon">➕</span>創建話題
+            </a>
+            <a href="#" class="nav-item" onclick="showPage('profile')">
+                <span class="nav-icon">👤</span>個人中心
+            </a>
+        </div>
+    </nav>
+
+    <!-- 主布局容器 -->
+    <div class="main-layout">
+        <!-- 首頁/瀑布流 -->
+        <div id="home" class="page active">
+            <div class="content-area">
+                <h1 style="text-align: center; margin-bottom: 2rem; color: #ffffff; font-weight: 700; font-size: 2rem;">熱門話題</h1>
+                <div class="waterfall" id="topicWaterfall">
+                    <!-- 話題卡片將通過JavaScript動態生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 內盤話題頁面 -->
+        <div id="inner" class="page">
+            <div class="content-area">
+                <h1 style="text-align: center; margin-bottom: 2rem; color: #ffffff; font-weight: 700; font-size: 2rem;">內盤話題</h1>
+                <div class="waterfall" id="innerTopicWaterfall">
+                    <!-- 內盤話題卡片將通過JavaScript動態生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 創建話題頁面 -->
+        <div id="create" class="page">
+            <div class="content-area">
+                <div class="create-form">
+                    <h2 style="text-align: center; margin-bottom: 2rem; color: #ffffff; font-weight: 700; font-size: 1.75rem;">創建新話題</h2>
+                
+                <div class="pump-notice">
+                    <strong>Pump条件说明：</strong>当话题资金池达到1000 USDT时，将自动从内盘转换为外盤交易。
+                </div>
+
+                <form id="createTopicForm">
+                    <div class="form-group">
+                        <label class="form-label">話題內容 *</label>
+                        <textarea class="form-input form-textarea" name="content" placeholder="請輸入您要预测的話題內容..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">话题头像</label>
+                        <input type="file" class="form-input" name="avatar" accept="image/*">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">話題類別 *</label>
+                        <select class="form-input" name="category" required>
+                            <option value="">請選擇类别</option>
+                            <option value="sports">体育赛事</option>
+                            <option value="politics">政治选举</option>
+                            <option value="crypto">加密貨幣</option>
+                            <option value="economy">經濟预测</option>
+                            <option value="entertainment">娱乐八卦</option>
+                            <option value="technology">科技发展</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="isPrivate" name="isPrivate">
+                            <label for="isPrivate" class="form-label" style="margin-bottom: 0;">私密話題（不会出现在瀑布流中）</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">选项设置</label>
+                        <div class="options-container">
+                            <div>默认为YES/NO二元選擇</div>
+                            <div id="customOptions" style="margin-top: 1rem; display: none;">
+                                <div class="option-input">
+                                    <input type="text" class="form-input" placeholder="选项1">
+                                    <button type="button" class="btn btn-secondary" onclick="removeOption(this)">删除</button>
+                                </div>
+                            </div>
+                            <div class="add-option" onclick="toggleCustomOptions()">+ 添加自定义选项</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">交易結束時間 *</label>
+                        <input type="datetime-local" class="form-input" name="tradingEndTime" required>
+                        <small style="color: #6b7280; margin-top: 0.5rem; display: block;">在此时间内可以pump，可进入外盤交易</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">话题結束時間 *</label>
+                        <input type="datetime-local" class="form-input" name="topicEndTime" required>
+                        <small style="color: #6b7280; margin-top: 0.5rem; display: block;">话题结束后均不可交易，此时间需大于交易結束時間</small>
+                    </div>
+
+                                            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                            <button type="button" class="btn btn-secondary" onclick="showPage('home')">取消</button>
+                            <button type="submit" class="btn btn-primary">創建話題</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 話題詳情页面 -->
+        <div id="detail" class="page">
+            <div class="content-area">
+                <div class="topic-detail-container">
+                    <div class="topic-header">
+                        <div class="topic-avatar" id="detailAvatar">A</div>
+                        <div class="topic-info">
+                            <h1 class="topic-title" id="detailTitle">话题标题</h1>
+                            <div class="topic-meta">
+                                <span class="topic-category" id="detailCategory">类别</span>
+                                <span class="status-badge status-inner" id="detailStatus">內盤交易</span>
+                                <span id="detailEndTime">結束時間：2024-12-31 23:59</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; color: #9ca3af; line-height: 1.6;" id="detailDescription">
+                        这里显示话题的详细描述内容...
+                    </div>
+
+                    <!-- 资金池状态详情 -->
+                    <div style="margin-top: 2rem;" id="poolDetailsSection">
+                        <!-- 资金池信息将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 個人中心页面 -->
+        <div id="profile" class="page">
+            <div class="content-area">
+                <h1 style="text-align: center; margin-bottom: 2rem; color: #ffffff; font-weight: 700; font-size: 1.75rem;">個人中心</h1>
+                
+                <div class="profile-stats">
+                    <div class="stat-card primary">
+                        <h3>持倉價值</h3>
+                        <div class="value" id="totalAssets">1,234.56 U</div>
+                    </div>
+                    <div class="stat-card positive">
+                        <h3>總盈虧</h3>
+                        <div class="value" id="totalProfit">+234.56 U</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>參與話題</h3>
+                        <div class="value" style="color: #60a5fa;" id="totalTopics">8</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>總交易量</h3>
+                        <div class="value" style="color: #34d399;" id="totalTrades">30M U</div>
+                    </div>
+                </div>
+
+                <!-- 持仓记录 -->
+                <div class="topic-detail-container" style="margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem; color: #ffffff; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: #3b82f6;">📊</span> 當前持倉
+                    </h3>
+                    <div id="currentPositions">
+                        <!-- 持仓数据将通过JavaScript生成 -->
+                    </div>
+                </div>
+
+                <!-- 交易歷史 -->
+                <div class="topic-detail-container">
+                    <h3 style="margin-bottom: 1.5rem; color: #ffffff; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: #10b981;">📈</span> 交易歷史
+                    </h3>
+                    <div id="tradingHistory">
+                        <!-- 交易歷史将通过JavaScript生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右侧交易栏 -->
+    <div class="trading-sidebar hidden" id="tradingSidebar">
+        <div class="trading-header">
+            <div class="trading-title" id="tradingTitle">交易面板</div>
+            <div class="trading-subtitle" id="tradingSubtitle">選擇您的预测并下注</div>
+        </div>
+
+        <!-- 內盤交易界面 -->
+        <div id="innerTrading" class="trading-section">
+            <div class="section-title">選擇预测</div>
+            <div class="betting-interface">
+                <div class="bet-option yes" onclick="selectOption('yes')">
+                    <div class="bet-label">YES</div>
+                    <div class="bet-amount" id="yesAmount">0 USDT</div>
+                </div>
+                <div class="bet-option no" onclick="selectOption('no')">
+                    <div class="bet-label">NO</div>
+                    <div class="bet-amount" id="noAmount">0 USDT</div>
+                </div>
+            </div>
+
+            <div class="amount-input-group">
+                <input type="number" class="amount-input" id="betAmount" placeholder="輸入下注金額" min="1" step="1">
+                <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">確認下注</button>
+            </div>
+        </div>
+
+        <!-- 外盤交易界面 -->
+        <div id="outerTrading" class="trading-section" style="display: none;">
+            <div class="section-title">LMSR交易</div>
+            
+            <!-- 價格显示区域 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem;">
+                <div class="price-card yes-price">
+                    <div class="price-label">YES</div>
+                    <div class="price-value" id="yesPriceDisplay">0.500</div>
+                    <div class="price-unit">USDT</div>
+                </div>
+                <div class="price-card no-price">
+                    <div class="price-label">NO</div>
+                    <div class="price-value" id="noPriceDisplay">0.500</div>
+                    <div class="price-unit">USDT</div>
+                </div>
+            </div>
+
+            <!-- 交易表单 -->
+            <div class="trading-form">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: #9ca3af; font-size: 0.85rem;">交易數量</label>
+                    <input type="number" class="amount-input" id="lmsrAmount" placeholder="輸入交易數量" min="0.1" step="0.1">
+                </div>
+                
+                <div class="trading-buttons">
+                    <div style="margin-bottom: 1rem;">
+                        <div style="text-align: center; margin-bottom: 0.5rem; color: #9ca3af; font-size: 0.85rem;">買入</div>
+                        <button class="btn btn-success lmsr-buy-btn" onclick="buyLMSR('yes')" style="width: 100%; margin-bottom: 0.5rem;">
+                            <span>買入 YES</span>
+                            <small id="yesBuyInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計花費: 0 USDT</small>
+                        </button>
+                        <button class="btn btn-danger lmsr-buy-btn" onclick="buyLMSR('no')" style="width: 100%;">
+                            <span>買入 NO</span>
+                            <small id="noBuyInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計花費: 0 USDT</small>
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <div style="text-align: center; margin-bottom: 0.5rem; color: #9ca3af; font-size: 0.85rem;">賣出</div>
+                        <button class="btn btn-outline btn-success" onclick="sellLMSR('yes')" style="width: 100%; margin-bottom: 0.5rem;">
+                            <span>賣出 YES</span>
+                            <small id="yesSellInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計收入: 0 USDT</small>
+                        </button>
+                        <button class="btn btn-outline btn-danger" onclick="sellLMSR('no')" style="width: 100%;">
+                            <span>賣出 NO</span>
+                            <small id="noSellInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計收入: 0 USDT</small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 我的持仓 -->
+        <div class="trading-section">
+            <div class="section-title">我的持仓</div>
+            
+            <!-- 外盤持倉 -->
+            <div class="pool-section" id="myOuterPositions" style="display: none;">
+                <div class="pool-section-header">
+                    <span class="pool-section-title">外盤持倉</span>
+                    <span class="pool-section-badge outer">LMSR代幣</span>
+                </div>
+                <div class="pool-info">
+                    <div class="pool-row">
+                        <span class="pool-label">YES代幣：</span>
+                        <span class="pool-value" id="myOuterYes">0 个</span>
+                    </div>
+                    <div class="pool-row">
+                        <span class="pool-label">NO代幣：</span>
+                        <span class="pool-value" id="myOuterNo">0 个</span>
+                    </div>
+                    <div class="pool-row">
+                        <span class="pool-label">估值：</span>
+                        <span class="pool-value" id="myOuterValue">0 USDT</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 內盤持倉 -->
+            <div class="pool-section" id="myInnerPositions">
+                <div class="pool-section-header">
+                    <span class="pool-section-title">內盤持倉</span>
+                    <span class="pool-section-badge">原始下注</span>
+                </div>
+                <div class="pool-info">
+                    <div class="pool-row">
+                        <span class="pool-label">YES持仓：</span>
+                        <span class="pool-value" id="myInnerYes">0 USDT</span>
+                    </div>
+                    <div class="pool-row">
+                        <span class="pool-label">NO持仓：</span>
+                        <span class="pool-value" id="myInnerNo">0 USDT</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分享按钮 -->
+        <div class="trading-section">
+            <button class="btn btn-secondary" style="width: 100%;" onclick="shareLink()">
+                📤 分享連結
+            </button>
+        </div>
+    </div>
+
+
+
+    <!-- 確認模态框 -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">確認下注</div>
+            <div id="confirmText">您确定要下注 100 USDT 到 YES 吗？</div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="confirmBet()">確認</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pump通知模态框 -->
+    <div id="pumpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">🎉 Pump成功！</div>
+            <div>恭喜！话题已成功从内盘转换为外盘，现在可以进行LMSR交易了！</div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="closePumpModal()">查看外盘</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局状态管理
+        let currentPage = 'home';
+        let selectedOption = null;
+        let topics = [];
+        let currentTopic = null;
+
+        // 模拟数据
+        const sampleTopics = [
+            {
+                id: 1,
+                title: "比特幣價格在2025年底能否突破15萬美元？",
+                category: "crypto",
+                categoryName: "加密貨幣",
+                avatar: "₿",
+                // 内盘数据（Pump前的原始下注）
+                innerPool: {
+                    yesAmount: 600,
+                    noAmount: 400,
+                    totalAmount: 1000
+                },
+                // 外盘数据（LMSR底池 + 交易）
+                outerPool: {
+                    basePool: 200, // 从内盘小方50%转入的底池
+                    yesAmount: 320, // 外盘YES交易量
+                    noAmount: 280,  // 外盘NO交易量
+                    totalAmount: 600,
+                    tradingFeeToInner: 12 // 外盤交易手續費转入内盘的金额
+                },
+                isOuter: true,
+                endTime: "2025-12-31",
+                status: "outer",
+                description: "隨著比特幣ETF獲批和機構採用增加，比特幣價格是否能在2025年底突破歷史新高15萬美元？",
+                // 內盤持倉（原始下注）
+                myInnerYes: 100,
+                myInnerNo: 0,
+                // 外盤持倉（LMSR代幣）
+                myOuterYes: 15,
+                myOuterNo: 0
+            },
+            {
+                id: 2,
+                title: "2024年美國總統大選結果預測",
+                category: "politics", 
+                categoryName: "政治选举",
+                avatar: "🗳",
+                innerPool: {
+                    yesAmount: 800,
+                    noAmount: 1200,
+                    totalAmount: 2000
+                },
+                outerPool: {
+                    basePool: 400, // 从内盘小方(YES)50%转入
+                    yesAmount: 600,
+                    noAmount: 800,
+                    totalAmount: 1400,
+                    tradingFeeToInner: 28
+                },
+                isOuter: true,
+                endTime: "2024-11-05",
+                status: "outer",
+                description: "預測2024年美國總統大選的結果，YES代表共和黨獲勝，NO代表民主黨獲勝。",
+                myInnerYes: 50,
+                myInnerNo: 200,
+                myOuterYes: 0,
+                myOuterNo: 25
+            },
+            {
+                id: 3,
+                title: "OpenAI GPT-5是否會在2024年發布？",
+                category: "technology",
+                categoryName: "科技发展", 
+                avatar: "🤖",
+                innerPool: {
+                    yesAmount: 200,
+                    noAmount: 150,
+                    totalAmount: 350
+                },
+                outerPool: null, // 还未Pump
+                isOuter: false,
+                endTime: "2024-12-31",
+                status: "inner",
+                description: "OpenAI是否會在2024年内發布GPT-5模型？基于当前的技術发展进度和公司公告进行预测。",
+                myInnerYes: 0,
+                myInnerNo: 0,
+                myOuterYes: 0,
+                myOuterNo: 0
+            },
+            {
+                id: 4,
+                title: "特斯拉股價能否在2024年超過300美元？",
+                category: "economy",
+                categoryName: "經濟预测",
+                avatar: "🚗",
+                innerPool: {
+                    yesAmount: 80,
+                    noAmount: 120,
+                    totalAmount: 200
+                },
+                outerPool: null,
+                isOuter: false,
+                endTime: "2024-12-31",
+                status: "inner",
+                description: "考慮到電動車市場競爭和特斯拉的業務發展，其股價是否能在2024年突破300美元？",
+                myInnerYes: 50,
+                myInnerNo: 0,
+                myOuterYes: 0,
+                myOuterNo: 0
+            }
+        ];
+
+        // 页面切换
+        function showPage(pageId) {
+            // 更新页面显示
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // 更新导航状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 根据页面设置对应的导航项为活跃状态
+            const navMap = {
+                'home': 0,
+                'inner': 1,
+                'create': 2,
+                'profile': 3
+            };
+            if (navMap[pageId] !== undefined) {
+                document.querySelectorAll('.nav-item')[navMap[pageId]].classList.add('active');
+            }
+            
+            currentPage = pageId;
+
+            // 控制交易栏显示
+            const tradingSidebar = document.getElementById('tradingSidebar');
+            if (pageId === 'detail') {
+                tradingSidebar.classList.remove('hidden');
+            } else {
+                tradingSidebar.classList.add('hidden');
+            }
+
+            if (pageId === 'home') {
+                renderTopics();
+            } else if (pageId === 'inner') {
+                renderInnerTopics();
+            } else if (pageId === 'profile') {
+                renderProfileData();
+            }
+        }
+
+        // 渲染话题瀑布流
+        function renderTopics() {
+            const waterfall = document.getElementById('topicWaterfall');
+            waterfall.innerHTML = '';
+
+            sampleTopics.filter(topic => topic.isOuter).forEach(topic => {
+                const card = document.createElement('div');
+                card.className = 'topic-card';
+                card.onclick = () => showTopicDetail(topic.id);
+                
+                // 计算外盘总资金池
+                const outerTotalPool = topic.outerPool.basePool + topic.outerPool.totalAmount;
+                const yesPercentage = ((topic.outerPool.yesAmount / topic.outerPool.totalAmount) * 100).toFixed(1);
+                
+                card.innerHTML = `
+                    <div class="topic-header">
+                        <div class="topic-avatar">${topic.avatar}</div>
+                        <div class="topic-info">
+                            <h3>${topic.title}</h3>
+                            <div class="topic-category">${topic.categoryName}</div>
+                        </div>
+                    </div>
+                    <div class="topic-stats">
+                        <div class="stat">
+                            <div class="stat-value">${outerTotalPool}</div>
+                            <div class="stat-label">外盘总池(USDT)</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${yesPercentage}%</div>
+                            <div class="stat-label">Chance</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${topic.endTime}</div>
+                            <div class="stat-label">結束時間</div>
+                        </div>
+                    </div>
+                `;
+                
+                waterfall.appendChild(card);
+            });
+        }
+
+        // 渲染內盤話題瀑布流
+        function renderInnerTopics() {
+            const waterfall = document.getElementById('innerTopicWaterfall');
+            waterfall.innerHTML = '';
+
+            sampleTopics.filter(topic => !topic.isOuter).forEach(topic => {
+                const card = document.createElement('div');
+                card.className = 'topic-card';
+                card.onclick = () => showTopicDetail(topic.id);
+                
+                // 計算內盤資金池信息
+                const innerTotalPool = topic.innerPool.totalAmount;
+                const yesPercentage = innerTotalPool > 0 ? ((topic.innerPool.yesAmount / innerTotalPool) * 100).toFixed(1) : '50.0';
+                const pumpProgress = Math.min((innerTotalPool / 1000) * 100, 100).toFixed(1);
+                
+                // 計算到Pump還需多少
+                const pumpRemaining = Math.max(1000 - innerTotalPool, 0);
+                
+                card.innerHTML = `
+                    <div class="topic-header">
+                        <div class="topic-avatar">${topic.avatar}</div>
+                        <div class="topic-info">
+                            <h3>${topic.title}</h3>
+                            <div class="topic-category">${topic.categoryName}</div>
+                        </div>
+                    </div>
+                    <div class="topic-stats">
+                        <div class="stat">
+                            <div class="stat-value">${innerTotalPool}</div>
+                            <div class="stat-label">內盤總池(USDT)</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${yesPercentage}%</div>
+                            <div class="stat-label">Chance</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${pumpProgress}%</div>
+                            <div class="stat-label">Pump進度</div>
+                        </div>
+                    </div>
+                    <div class="topic-progress">
+                        <div style="font-size: 0.8rem; color: #9ca3af; margin-bottom: 0.5rem;">
+                            距離Pump還需: <strong style="color: #f59e0b;">${pumpRemaining} USDT</strong>
+                        </div>
+                        <div style="background: #374151; border-radius: 4px; height: 6px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #10b981, #059669); height: 100%; width: ${pumpProgress}%; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                `;
+                
+                waterfall.appendChild(card);
+            });
+
+            // 如果沒有內盤話題，顯示空狀態
+            if (waterfall.children.length === 0) {
+                waterfall.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                        <h3 style="margin-bottom: 0.5rem;">暫無內盤話題</h3>
+                        <p>所有話題都已進入外盤階段，或創建新話題開始交易</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 显示話題詳情
+        function showTopicDetail(topicId) {
+            currentTopic = sampleTopics.find(t => t.id === topicId) || {
+                id: topicId,
+                title: "新话题",
+                category: "other",
+                categoryName: "其他",
+                avatar: "💡",
+                innerPool: {
+                    yesAmount: 0,
+                    noAmount: 0,
+                    totalAmount: 0
+                },
+                outerPool: null,
+                isOuter: false,
+                endTime: "2024-12-31",
+                status: "inner",
+                description: "这是一个新创建的话题",
+                myInnerYes: 0,
+                myInnerNo: 0,
+                myOuterYes: 0,
+                myOuterNo: 0
+            };
+
+            // 更新页面内容
+            document.getElementById('detailTitle').textContent = currentTopic.title;
+            document.getElementById('detailCategory').textContent = currentTopic.categoryName;
+            document.getElementById('detailAvatar').textContent = currentTopic.avatar;
+            document.getElementById('detailEndTime').textContent = `結束時間：${currentTopic.endTime}`;
+            document.getElementById('detailDescription').textContent = currentTopic.description || currentTopic.title;
+            
+            // 根据话题状态更新交易栏
+            updateTradingInterface();
+            updatePoolDisplay();
+            showPage('detail');
+        }
+
+        // 更新交易界面
+        function updateTradingInterface() {
+            if (!currentTopic) return;
+            
+            const isOuter = currentTopic.status === 'outer';
+            const tradingTitle = document.getElementById('tradingTitle');
+            const tradingSubtitle = document.getElementById('tradingSubtitle');
+            const statusBadge = document.getElementById('detailStatus');
+            const innerTrading = document.getElementById('innerTrading');
+            const outerTrading = document.getElementById('outerTrading');
+
+            if (isOuter) {
+                // 外盘状态
+                tradingTitle.textContent = 'LMSR交易';
+                tradingSubtitle.textContent = '基于市场價格的预测市场交易';
+                statusBadge.textContent = '外盤交易';
+                statusBadge.className = 'status-badge status-outer';
+                innerTrading.style.display = 'none';
+                outerTrading.style.display = 'block';
+                
+                // 更新LMSR價格显示
+                updateLMSRPrices();
+            } else {
+                // 内盘状态
+                tradingTitle.textContent = '内盘下注';
+                tradingSubtitle.textContent = '選擇您的预测并下注';
+                statusBadge.textContent = '內盤交易';
+                statusBadge.className = 'status-badge status-inner';
+                innerTrading.style.display = 'block';
+                outerTrading.style.display = 'none';
+                
+                // 检查是否接近Pump条件
+                if (currentTopic.totalPool >= 800) {
+                    tradingSubtitle.textContent = '即将达到Pump条件！';
+                    tradingSubtitle.style.color = '#f59e0b';
+                } else {
+                    tradingSubtitle.style.color = '#6b7280';
+                }
+            }
+        }
+
+        // 更新LMSR價格显示
+        function updateLMSRPrices() {
+            if (!currentTopic || currentTopic.status !== 'outer' || !currentTopic.outerPool) return;
+
+            // 使用外盘数据计算LMSR價格
+            const outerPool = currentTopic.outerPool;
+            const totalAmount = outerPool.totalAmount;
+            const yesAmount = outerPool.yesAmount;
+            const noAmount = outerPool.noAmount;
+            
+            // 基本價格计算（基于外盘资金池比例）
+            const yesPrice = (yesAmount / totalAmount).toFixed(3);
+            const noPrice = (noAmount / totalAmount).toFixed(3);
+
+            // 更新價格显示
+            document.getElementById('yesPriceDisplay').textContent = yesPrice;
+            document.getElementById('noPriceDisplay').textContent = noPrice;
+
+            // 监听数量輸入变化，更新預計花費和收入
+            const amountInput = document.getElementById('lmsrAmount');
+            const updateCostInfo = () => {
+                const amount = parseFloat(amountInput.value) || 0;
+                const yesCostBase = amount * parseFloat(yesPrice);
+                const noCostBase = amount * parseFloat(noPrice);
+                
+                // 包含5%手續費的总成本（買入）
+                const yesCostTotal = (yesCostBase * 1.05).toFixed(2);
+                const noCostTotal = (noCostBase * 1.05).toFixed(2);
+                
+                // 扣除5%手續費的净收入（賣出）
+                const yesRevenueTotal = (yesCostBase * 0.95).toFixed(2);
+                const noRevenueTotal = (noCostBase * 0.95).toFixed(2);
+                
+                // 更新買入信息
+                document.getElementById('yesBuyInfo').textContent = `預計花費: ${yesCostTotal} USDT `;
+                document.getElementById('noBuyInfo').textContent = `預計花費: ${noCostTotal} USDT `;
+                
+                // 更新賣出信息
+                document.getElementById('yesSellInfo').textContent = `預計收入: ${yesRevenueTotal} USDT`;
+                document.getElementById('noSellInfo').textContent = `預計收入: ${noRevenueTotal} USDT`;
+            };
+
+            // 绑定輸入事件
+            amountInput.removeEventListener('input', updateCostInfo);
+            amountInput.addEventListener('input', updateCostInfo);
+            
+            // 初始更新
+            updateCostInfo();
+        }
+
+        // LMSR買入功能
+        function buyLMSR(option) {
+            if (!currentTopic || currentTopic.status !== 'outer' || !currentTopic.outerPool) {
+                alert('只能在外盘状态下进行LMSR交易');
+                return;
+            }
+
+            const amount = parseFloat(document.getElementById('lmsrAmount').value);
+            if (!amount || amount <= 0) {
+                alert('請輸入有效的交易數量');
+                return;
+            }
+
+            // 计算交易成本
+            const yesPrice = parseFloat(document.getElementById('yesPriceDisplay').textContent);
+            const noPrice = parseFloat(document.getElementById('noPriceDisplay').textContent);
+            const cost = option === 'yes' ? amount * yesPrice : amount * noPrice;
+
+            // 计算2%手續費
+            const tradingFee = cost * 0.05;
+            const netCost = cost - tradingFee;
+
+            // 確認交易
+            if (confirm(`確認買入 ${amount} 个 ${option.toUpperCase()} 代幣？\n交易成本: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT \n净成本: ${netCost.toFixed(2)} USDT`)) {
+                // 更新外盤持倉
+                if (option === 'yes') {
+                    currentTopic.myOuterYes = (currentTopic.myOuterYes || 0) + amount;
+                } else {
+                    currentTopic.myOuterNo = (currentTopic.myOuterNo || 0) + amount;
+                }
+
+                // 更新外盘资金池
+                currentTopic.outerPool.totalAmount += netCost;
+                if (option === 'yes') {
+                    currentTopic.outerPool.yesAmount += netCost;
+                } else {
+                    currentTopic.outerPool.noAmount += netCost;
+                }
+
+                // 手續費的40%回流到内盘
+                const feeToInner = tradingFee * 0.4;
+                currentTopic.outerPool.tradingFeeToInner += feeToInner;
+
+                // 更新sampleTopics中的数据
+                const topicIndex = sampleTopics.findIndex(t => t.id === currentTopic.id);
+                if (topicIndex !== -1) {
+                    sampleTopics[topicIndex] = {...currentTopic};
+                }
+
+                // 更新显示
+                updateLMSRPrices();
+                updatePoolDisplay();
+
+                // 清空輸入
+                document.getElementById('lmsrAmount').value = '';
+
+                alert(`交易成功！\n買入: ${amount} 个 ${option.toUpperCase()}\n总花费: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT (40%已回流内盘)`);
+            }
+        }
+
+        // LMSR賣出函數
+        function sellLMSR(option) {
+            if (!currentTopic || currentTopic.status !== 'outer' || !currentTopic.outerPool) {
+                alert('只能在外盤狀態下進行LMSR交易');
+                return;
+            }
+
+            const amount = parseFloat(document.getElementById('lmsrAmount').value);
+            if (!amount || amount <= 0) {
+                alert('請輸入有效的交易數量');
+                return;
+            }
+
+            // 檢查持倉是否足夠
+            const currentHolding = option === 'yes' ? (currentTopic.myOuterYes || 0) : (currentTopic.myOuterNo || 0);
+            if (amount > currentHolding) {
+                alert(`持倉不足！您目前持有 ${currentHolding} 個 ${option.toUpperCase()} 代幣`);
+                return;
+            }
+
+            // 計算賣出收入
+            const yesPrice = parseFloat(document.getElementById('yesPriceDisplay').textContent);
+            const noPrice = parseFloat(document.getElementById('noPriceDisplay').textContent);
+            const revenue = option === 'yes' ? amount * yesPrice : amount * noPrice;
+
+            // 計算2%手續費
+            const tradingFee = revenue * 0.05;
+            const netRevenue = revenue - tradingFee;
+
+            // 確認交易
+            if (confirm(`確認賣出 ${amount} 個 ${option.toUpperCase()} 代幣？\n賣出收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT \n淨收入: ${netRevenue.toFixed(2)} USDT`)) {
+                // 更新外盤持倉
+                if (option === 'yes') {
+                    currentTopic.myOuterYes = (currentTopic.myOuterYes || 0) - amount;
+                } else {
+                    currentTopic.myOuterNo = (currentTopic.myOuterNo || 0) - amount;
+                }
+
+                // 更新外盤資金池（從池中取出資金）
+                currentTopic.outerPool.totalAmount -= netRevenue;
+                if (option === 'yes') {
+                    currentTopic.outerPool.yesAmount -= netRevenue;
+                } else {
+                    currentTopic.outerPool.noAmount -= netRevenue;
+                }
+
+                // 手續費的40%回流到內盤
+                const feeToInner = tradingFee * 0.4;
+                currentTopic.outerPool.tradingFeeToInner += feeToInner;
+
+                // 更新sampleTopics中的數據
+                const topicIndex = sampleTopics.findIndex(t => t.id === currentTopic.id);
+                if (topicIndex !== -1) {
+                    sampleTopics[topicIndex] = {...currentTopic};
+                }
+
+                // 更新顯示
+                updateLMSRPrices();
+                updatePoolDisplay();
+
+                // 清空輸入
+                document.getElementById('lmsrAmount').value = '';
+
+                alert(`交易成功！\n賣出: ${amount} 個 ${option.toUpperCase()}\n總收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT (40%已回流內盤)`);
+            }
+        }
+
+        // 更新资金池显示
+        function updatePoolDisplay() {
+            if (!currentTopic) return;
+
+            const isOuter = currentTopic.status === 'outer';
+            
+            // 更新內盤交易界面的显示（如果存在这些元素）
+            if (currentTopic.innerPool) {
+                const yesAmountEl = document.getElementById('yesAmount');
+                const noAmountEl = document.getElementById('noAmount');
+                if (yesAmountEl) yesAmountEl.textContent = `${currentTopic.innerPool.yesAmount} USDT`;
+                if (noAmountEl) noAmountEl.textContent = `${currentTopic.innerPool.noAmount} USDT`;
+            }
+
+            // 更新我的持仓
+            updateMyPositions();
+
+            // 更新中间区域的资金池详情
+            updatePoolDetailsSection();
+        }
+
+        // 更新中间区域的资金池详情显示
+        function updatePoolDetailsSection() {
+            if (!currentTopic) return;
+
+            const poolDetailsSection = document.getElementById('poolDetailsSection');
+            const isOuter = currentTopic.status === 'outer';
+
+            if (isOuter && currentTopic.outerPool) {
+                // 外盘状态 - 显示完整的资金流向
+                poolDetailsSection.innerHTML = `
+                    <!-- 外盘资金池 -->
+                    <div class="pool-section">
+                        <div class="pool-section-header">
+                            <span class="pool-section-title">外盘资金池</span>
+                            <span class="pool-section-badge outer">LMSR</span>
+                        </div>
+                        <div class="pool-info">
+                            <div class="pool-row" style="color: #10b981;">
+                                <span class="pool-label">来自内盘底池：</span>
+                                <span class="pool-value">+${currentTopic.outerPool.basePool} USDT</span>
+                            </div>
+                            <div class="pool-row">
+                                <span class="pool-label">YES交易量：</span>
+                                <span class="pool-value">${currentTopic.outerPool.yesAmount} USDT</span>
+                            </div>
+                            <div class="pool-row">
+                                <span class="pool-label">NO交易量：</span>
+                                <span class="pool-value">${currentTopic.outerPool.noAmount} USDT</span>
+                            </div>
+                            <div class="pool-row">
+                                <span class="pool-label">外盘总额：</span>
+                                <span class="pool-value">${currentTopic.outerPool.totalAmount} USDT</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 内盘资金池 -->
+                    <div class="pool-section">
+                        <div class="pool-section-header">
+                            <span class="pool-section-title">内盘资金池</span>
+                            <span class="pool-section-badge pumped">已Pump</span>
+                        </div>
+                        <div class="pool-info">
+                            <div class="pool-row">
+                                <span class="pool-label">原始YES投注：</span>
+                                <span class="pool-value">${currentTopic.innerPool?.yesAmount || 0} USDT</span>
+                            </div>
+                            <div class="pool-row">
+                                <span class="pool-label">原始NO投注：</span>
+                                <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} USDT</span>
+                            </div>
+                            <div class="pool-row" style="color: #ef4444;">
+                                <span class="pool-label">转出外盘底池：</span>
+                                <span class="pool-value">-${currentTopic.outerPool.basePool} USDT</span>
+                            </div>
+                            <div class="pool-row" style="color: #10b981;">
+                                <span class="pool-label">手續費回流：</span>
+                                <span class="pool-value">+${currentTopic.outerPool.tradingFeeToInner || 0} USDT</span>
+                            </div>
+                            <div class="pool-row">
+                                <span class="pool-label">内盘当前总额：</span>
+                                <span class="pool-value">${((currentTopic.innerPool?.totalAmount || 0) - currentTopic.outerPool.basePool + (currentTopic.outerPool.tradingFeeToInner || 0)).toFixed(2)} USDT</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pump机制说明 -->
+                    <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #fbbf24;">
+                        <strong>💡 Pump机制说明：</strong><br>
+                        • 内盘达到1000U时触发Pump<br>
+                        • 小方的50%转入外盘底池<br>
+                        • 外盤交易手續費的40%持续回流内盘
+                    </div>
+                `;
+            } else {
+                // 内盘状态 - 显示当前状态和Pump进度
+                const innerTotal = currentTopic.innerPool?.totalAmount || 0;
+                const progress = Math.min(innerTotal / 1000 * 100, 100);
+                const remaining = Math.max(1000 - innerTotal, 0);
+
+                poolDetailsSection.innerHTML = `
+                    <!-- 内盘资金池 -->
+                    <div class="pool-section">
+                        <div class="pool-section-header">
+                            <span class="pool-section-title">内盘资金池</span>
+                            <span class="pool-section-badge">活跃</span>
+                        </div>
+                        <div class="pool-info">
+                            <div class="pool-row">
+                                <span class="pool-label">YES投注：</span>
+                                <span class="pool-value">${currentTopic.innerPool?.yesAmount || 0} USDT</span>
+                            </div>
+                            <div class="pool-row">
+                                <span class="pool-label">NO投注：</span>
+                                <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} USDT</span>
+                            </div>
+                            <div class="pool-row">
+                                <span class="pool-label">内盘总额：</span>
+                                <span class="pool-value">${innerTotal} USDT</span>
+                            </div>
+                        </div>
+                        
+                        <div class="pump-progress" style="margin: 1.5rem 0;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%;"></div>
+                            </div>
+                            <div class="progress-text">
+                                距离Pump还需 <strong style="color: #10b981;">${remaining}</strong> USDT
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pump条件说明 -->
+                    <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #60a5fa;">
+                        <strong>⚡ Pump条件：</strong><br>
+                        • 内盘资金池达到1000 USDT时自动触发Pump<br>
+                        • 内盘交易收取5%手續費<br>
+                        • 下注金額较小一方的50%将转为外盘LMSR底池<br>
+                        • 转为外盘后可在瀑布流中展示和交易
+                    </div>
+                `;
+            }
+        }
+
+        // 更新我的持仓显示
+        function updateMyPositions() {
+            if (!currentTopic) return;
+
+            const isOuter = currentTopic.status === 'outer';
+            const myInnerPositions = document.getElementById('myInnerPositions');
+            const myOuterPositions = document.getElementById('myOuterPositions');
+
+            // 更新內盤持倉
+            document.getElementById('myInnerYes').textContent = `${currentTopic.myInnerYes || 0} USDT`;
+            document.getElementById('myInnerNo').textContent = `${currentTopic.myInnerNo || 0} USDT`;
+
+            // 根据状态显示/隐藏外盤持倉
+            if (isOuter && currentTopic.outerPool) {
+                myOuterPositions.style.display = 'block';
+                
+                // 更新外盤持倉
+                const myOuterYes = currentTopic.myOuterYes || 0;
+                const myOuterNo = currentTopic.myOuterNo || 0;
+                document.getElementById('myOuterYes').textContent = `${myOuterYes} 个`;
+                document.getElementById('myOuterNo').textContent = `${myOuterNo} 个`;
+
+                // 计算外盤持倉估值
+                if (currentTopic.outerPool.totalAmount > 0) {
+                    const yesPrice = currentTopic.outerPool.yesAmount / currentTopic.outerPool.totalAmount;
+                    const noPrice = currentTopic.outerPool.noAmount / currentTopic.outerPool.totalAmount;
+                    const totalValue = (myOuterYes * yesPrice + myOuterNo * noPrice).toFixed(2);
+                    document.getElementById('myOuterValue').textContent = `${totalValue} USDT`;
+                } else {
+                    document.getElementById('myOuterValue').textContent = '0 USDT';
+                }
+            } else {
+                myOuterPositions.style.display = 'none';
+            }
+        }
+
+        // 選擇下注選項
+        function selectOption(option) {
+            selectedOption = option;
+            document.querySelectorAll('.bet-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            document.querySelector(`.bet-option.${option}`).classList.add('selected');
+        }
+
+        // 下注
+        function placeBet() {
+            if (!selectedOption) {
+                alert('请先選擇YES或NO');
+                return;
+            }
+
+            const amount = parseInt(document.getElementById('betAmount').value);
+            if (!amount || amount <= 0) {
+                alert('請輸入有效的下注金額');
+                return;
+            }
+
+            // 显示確認模态框
+            document.getElementById('confirmText').textContent = 
+                `您确定要下注 ${amount} USDT 到 ${selectedOption.toUpperCase()} 吗？`;
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        // 確認下注
+        function confirmBet() {
+            const inputAmount = parseInt(document.getElementById('betAmount').value);
+            
+            // 計算5%手續費
+            const fee = inputAmount * 0.05;
+            const netAmount = inputAmount - fee;
+            
+            // 確認交易
+            if (!confirm(`確認下注 ${inputAmount} USDT？\n手續費: ${fee.toFixed(2)} USDT (5%)\n實際下注: ${netAmount.toFixed(2)} USDT`)) {
+                return;
+            }
+            
+            // 确保内盘数据结构存在
+            if (!currentTopic.innerPool) {
+                currentTopic.innerPool = { yesAmount: 0, noAmount: 0, totalAmount: 0 };
+            }
+            
+            // 更新内盘数据（使用扣除手續費後的金額）
+            if (selectedOption === 'yes') {
+                currentTopic.innerPool.yesAmount += netAmount;
+                currentTopic.myInnerYes = (currentTopic.myInnerYes || 0) + netAmount;
+            } else {
+                currentTopic.innerPool.noAmount += netAmount;
+                currentTopic.myInnerNo = (currentTopic.myInnerNo || 0) + netAmount;
+            }
+            currentTopic.innerPool.totalAmount += netAmount;
+
+            // 更新sampleTopics中的数据
+            const topicIndex = sampleTopics.findIndex(t => t.id === currentTopic.id);
+            if (topicIndex !== -1) {
+                sampleTopics[topicIndex] = {...currentTopic};
+            }
+
+            // 检查是否触发Pump（严格要求1000U）
+            if (currentTopic.innerPool.totalAmount >= 1000 && currentTopic.status === 'inner') {
+                triggerPump();
+            } else {
+                // 如果还是内盘，更新界面提示
+                updateTradingInterface();
+            }
+
+            updatePoolDisplay();
+            closeModal();
+            
+            // 清空輸入
+            document.getElementById('betAmount').value = '';
+            selectedOption = null;
+            document.querySelectorAll('.bet-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+        }
+
+        // 触发Pump机制
+        function triggerPump() {
+            const inner = currentTopic.innerPool;
+            
+            // 找出下注金額较小的一方
+            const smallerSide = inner.yesAmount < inner.noAmount ? 'yes' : 'no';
+            const smallerAmount = Math.min(inner.yesAmount, inner.noAmount);
+            
+            // 小方的50%作为外盘底池
+            const basePool = smallerAmount * 0.5;
+            
+            // 根据内盘资金比例设置初始虚拟流动性
+            const yesRatio = inner.yesAmount / inner.totalAmount;
+            const noRatio = inner.noAmount / inner.totalAmount;
+            
+            // 创建外盘数据结构
+            currentTopic.outerPool = {
+                basePool: basePool,
+                yesAmount: yesRatio * basePool * 2, // 初始虚拟流动性
+                noAmount: noRatio * basePool * 2,
+                totalAmount: basePool * 2,
+                tradingFeeToInner: 0
+            };
+            
+            // 更新状态
+            currentTopic.status = 'outer';
+            currentTopic.isOuter = true;
+            
+            // 更新sampleTopics中的数据
+            const topicIndex = sampleTopics.findIndex(t => t.id === currentTopic.id);
+            if (topicIndex !== -1) {
+                sampleTopics[topicIndex] = {...currentTopic};
+            }
+            
+            // 更新交易界面
+            updateTradingInterface();
+            
+            // 显示Pump通知
+            setTimeout(() => {
+                document.getElementById('pumpModal').classList.add('active');
+            }, 500);
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+        }
+
+        function closePumpModal() {
+            document.getElementById('pumpModal').classList.remove('active');
+            // 切换到外盤交易界面
+            document.getElementById('innerTrading').style.display = 'none';
+            document.getElementById('outerTrading').style.display = 'block';
+            document.getElementById('tradingTitle').textContent = 'LMSR交易';
+            document.getElementById('tradingSubtitle').textContent = '基于市场價格交易';
+        }
+
+        // 分享連結
+        function shareLink() {
+            const url = `${window.location.origin}${window.location.pathname}?topic=${currentTopic.id}`;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('分享連結已复制到剪贴板！');
+            });
+        }
+
+        // 自定义选项管理
+        function toggleCustomOptions() {
+            const customOptions = document.getElementById('customOptions');
+            if (customOptions.style.display === 'none') {
+                customOptions.style.display = 'block';
+                addOption();
+            } else {
+                customOptions.style.display = 'none';
+            }
+        }
+
+        function addOption() {
+            const customOptions = document.getElementById('customOptions');
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option-input';
+            optionDiv.innerHTML = `
+                <input type="text" class="form-input" placeholder="新选项">
+                <button type="button" class="btn btn-secondary" onclick="removeOption(this)">删除</button>
+            `;
+            customOptions.appendChild(optionDiv);
+        }
+
+        function removeOption(button) {
+            button.parentElement.remove();
+        }
+
+        // 創建話題表单提交
+        document.getElementById('createTopicForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const newTopic = {
+                id: Date.now(),
+                title: formData.get('content'),
+                category: formData.get('category'),
+                categoryName: e.target.category.selectedOptions[0].text,
+                avatar: formData.get('content').charAt(0).toUpperCase(),
+                innerPool: {
+                    yesAmount: 0,
+                    noAmount: 0,
+                    totalAmount: 0
+                },
+                outerPool: null,
+                isOuter: false,
+                endTime: formData.get('topicEndTime').split('T')[0],
+                status: 'inner',
+                description: formData.get('content'),
+                isPrivate: formData.get('isPrivate') === 'on',
+                myInnerYes: 0,
+                myInnerNo: 0,
+                myOuterYes: 0,
+                myOuterNo: 0
+            };
+
+            sampleTopics.push(newTopic);
+            alert('话题创建成功！');
+            
+            // 重置表单
+            e.target.reset();
+            
+            // 跳转到話題詳情
+            showTopicDetail(newTopic.id);
+        });
+
+        // 渲染個人中心数据
+        function renderProfileData() {
+            // 计算统计数据
+            let totalInvested = 0;  // 總投入
+            let totalValue = 0;     // 持倉價值
+            let participatedTopics = 0;  // 參與話題數
+            let totalTradingVolume = 0;  // 總交易量
+
+            sampleTopics.forEach(topic => {
+                const myInnerYes = topic.myInnerYes || 0;
+                const myInnerNo = topic.myInnerNo || 0;
+                const myOuterYes = topic.myOuterYes || 0;
+                const myOuterNo = topic.myOuterNo || 0;
+                
+                const myInnerTotal = myInnerYes + myInnerNo;
+                const myOuterTotal = myOuterYes + myOuterNo;
+                const myTotal = myInnerTotal + myOuterTotal;
+                
+                if (myTotal > 0) {
+                    participatedTopics++;
+                    totalInvested += myTotal;
+                    
+                    // 計算當前持倉價值
+                    let currentValue = myInnerTotal; // 內盤按原值計算
+                    
+                    // 計算交易量（包括內盤和外盤的所有交易）
+                    totalTradingVolume += myInnerTotal; // 內盤投入
+                    
+                    if (topic.status === 'outer' && topic.outerPool && topic.outerPool.totalAmount > 0) {
+                        const yesPrice = topic.outerPool.yesAmount / topic.outerPool.totalAmount;
+                        const noPrice = topic.outerPool.noAmount / topic.outerPool.totalAmount;
+                        const outerValue = myOuterYes * yesPrice + myOuterNo * noPrice;
+                        currentValue = myInnerTotal + outerValue;
+                        
+                        // 外盤交易量估算（假設代幣是以當前價格買入的）
+                        const outerTradeValue = myOuterYes * yesPrice + myOuterNo * noPrice;
+                        totalTradingVolume += outerTradeValue;
+                        
+                        // 模擬歷史交易量（為了達到30M的水平）
+                        totalTradingVolume += topic.outerPool.totalAmount * 0.1; // 假設參與了總池的10%的交易
+                    }
+                    
+                    // 為每個話題添加模擬的歷史交易量
+                    totalTradingVolume += (topic.innerPool?.totalAmount || 0) * 2; // 模擬多次內盤交易
+                    
+                    totalValue += currentValue;
+                }
+            });
+
+            // 模擬更大的交易量以達到合理的數值
+            totalTradingVolume = totalTradingVolume * 50000; // 放大倍數以達到30M級別
+
+            const totalProfit = totalValue - totalInvested;
+
+            // 格式化數字顯示
+            const formatNumber = (num) => {
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(1) + 'M';
+                } else if (num >= 1000) {
+                    return (num / 1000).toFixed(1) + 'K';
+                } else {
+                    return num.toFixed(2);
+                }
+            };
+
+            // 更新統計數據
+            document.getElementById('totalAssets').textContent = `${formatNumber(totalValue)} U`;
+            document.getElementById('totalProfit').textContent = totalProfit >= 0 ? 
+                `+${formatNumber(totalProfit)} U` : `${formatNumber(totalProfit)} U`;
+            document.getElementById('totalTopics').textContent = participatedTopics;
+            document.getElementById('totalTrades').textContent = `${formatNumber(totalTradingVolume)} U`;
+
+            // 渲染當前持倉
+            renderCurrentPositions();
+            
+            // 渲染交易歷史
+            renderTradingHistory();
+        }
+
+        // 渲染當前持倉
+        function renderCurrentPositions() {
+            const container = document.getElementById('currentPositions');
+            container.innerHTML = '';
+
+            const activePositions = sampleTopics.filter(topic => {
+                const myInnerTotal = (topic.myInnerYes || 0) + (topic.myInnerNo || 0);
+                const myOuterTotal = (topic.myOuterYes || 0) + (topic.myOuterNo || 0);
+                return (myInnerTotal > 0 || myOuterTotal > 0) && topic.status !== 'ended';
+            });
+
+            if (activePositions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <p>暫無活跃持仓</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">參與話題交易后将在这里显示</p>
+                    </div>
+                `;
+                return;
+            }
+
+            activePositions.forEach(topic => {
+                const myInnerYes = topic.myInnerYes || 0;
+                const myInnerNo = topic.myInnerNo || 0;
+                const myOuterYes = topic.myOuterYes || 0;
+                const myOuterNo = topic.myOuterNo || 0;
+                
+                const myInnerTotal = myInnerYes + myInnerNo;
+                const myOuterTotal = myOuterYes + myOuterNo;
+                const myTotal = myInnerTotal + myOuterTotal;
+                
+                // 确定主要持仓类型和金额
+                let position, positionAmount, positionType;
+                if (myInnerTotal > myOuterTotal) {
+                    position = myInnerYes > myInnerNo ? 'YES' : 'NO';
+                    positionAmount = Math.max(myInnerYes, myInnerNo);
+                    positionType = '内盘';
+                } else if (myOuterTotal > 0) {
+                    position = myOuterYes > myOuterNo ? 'YES' : 'NO';
+                    positionAmount = Math.max(myOuterYes, myOuterNo);
+                    positionType = '外盘';
+                } else {
+                    position = myInnerYes > myInnerNo ? 'YES' : 'NO';
+                    positionAmount = Math.max(myInnerYes, myInnerNo);
+                    positionType = '内盘';
+                }
+
+                // 计算当前价值
+                let currentValue = myInnerTotal;
+                let valueClass = 'neutral';
+                if (topic.status === 'outer' && topic.outerPool && topic.outerPool.totalAmount > 0) {
+                    const yesPrice = topic.outerPool.yesAmount / topic.outerPool.totalAmount;
+                    const noPrice = topic.outerPool.noAmount / topic.outerPool.totalAmount;
+                    const outerValue = myOuterYes * yesPrice + myOuterNo * noPrice;
+                    currentValue = myInnerTotal + outerValue;
+                    valueClass = currentValue > myTotal ? 'positive' : currentValue < myTotal ? 'negative' : 'neutral';
+                }
+
+                const profitLoss = currentValue - myTotal;
+
+                container.innerHTML += `
+                    <div class="position-item" onclick="showTopicDetail(${topic.id})">
+                        <div class="position-info">
+                            <div class="position-title">${topic.title}</div>
+                            <div class="position-details">
+                                <span>持仓：${position} ${positionAmount} ${positionType === '外盘' ? '个' : 'USDT'}</span>
+                                <span>状态：${positionType}</span>
+                                <span>结束：${topic.endTime}</span>
+                            </div>
+                        </div>
+                        <div class="position-value">
+                            <div class="position-amount ${valueClass}">${currentValue.toFixed(2)} USDT</div>
+                            <div class="position-status status-active">
+                                ${profitLoss >= 0 ? '+' : ''}${profitLoss.toFixed(2)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // 渲染交易歷史
+        function renderTradingHistory() {
+            const container = document.getElementById('tradingHistory');
+            
+            // 模拟交易歷史数据
+            const historyData = [
+                {
+                    id: 1,
+                    title: "比特币價格预测",
+                    position: "YES",
+                    amount: 100,
+                    result: "won",
+                    profit: 45.5,
+                    date: "2024-01-15"
+                },
+                {
+                    id: 2,
+                    title: "美国大选预测",
+                    position: "NO",
+                    amount: 200,
+                    result: "won",
+                    profit: 89.2,
+                    date: "2024-01-10"
+                },
+                {
+                    id: 3,
+                    title: "特斯拉股价预测",
+                    position: "YES",
+                    amount: 150,
+                    result: "lost",
+                    profit: -150,
+                    date: "2024-01-05"
+                },
+                {
+                    id: 4,
+                    title: "OpenAI發布预测",
+                    position: "NO",
+                    amount: 80,
+                    result: "won",
+                    profit: 25.8,
+                    date: "2023-12-28"
+                }
+            ];
+
+            container.innerHTML = '';
+
+            historyData.forEach(trade => {
+                const resultClass = trade.result === 'won' ? 'positive' : 'negative';
+                const statusClass = trade.result === 'won' ? 'status-won' : 'status-lost';
+
+                container.innerHTML += `
+                    <div class="history-item">
+                        <div class="history-info">
+                            <div class="history-title">${trade.title}</div>
+                            <div class="history-details">
+                                <span>持仓：${trade.position} ${trade.amount} USDT</span>
+                                <span>日期：${trade.date}</span>
+                            </div>
+                        </div>
+                        <div class="history-value">
+                            <div class="history-amount ${resultClass}">
+                                ${trade.profit >= 0 ? '+' : ''}${trade.profit.toFixed(2)} USDT
+                            </div>
+                            <div class="history-status ${statusClass}">
+                                ${trade.result === 'won' ? '盈利' : '亏损'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTopics();
+            
+            // 检查URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const topicId = urlParams.get('topic');
+            if (topicId) {
+                showTopicDetail(parseInt(topicId));
+            }
+        });
+    </script>
+</body>
+</html>
+
