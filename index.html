@@ -99,9 +99,10 @@
 
         /* 創建頁面特殊佈局 */
         #create .content-area {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem 3rem;
+            padding: 2rem 4rem;
+            width: calc(100vw - 240px);
         }
 
         .container {
@@ -1251,10 +1252,10 @@
         /* PK對壘界面樣式 */
         .pk-arena {
             display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-            padding: 1.5rem;
+            align-items: stretch;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
             background: rgba(17, 24, 39, 0.5);
             border-radius: 12px;
             border: 1px solid rgba(75, 85, 99, 0.3);
@@ -1264,12 +1265,16 @@
             flex: 1;
             background: rgba(31, 41, 55, 0.8);
             border-radius: 8px;
-            padding: 1.5rem;
+            padding: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
         }
 
         .pk-side:hover {
@@ -1303,7 +1308,7 @@
         .pk-header {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
             margin-bottom: 0.75rem;
         }
 
@@ -1319,8 +1324,11 @@
 
         .pk-stats {
             text-align: center;
-            color: #9ca3af;
-            font-size: 0.85rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.15rem;
         }
 
         .pk-amount {
@@ -1331,13 +1339,13 @@
         }
 
         .pk-percentage {
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
+            font-size: 0.85rem;
+            color: #9ca3af;
         }
 
         .pk-participants {
-            font-size: 0.8rem;
-            opacity: 0.8;
+            font-size: 0.75rem;
+            color: #6b7280;
         }
 
         .pk-indicator {
@@ -1363,7 +1371,11 @@
             color: #ffffff;
             font-weight: bold;
             flex-shrink: 0;
-            padding: 0 0.5rem;
+            padding: 0 0.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .vs-text {
@@ -1376,9 +1388,9 @@
         }
 
         .vs-subtitle {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #9ca3af;
-            margin-top: 0.25rem;
+            margin-top: 0.15rem;
         }
 
         /* K線圖樣式 */
@@ -1481,6 +1493,84 @@
             opacity: 0;
             transition: opacity 0.2s;
             z-index: 100;
+        }
+
+        /* 快速下單按鈕樣式 */
+        .quick-amount-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            justify-content: space-between;
+        }
+
+        .quick-btn {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            background: rgba(75, 85, 99, 0.3);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            color: #d1d5db;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+            color: #60a5fa;
+        }
+
+        .quick-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: #ffffff;
+        }
+
+        /* 餘額顯示樣式 */
+        .input-with-balance {
+            position: relative;
+        }
+
+        .balance-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: rgba(17, 24, 39, 0.8);
+            border-radius: 6px;
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+
+        .balance-label {
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        .balance-amount {
+            color: #10b981;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .balance-amount.insufficient {
+            color: #ef4444;
+        }
+
+        /* 充值按鈕樣式 */
+        .recharge-btn {
+            background: linear-gradient(45deg, #8b5cf6, #06b6d4);
+            border: none;
+            color: #ffffff;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .recharge-btn:hover {
+            background: linear-gradient(45deg, #7c3aed, #0891b2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
         }
     </style>
 </head>
@@ -1777,7 +1867,7 @@
 
         <!-- 內盤交易界面 -->
         <div id="innerTrading" class="trading-section">
-            <div class="section-title">PK對壘 - 選擇陣營</div>
+            <div class="section-title">陣營對決 - 選擇立場</div>
             
             <!-- PK對戰界面 -->
             <div class="pk-arena">
@@ -1796,7 +1886,7 @@
                 
                 <div class="pk-vs">
                     <div class="vs-text">VS</div>
-                    <div class="vs-subtitle">預測對決</div>
+                    <div class="vs-subtitle">立場對決</div>
                 </div>
                 
                 <div class="pk-side no-side" onclick="selectOption('no')">
@@ -1814,8 +1904,21 @@
             </div>
 
             <div class="amount-input-group">
-                <input type="number" class="amount-input" id="betAmount" placeholder="輸入下注金額" min="1" step="1">
+                <div class="quick-amount-buttons">
+                    <button class="quick-btn" onclick="setQuickAmount(100)">100</button>
+                    <button class="quick-btn" onclick="setQuickAmount(500)">500</button>
+                    <button class="quick-btn" onclick="setQuickAmount(1000)">1K</button>
+                    <button class="quick-btn" onclick="setQuickAmount(5000)">5K</button>
+                </div>
+                <div class="input-with-balance">
+                    <input type="number" class="amount-input" id="betAmount" placeholder="輸入下注金額" min="1" step="1" oninput="checkInnerBalance()">
+                    <div class="balance-display">
+                        <span class="balance-label">餘額:</span>
+                        <span class="balance-amount" id="userBalance">10,000 USDT</span>
+                    </div>
+                </div>
                 <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">加入陣營</button>
+                <button class="btn btn-outline recharge-btn" onclick="showRecharge()" style="width: 100%; margin-top: 0.5rem; display: none;" id="rechargeBtn">💰 充值</button>
             </div>
         </div>
 
@@ -1841,7 +1944,19 @@
             <div class="trading-form">
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label style="display: block; margin-bottom: 0.5rem; color: #9ca3af; font-size: 0.85rem;">交易數量</label>
-                    <input type="number" class="amount-input" id="lmsrAmount" placeholder="輸入交易數量" min="0.1" step="0.1">
+                    <div class="quick-amount-buttons">
+                        <button class="quick-btn" onclick="setLMSRQuickAmount(10)">10</button>
+                        <button class="quick-btn" onclick="setLMSRQuickAmount(50)">50</button>
+                        <button class="quick-btn" onclick="setLMSRQuickAmount(100)">100</button>
+                        <button class="quick-btn" onclick="setLMSRQuickAmount(500)">500</button>
+                    </div>
+                    <div class="input-with-balance">
+                        <input type="number" class="amount-input" id="lmsrAmount" placeholder="輸入交易數量" min="0.1" step="0.1" oninput="checkLMSRBalance()">
+                        <div class="balance-display">
+                            <span class="balance-label">餘額:</span>
+                            <span class="balance-amount" id="outerUserBalance">10,000 USDT</span>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="trading-buttons">
@@ -1869,6 +1984,8 @@
                         </button>
                     </div>
                 </div>
+                
+                <button class="btn btn-outline recharge-btn" onclick="showRecharge()" style="width: 100%; margin-top: 1rem; display: none;" id="outerRechargeBtn">💰 充值</button>
             </div>
         </div>
 
@@ -2291,8 +2408,8 @@
                 }, 100);
             } else {
                 // 内盘状态
-                tradingTitle.textContent = 'PK對壘';
-                tradingSubtitle.textContent = '選擇陣營，預測未來';
+                tradingTitle.textContent = '預測對決';
+                tradingSubtitle.textContent = '選擇立場，預見未來';
                 statusBadge.textContent = '內盤交易';
                 statusBadge.className = 'status-badge status-inner';
                 innerTrading.style.display = 'block';
@@ -2379,17 +2496,37 @@
                 return;
             }
 
-            // 计算交易成本
-            const yesPrice = parseFloat(document.getElementById('yesPriceDisplay').textContent);
-            const noPrice = parseFloat(document.getElementById('noPriceDisplay').textContent);
-            const cost = option === 'yes' ? amount * yesPrice : amount * noPrice;
+            // 計算交易成本
+            const yesPrice = currentTopic.outerPool.yesAmount / (currentTopic.outerPool.yesAmount + currentTopic.outerPool.noAmount) || 0.5;
+            const noPrice = 1 - yesPrice;
+            const priceBase = option === 'yes' ? yesPrice : noPrice;
+            const cost = amount * priceBase * 1.05; // 包含5%手續費
 
-            // 计算2%手續費
+            // 檢查餘額
+            if (cost > userBalance) {
+                const shortage = cost - userBalance;
+                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${cost.toFixed(2)} USDT\n當前餘額: ${userBalance.toFixed(2)} USDT\n不足金額: ${shortage.toFixed(2)} USDT\n\n是否立即充值？`);
+                
+                if (shouldRecharge) {
+                    showRecharge();
+                } else {
+                    // 顯示充值按鈕
+                    const outerRechargeBtn = document.getElementById('outerRechargeBtn');
+                    if (outerRechargeBtn) outerRechargeBtn.style.display = 'block';
+                }
+                
+                return;
+            }
+
+            // 计算5%手續費
             const tradingFee = cost * 0.05;
             const netCost = cost - tradingFee;
 
             // 確認交易
             if (confirm(`確認買入 ${amount} 个 ${option.toUpperCase()} 代幣？\n交易成本: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT \n净成本: ${netCost.toFixed(2)} USDT`)) {
+                
+                // 扣除餘額
+                userBalance -= cost;
                 // 更新外盤持倉
                 if (option === 'yes') {
                     currentTopic.myOuterYes = (currentTopic.myOuterYes || 0) + amount;
@@ -2421,6 +2558,9 @@
 
                 // 清空輸入
                 document.getElementById('lmsrAmount').value = '';
+
+                // 更新餘額顯示
+                updateBalanceDisplay();
 
                 alert(`交易成功！\n買入: ${amount} 个 ${option.toUpperCase()}\n总花费: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT (40%已回流内盘)`);
             }
@@ -2488,6 +2628,10 @@
 
                 // 清空輸入
                 document.getElementById('lmsrAmount').value = '';
+
+                // 增加餘額（賣出收入）
+                userBalance += netRevenue;
+                updateBalanceDisplay();
 
                 alert(`交易成功！\n賣出: ${amount} 個 ${option.toUpperCase()}\n總收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT (40%已回流內盤)`);
             }
@@ -2789,6 +2933,19 @@
         function confirmBet() {
             const inputAmount = parseInt(document.getElementById('betAmount').value);
             
+            // 檢查餘額
+            if (inputAmount > userBalance) {
+                const shortage = inputAmount - userBalance;
+                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${inputAmount} USDT\n當前餘額: ${userBalance} USDT\n不足金額: ${shortage} USDT\n\n是否立即充值？`);
+                
+                if (shouldRecharge) {
+                    showRecharge();
+                } else {
+                    checkInnerBalance(); // 顯示充值按鈕
+                }
+                return;
+            }
+            
             // 計算5%手續費
             const fee = inputAmount * 0.05;
             const netAmount = inputAmount - fee;
@@ -2797,6 +2954,9 @@
             if (!confirm(`確認下注 ${inputAmount} USDT？\n手續費: ${fee.toFixed(2)} USDT (5%)\n實際下注: ${netAmount.toFixed(2)} USDT`)) {
                 return;
             }
+            
+            // 扣除餘額
+            userBalance -= inputAmount;
             
             // 确保内盘数据结构存在
             if (!currentTopic.innerPool) {
@@ -2832,6 +2992,9 @@
 
             updatePoolDisplay();
             closeModal();
+            
+            // 更新餘額顯示
+            updateBalanceDisplay();
             
             // 清空輸入
             document.getElementById('betAmount').value = '';
@@ -3246,6 +3409,163 @@
             generateKlineData();
             renderKlineChart();
         }
+
+        // 快速下單功能
+        let userBalance = 10000; // 模擬用戶餘額
+
+        // 設置快速金額 (內盤)
+        function setQuickAmount(amount) {
+            document.getElementById('betAmount').value = amount;
+            
+            // 更新快速按鈕狀態
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === amount.toString() || 
+                    (amount === 1000 && btn.textContent === '1K') ||
+                    (amount === 5000 && btn.textContent === '5K')) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // 檢查餘額
+            checkInnerBalance();
+        }
+
+        // 設置快速金額 (外盤)
+        function setLMSRQuickAmount(amount) {
+            document.getElementById('lmsrAmount').value = amount;
+            
+            // 更新快速按鈕狀態
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === amount.toString()) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // 觸發LMSR價格更新和餘額檢查
+            updateLMSRPrices();
+            checkLMSRBalance();
+        }
+
+        // 檢查內盤交易餘額
+        function checkInnerBalance() {
+            const amount = parseFloat(document.getElementById('betAmount').value) || 0;
+            if (amount <= 0) return;
+            
+            // 計算包含5%手續費的總成本
+            const totalCost = amount; // 內盤是全額投入，手續費從中扣除
+            
+            const balanceElement = document.getElementById('userBalance');
+            const rechargeBtn = document.getElementById('rechargeBtn');
+            
+            if (totalCost > userBalance) {
+                if (balanceElement) balanceElement.classList.add('insufficient');
+                if (rechargeBtn) rechargeBtn.style.display = 'block';
+            } else {
+                if (balanceElement) balanceElement.classList.remove('insufficient');
+                if (rechargeBtn) rechargeBtn.style.display = 'none';
+            }
+        }
+
+        // 檢查LMSR交易餘額
+        function checkLMSRBalance() {
+            const amount = parseFloat(document.getElementById('lmsrAmount').value) || 0;
+            if (amount <= 0) return;
+            
+            // 計算預期成本（基於當前價格）
+            const yesPrice = parseFloat(document.getElementById('yesPriceDisplay').textContent) || 0.5;
+            const noPrice = parseFloat(document.getElementById('noPriceDisplay').textContent) || 0.5;
+            
+            // 使用較高的價格來估算最大成本
+            const maxPrice = Math.max(yesPrice, noPrice);
+            const estimatedCost = amount * maxPrice * 1.05; // 包含5%手續費
+            
+            const outerBalanceElement = document.getElementById('outerUserBalance');
+            const outerRechargeBtn = document.getElementById('outerRechargeBtn');
+            
+            if (estimatedCost > userBalance) {
+                if (outerBalanceElement) outerBalanceElement.classList.add('insufficient');
+                if (outerRechargeBtn) outerRechargeBtn.style.display = 'block';
+            } else {
+                if (outerBalanceElement) outerBalanceElement.classList.remove('insufficient');
+                if (outerRechargeBtn) outerRechargeBtn.style.display = 'none';
+            }
+        }
+
+        // 檢查餘額
+        function checkBalance(amount) {
+            const balanceElement = document.getElementById('userBalance');
+            const outerBalanceElement = document.getElementById('outerUserBalance');
+            const rechargeBtn = document.getElementById('rechargeBtn');
+            const outerRechargeBtn = document.getElementById('outerRechargeBtn');
+            
+            // 更新餘額顯示
+            if (balanceElement) {
+                balanceElement.textContent = `${userBalance.toLocaleString()} USDT`;
+                if (amount > userBalance) {
+                    balanceElement.classList.add('insufficient');
+                    if (rechargeBtn) rechargeBtn.style.display = 'block';
+                } else {
+                    balanceElement.classList.remove('insufficient');
+                    if (rechargeBtn) rechargeBtn.style.display = 'none';
+                }
+            }
+            
+            if (outerBalanceElement) {
+                outerBalanceElement.textContent = `${userBalance.toLocaleString()} USDT`;
+            }
+        }
+
+        // 顯示充值界面
+        function showRecharge() {
+            alert('充值功能將跳轉到充值頁面\n\n• 支持銀行卡充值\n• 支持數字貨幣充值\n• 支持第三方支付\n\n充值後餘額將即時到賬');
+            
+            // 模擬充值成功
+            if (confirm('是否模擬充值 5000 USDT？')) {
+                userBalance += 5000;
+                updateBalanceDisplay();
+                alert('充值成功！餘額已更新');
+            }
+        }
+
+        // 更新所有餘額顯示
+        function updateBalanceDisplay() {
+            const balanceElement = document.getElementById('userBalance');
+            const outerBalanceElement = document.getElementById('outerUserBalance');
+            
+            if (balanceElement) {
+                balanceElement.textContent = `${userBalance.toLocaleString()} USDT`;
+                balanceElement.classList.remove('insufficient');
+            }
+            
+            if (outerBalanceElement) {
+                outerBalanceElement.textContent = `${userBalance.toLocaleString()} USDT`;
+                outerBalanceElement.classList.remove('insufficient');
+            }
+            
+            // 隱藏充值按鈕
+            const rechargeBtn = document.getElementById('rechargeBtn');
+            const outerRechargeBtn = document.getElementById('outerRechargeBtn');
+            if (rechargeBtn) rechargeBtn.style.display = 'none';
+            if (outerRechargeBtn) outerRechargeBtn.style.display = 'none';
+            
+            // 重新檢查餘額（如果有輸入值）
+            const betAmount = document.getElementById('betAmount');
+            if (betAmount && betAmount.value) {
+                checkInnerBalance();
+            }
+            
+            const lmsrAmount = document.getElementById('lmsrAmount');
+            if (lmsrAmount && lmsrAmount.value) {
+                checkLMSRBalance();
+            }
+        }
+
+        // 頁面加載時初始化餘額
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBalanceDisplay();
+        });
 
         // 創建話題表单提交
         document.getElementById('createTopicForm').addEventListener('submit', function(e) {
