@@ -2413,6 +2413,35 @@
                 myOuterOption4: 0
             },
             {
+                id: 7,
+                title: "2024年奧斯卡最佳影片獎預測",
+                category: "entertainment",
+                categoryName: "娛樂藝術",
+                avatar: "🏆",
+                options: ["沙丘2", "奧本海默", "花月殺手", "貧民窟百萬富翁重製版", "其他"],
+                innerPool: {
+                    option0Amount: 150,  // 沙丘2
+                    option1Amount: 200,  // 奧本海默
+                    option2Amount: 120,  // 花月殺手
+                    option3Amount: 80,   // 貧民窟百萬富翁重製版
+                    option4Amount: 50,   // 其他
+                    totalAmount: 600
+                },
+                outerPool: null, // 還未Pump
+                isOuter: false,
+                endTime: "2024-03-10",
+                status: "inner",
+                description: "2024年第96屆奧斯卡金像獎最佳影片獎花落誰家？基於影片質量、票房表現和學院偏好進行預測。",
+                isPrivate: false,
+                pumpCondition: 1000,
+                // 內盤多選項持倉
+                myOption0: 30,  // 我在沙丘2的投注
+                myOption1: 0,   // 我在奧本海默的投注
+                myOption2: 20,  // 我在花月殺手的投注
+                myOption3: 0,   // 我在貧民窟百萬富翁重製版的投注
+                myOption4: 0    // 我在其他的投注
+            },
+            {
                 id: 6,
                 title: "特斯拉股價能否在2024年超過300美元？",
                 category: "economy",
@@ -4172,21 +4201,44 @@
 
         // 檢查內盤交易餘額
         function checkInnerBalance() {
-            const amount = parseFloat(document.getElementById('betAmount').value) || 0;
-            if (amount <= 0) return;
-            
-            // 計算包含5%手續費的總成本
-            const totalCost = amount; // 內盤是全額投入，手續費從中扣除
-            
-            const balanceElement = document.getElementById('userBalance');
-            const rechargeBtn = document.getElementById('rechargeBtn');
-            
-            if (totalCost > userBalance) {
-                if (balanceElement) balanceElement.classList.add('insufficient');
-                if (rechargeBtn) rechargeBtn.style.display = 'block';
-            } else {
-                if (balanceElement) balanceElement.classList.remove('insufficient');
-                if (rechargeBtn) rechargeBtn.style.display = 'none';
+            // 檢查二元選項（betAmount）
+            const betAmountEl = document.getElementById('betAmount');
+            if (betAmountEl) {
+                const amount = parseFloat(betAmountEl.value) || 0;
+                if (amount > 0) {
+                    const totalCost = amount; // 內盤是全額投入，手續費從中扣除
+                    
+                    const balanceElement = document.getElementById('userBalance');
+                    const rechargeBtn = document.getElementById('rechargeBtn');
+                    
+                    if (totalCost > userBalance) {
+                        if (balanceElement) balanceElement.classList.add('insufficient');
+                        if (rechargeBtn) rechargeBtn.style.display = 'block';
+                    } else {
+                        if (balanceElement) balanceElement.classList.remove('insufficient');
+                        if (rechargeBtn) rechargeBtn.style.display = 'none';
+                    }
+                }
+            }
+
+            // 檢查多選項（multiOptionAmount）
+            const multiOptionAmountEl = document.getElementById('multiOptionAmount');
+            if (multiOptionAmountEl) {
+                const amount = parseFloat(multiOptionAmountEl.value) || 0;
+                if (amount > 0) {
+                    const totalCost = amount; // 內盤是全額投入，手續費從中扣除
+                    
+                    const multiBalanceElement = document.getElementById('multiUserBalance');
+                    const multiRechargeBtn = document.getElementById('multiRechargeBtn');
+                    
+                    if (totalCost > userBalance) {
+                        if (multiBalanceElement) multiBalanceElement.classList.add('insufficient');
+                        if (multiRechargeBtn) multiRechargeBtn.style.display = 'block';
+                    } else {
+                        if (multiBalanceElement) multiBalanceElement.classList.remove('insufficient');
+                        if (multiRechargeBtn) multiRechargeBtn.style.display = 'none';
+                    }
+                }
             }
         }
 
@@ -4294,17 +4346,23 @@
             // 隱藏充值按鈕
             const rechargeBtn = document.getElementById('rechargeBtn');
             const outerRechargeBtn = document.getElementById('outerRechargeBtn');
+            const multiRechargeBtn = document.getElementById('multiRechargeBtn');
+            const multiOuterRechargeBtn = document.getElementById('multiOuterRechargeBtn');
             if (rechargeBtn) rechargeBtn.style.display = 'none';
             if (outerRechargeBtn) outerRechargeBtn.style.display = 'none';
+            if (multiRechargeBtn) multiRechargeBtn.style.display = 'none';
+            if (multiOuterRechargeBtn) multiOuterRechargeBtn.style.display = 'none';
             
             // 重新檢查餘額（如果有輸入值）
             const betAmount = document.getElementById('betAmount');
-            if (betAmount && betAmount.value) {
+            const multiOptionAmount = document.getElementById('multiOptionAmount');
+            if ((betAmount && betAmount.value) || (multiOptionAmount && multiOptionAmount.value)) {
                 checkInnerBalance();
             }
             
             const lmsrAmount = document.getElementById('lmsrAmount');
-            if (lmsrAmount && lmsrAmount.value) {
+            const multiLmsrAmount = document.getElementById('multiLmsrAmount');
+            if ((lmsrAmount && lmsrAmount.value) || (multiLmsrAmount && multiLmsrAmount.value)) {
                 checkLMSRBalance();
             }
         }
