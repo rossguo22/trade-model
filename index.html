@@ -1393,6 +1393,156 @@
             margin-top: 0.15rem;
         }
 
+        /* 多選項交易界面樣式 */
+        .multi-option-trading {
+            display: none;
+        }
+
+        .multi-option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .option-card {
+            background: rgba(31, 41, 55, 0.8);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .option-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .option-card.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .option-header {
+            text-align: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .option-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .option-stats {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .option-amount {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .option-percentage {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        .option-participants {
+            font-size: 0.7rem;
+            color: #6b7280;
+        }
+
+        .option-indicator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            border-radius: 0 0 6px 6px;
+            transition: width 0.3s ease;
+        }
+
+        /* 多選項外盤LMSR樣式 */
+        .multi-lmsr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .lmsr-option-card {
+            background: rgba(31, 41, 55, 0.8);
+            border-radius: 6px;
+            padding: 0.75rem;
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+
+        .lmsr-option-header {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .lmsr-option-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .lmsr-option-price {
+            font-size: 0.75rem;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .lmsr-option-actions {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .lmsr-mini-btn {
+            flex: 1;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            border: 1px solid;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lmsr-buy-btn {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .lmsr-buy-btn:hover {
+            background: rgba(16, 185, 129, 0.3);
+        }
+
+        .lmsr-sell-btn {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .lmsr-sell-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
         /* K線圖樣式 */
         .kline-chart-container {
             background: rgba(17, 24, 39, 0.8);
@@ -1922,6 +2072,63 @@
             </div>
         </div>
 
+        <!-- 多選項內盤交易界面 -->
+        <div id="multiOptionTrading" class="trading-section multi-option-trading">
+            <div class="section-title">多選項預測 - 選擇最佳答案</div>
+            
+            <!-- 多選項網格 -->
+            <div class="multi-option-grid" id="multiOptionGrid">
+                <!-- 動態生成選項卡片 -->
+            </div>
+
+            <div class="amount-input-group">
+                <div class="quick-amount-buttons">
+                    <button class="quick-btn" onclick="setMultiOptionQuickAmount(100)">100</button>
+                    <button class="quick-btn" onclick="setMultiOptionQuickAmount(500)">500</button>
+                    <button class="quick-btn" onclick="setMultiOptionQuickAmount(1000)">1K</button>
+                    <button class="quick-btn" onclick="setMultiOptionQuickAmount(5000)">5K</button>
+                </div>
+                <div class="input-with-balance">
+                    <input type="number" class="amount-input" id="multiOptionAmount" placeholder="輸入下注金額" min="1" step="1" oninput="checkInnerBalance()">
+                    <div class="balance-display">
+                        <span class="balance-label">餘額:</span>
+                        <span class="balance-amount" id="multiUserBalance">10,000 USDT</span>
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">確認下注</button>
+                <button class="btn btn-outline recharge-btn" onclick="showRecharge()" style="width: 100%; margin-top: 0.5rem; display: none;" id="multiRechargeBtn">💰 充值</button>
+            </div>
+        </div>
+
+        <!-- 多選項外盤交易界面 -->
+        <div id="multiOptionOuter" class="trading-section multi-option-trading">
+            <div class="section-title">多選項LMSR交易</div>
+            
+            <!-- 交易數量輸入 -->
+            <div class="amount-input-group">
+                <div class="quick-amount-buttons">
+                    <button class="quick-btn" onclick="setMultiLMSRQuickAmount(10)">10</button>
+                    <button class="quick-btn" onclick="setMultiLMSRQuickAmount(50)">50</button>
+                    <button class="quick-btn" onclick="setMultiLMSRQuickAmount(100)">100</button>
+                    <button class="quick-btn" onclick="setMultiLMSRQuickAmount(500)">500</button>
+                </div>
+                <div class="input-with-balance">
+                    <input type="number" class="amount-input" id="multiLmsrAmount" placeholder="輸入交易數量" min="0.1" step="0.1" oninput="checkLMSRBalance()">
+                    <div class="balance-display">
+                        <span class="balance-label">餘額:</span>
+                        <span class="balance-amount" id="multiOuterUserBalance">10,000 USDT</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 多選項LMSR網格 -->
+            <div class="multi-lmsr-grid" id="multiLmsrGrid">
+                <!-- 動態生成LMSR選項卡片 -->
+            </div>
+            
+            <button class="btn btn-outline recharge-btn" onclick="showRecharge()" style="width: 100%; margin-top: 1rem; display: none;" id="multiOuterRechargeBtn">💰 充值</button>
+        </div>
+
         <!-- 外盤交易界面 -->
         <div id="outerTrading" class="trading-section" style="display: none;">
             <div class="section-title">LMSR交易</div>
@@ -2162,6 +2369,51 @@
             },
             {
                 id: 4,
+                title: "2024年世界盃冠軍預測",
+                category: "sports",
+                categoryName: "體育賽事",
+                avatar: "⚽",
+                options: ["巴西", "阿根廷", "法國", "德國", "其他"],
+                innerPool: {
+                    option0Amount: 300,  // 巴西
+                    option1Amount: 250,  // 阿根廷
+                    option2Amount: 200,  // 法國
+                    option3Amount: 150,  // 德國
+                    option4Amount: 100,  // 其他
+                    totalAmount: 1000
+                },
+                outerPool: {
+                    // 取最小選項(其他100)的50%作為底池
+                    basePool: 50,
+                    // 多選項外盤使用平均分配作為初始流動性
+                    option0Amount: 120,  // 巴西初始份額
+                    option1Amount: 100,  // 阿根廷初始份額
+                    option2Amount: 80,   // 法國初始份額
+                    option3Amount: 60,   // 德國初始份額
+                    option4Amount: 40,   // 其他初始份額
+                    totalAmount: 400,
+                    tradingFeeToInner: 0
+                },
+                isOuter: true,
+                endTime: "2024-12-31",
+                status: "outer",
+                description: "預測2024年世界盃足球賽的冠軍隊伍。選擇你認為最有可能奪冠的國家隊。",
+                isPrivate: false,
+                pumpCondition: 1000,
+                myOption0: 50,  // 我在巴西的投注
+                myOption1: 0,
+                myOption2: 0,
+                myOption3: 0,
+                myOption4: 0,
+                // 外盤多選項持倉（LMSR代幣）
+                myOuterOption0: 5,  // 我持有的巴西LMSR代幣
+                myOuterOption1: 2,  // 我持有的阿根廷LMSR代幣
+                myOuterOption2: 0,
+                myOuterOption3: 0,
+                myOuterOption4: 0
+            },
+            {
+                id: 6,
                 title: "特斯拉股價能否在2024年超過300美元？",
                 category: "economy",
                 categoryName: "經濟预测",
@@ -2234,21 +2486,43 @@
             const waterfall = document.getElementById('topicWaterfall');
             waterfall.innerHTML = '';
 
-            sampleTopics.filter(topic => topic.isOuter).forEach(topic => {
+            sampleTopics.filter(topic => topic.status === 'outer').forEach(topic => {
                 const card = document.createElement('div');
                 card.className = 'topic-card';
                 card.onclick = () => showTopicDetail(topic.id);
                 
                 // 计算外盘总资金池
                 const outerTotalPool = topic.outerPool.basePool + topic.outerPool.totalAmount;
-                const yesPercentage = ((topic.outerPool.yesAmount / topic.outerPool.totalAmount) * 100).toFixed(1);
+                const isMultiOption = topic.options && topic.options.length > 2;
+                
+                // 計算領先選項
+                let leadingOption = 'YES';
+                let leadingPercentage = '50.0';
+                
+                if (isMultiOption) {
+                    // 多選項外盤（未來擴展）
+                    leadingOption = topic.options[0] || '選項1';
+                    leadingPercentage = '20.0';  // 簡單平均
+                } else {
+                    // 二元選項
+                    const yesAmount = topic.outerPool.yesAmount || 0;
+                    const totalAmount = topic.outerPool.totalAmount || 1;
+                    leadingPercentage = ((yesAmount / totalAmount) * 100).toFixed(1);
+                    if (yesAmount < (topic.outerPool.noAmount || 0)) {
+                        leadingOption = 'NO';
+                        leadingPercentage = (((topic.outerPool.noAmount || 0) / totalAmount) * 100).toFixed(1);
+                    }
+                }
                 
                 card.innerHTML = `
                     <div class="topic-header">
                         <div class="topic-avatar">${topic.avatar}</div>
                         <div class="topic-info">
                             <h3>${topic.title}</h3>
-                            <div class="topic-category">${topic.categoryName}</div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="topic-category">${topic.categoryName}</div>
+                                ${isMultiOption ? '<span style="background: #059669; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 500;">多選項</span>' : ''}
+                            </div>
                         </div>
                     </div>
                     <div class="topic-stats">
@@ -2257,8 +2531,8 @@
                             <div class="stat-label">外盘总池(USDT)</div>
                         </div>
                         <div class="stat">
-                            <div class="stat-value">${yesPercentage}%</div>
-                            <div class="stat-label">Chance</div>
+                            <div class="stat-value">${leadingPercentage}%</div>
+                            <div class="stat-label">${leadingOption}領先</div>
                         </div>
                         <div class="stat">
                             <div class="stat-value">${topic.endTime}</div>
@@ -2267,8 +2541,11 @@
                     </div>
                 `;
                 
+
                 waterfall.appendChild(card);
             });
+            
+
         }
 
         // 渲染內盤話題瀑布流
@@ -2276,25 +2553,56 @@
             const waterfall = document.getElementById('innerTopicWaterfall');
             waterfall.innerHTML = '';
 
-            sampleTopics.filter(topic => !topic.isOuter).forEach(topic => {
+            const innerTopics = sampleTopics.filter(topic => topic.status === 'inner');
+
+            innerTopics.forEach(topic => {
                 const card = document.createElement('div');
                 card.className = 'topic-card';
                 card.onclick = () => showTopicDetail(topic.id);
                 
                 // 計算內盤資金池信息
                 const innerTotalPool = topic.innerPool.totalAmount;
-                const yesPercentage = innerTotalPool > 0 ? ((topic.innerPool.yesAmount / innerTotalPool) * 100).toFixed(1) : '50.0';
-                const pumpProgress = Math.min((innerTotalPool / 1000) * 100, 100).toFixed(1);
+                const isMultiOption = topic.options && topic.options.length > 2;
+                const pumpThreshold = topic.pumpCondition || 1000;
+                const pumpProgress = Math.min((innerTotalPool / pumpThreshold) * 100, 100).toFixed(1);
                 
                 // 計算到Pump還需多少
-                const pumpRemaining = Math.max(1000 - innerTotalPool, 0);
+                const pumpRemaining = Math.max(pumpThreshold - innerTotalPool, 0);
+                
+                // 計算最受歡迎的選項
+                let leadingOption = 'YES';
+                let leadingPercentage = '50.0';
+                
+                if (isMultiOption) {
+                    let maxAmount = 0;
+                    let maxIndex = 0;
+                    for (let i = 0; i < topic.options.length; i++) {
+                        const amount = topic.innerPool[`option${i}Amount`] || 0;
+                        if (amount > maxAmount) {
+                            maxAmount = amount;
+                            maxIndex = i;
+                        }
+                    }
+                    leadingOption = topic.options[maxIndex] || '選項1';
+                    leadingPercentage = innerTotalPool > 0 ? ((maxAmount / innerTotalPool) * 100).toFixed(1) : '0.0';
+                } else {
+                    const yesAmount = topic.innerPool.yesAmount || 0;
+                    leadingPercentage = innerTotalPool > 0 ? ((yesAmount / innerTotalPool) * 100).toFixed(1) : '50.0';
+                    if (yesAmount < (topic.innerPool.noAmount || 0)) {
+                        leadingOption = 'NO';
+                        leadingPercentage = innerTotalPool > 0 ? (((topic.innerPool.noAmount || 0) / innerTotalPool) * 100).toFixed(1) : '50.0';
+                    }
+                }
                 
                 card.innerHTML = `
                     <div class="topic-header">
                         <div class="topic-avatar">${topic.avatar}</div>
                         <div class="topic-info">
                             <h3>${topic.title}</h3>
-                            <div class="topic-category">${topic.categoryName}</div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="topic-category">${topic.categoryName}</div>
+                                ${isMultiOption ? '<span style="background: #059669; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 500;">多選項</span>' : ''}
+                            </div>
                         </div>
                     </div>
                     <div class="topic-stats">
@@ -2303,8 +2611,8 @@
                             <div class="stat-label">內盤總池(USDT)</div>
                         </div>
                         <div class="stat">
-                            <div class="stat-value">${yesPercentage}%</div>
-                            <div class="stat-label">Chance</div>
+                            <div class="stat-value">${leadingPercentage}%</div>
+                            <div class="stat-label">${leadingOption}領先</div>
                         </div>
                         <div class="stat">
                             <div class="stat-value">${pumpProgress}%</div>
@@ -2383,7 +2691,16 @@
             const statusBadge = document.getElementById('detailStatus');
             const innerTrading = document.getElementById('innerTrading');
             const outerTrading = document.getElementById('outerTrading');
+            const multiOptionTrading = document.getElementById('multiOptionTrading');
+            const multiOptionOuter = document.getElementById('multiOptionOuter');
             const centerKlineSection = document.getElementById('centerKlineSection');
+            const isMultiOption = currentTopic.options && currentTopic.options.length > 2;
+
+            // 隱藏所有交易界面
+            innerTrading.style.display = 'none';
+            outerTrading.style.display = 'none';
+            if (multiOptionTrading) multiOptionTrading.style.display = 'none';
+            if (multiOptionOuter) multiOptionOuter.style.display = 'none';
 
             if (isOuter) {
                 // 外盘状态
@@ -2391,8 +2708,14 @@
                 tradingSubtitle.textContent = '基于市场價格的预测市场交易';
                 statusBadge.textContent = '外盤交易';
                 statusBadge.className = 'status-badge status-outer';
-                innerTrading.style.display = 'none';
-                outerTrading.style.display = 'block';
+                
+                if (isMultiOption) {
+                    if (multiOptionOuter) multiOptionOuter.style.display = 'block';
+                    updateMultiLMSRInterface();
+                } else {
+                    outerTrading.style.display = 'block';
+                    updateLMSRPrices();
+                }
                 
                 // 顯示中間區域的K線圖
                 if (centerKlineSection) {
@@ -2408,12 +2731,20 @@
                 }, 100);
             } else {
                 // 内盘状态
-                tradingTitle.textContent = '預測對決';
-                tradingSubtitle.textContent = '選擇立場，預見未來';
                 statusBadge.textContent = '內盤交易';
                 statusBadge.className = 'status-badge status-inner';
-                innerTrading.style.display = 'block';
-                outerTrading.style.display = 'none';
+                
+                if (isMultiOption) {
+                    tradingTitle.textContent = '多選項預測';
+                    tradingSubtitle.textContent = '選擇最佳答案，預見未來';
+                    if (multiOptionTrading) multiOptionTrading.style.display = 'block';
+                    updateMultiOptionInterface();
+                } else {
+                    tradingTitle.textContent = '預測對決';
+                    tradingSubtitle.textContent = '選擇立場，預見未來';
+                    innerTrading.style.display = 'block';
+                    updatePKInterface();
+                }
                 
                 // 隱藏中間區域的K線圖
                 if (centerKlineSection) {
@@ -2637,18 +2968,165 @@
             }
         }
 
+        // 更新多選項內盤界面
+        function updateMultiOptionInterface() {
+            if (!currentTopic || !currentTopic.options) return;
+            
+            const grid = document.getElementById('multiOptionGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            currentTopic.options.forEach((option, index) => {
+                const amount = currentTopic.innerPool[`option${index}Amount`] || 0;
+                const percentage = currentTopic.innerPool.totalAmount > 0 ? 
+                    ((amount / currentTopic.innerPool.totalAmount) * 100).toFixed(1) : '0.0';
+                const participants = Math.floor(amount / 50) + Math.floor(Math.random() * 5); // 模擬參與人數
+                
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                card.onclick = () => selectMultiOption(index);
+                card.innerHTML = `
+                    <div class="option-header">
+                        <div class="option-name">${option}</div>
+                    </div>
+                    <div class="option-stats">
+                        <div class="option-amount">${amount} USDT</div>
+                        <div class="option-percentage">${percentage}%</div>
+                        <div class="option-participants">${participants}人支持</div>
+                    </div>
+                    <div class="option-indicator" style="width: ${percentage}%"></div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 更新多選項外盤LMSR界面
+        function updateMultiLMSRInterface() {
+            if (!currentTopic || !currentTopic.options) return;
+            
+            const grid = document.getElementById('multiLmsrGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            currentTopic.options.forEach((option, index) => {
+                // 簡化的價格計算
+                const basePrice = 1 / currentTopic.options.length;
+                const variance = (Math.random() - 0.5) * 0.3;
+                const price = Math.max(0.05, Math.min(0.95, basePrice + variance));
+                
+                const card = document.createElement('div');
+                card.className = 'lmsr-option-card';
+                card.innerHTML = `
+                    <div class="lmsr-option-header">
+                        <div class="lmsr-option-name">${option}</div>
+                        <div class="lmsr-option-price">${price.toFixed(3)} USDT</div>
+                    </div>
+                    <div class="lmsr-option-actions">
+                        <button class="lmsr-mini-btn lmsr-buy-btn" onclick="buyMultiLMSR(${index})">買入</button>
+                        <button class="lmsr-mini-btn lmsr-sell-btn" onclick="sellMultiLMSR(${index})">賣出</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 選擇多選項
+        let selectedMultiOption = null;
+        function selectMultiOption(optionIndex) {
+            selectedMultiOption = optionIndex;
+            
+            // 更新視覺狀態
+            document.querySelectorAll('.option-card').forEach((card, index) => {
+                if (index === optionIndex) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            });
+        }
+
+        // 多選項LMSR交易函數
+        function buyMultiLMSR(optionIndex) {
+            const amount = parseFloat(document.getElementById('multiLmsrAmount').value);
+            if (!amount || amount <= 0) {
+                alert('請輸入有效的交易數量');
+                return;
+            }
+            
+            // 簡單的成本計算
+            const cost = amount * (1 / currentTopic.options.length) * 1.05;
+            
+            if (cost > userBalance) {
+                const shortage = cost - userBalance;
+                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${cost.toFixed(2)} USDT\n當前餘額: ${userBalance.toFixed(2)} USDT\n不足金額: ${shortage.toFixed(2)} USDT\n\n是否立即充值？`);
+                
+                if (shouldRecharge) {
+                    showRecharge();
+                }
+                return;
+            }
+            
+            if (confirm(`確認買入 ${amount} 個 ${currentTopic.options[optionIndex]} 代幣？\n總花費: ${cost.toFixed(2)} USDT`)) {
+                userBalance -= cost;
+                
+                // 更新持倉
+                const holdingKey = `myMultiOption${optionIndex}`;
+                currentTopic[holdingKey] = (currentTopic[holdingKey] || 0) + amount;
+                
+                updateBalanceDisplay();
+                document.getElementById('multiLmsrAmount').value = '';
+                alert(`交易成功！買入 ${amount} 個 ${currentTopic.options[optionIndex]} 代幣`);
+            }
+        }
+
+        function sellMultiLMSR(optionIndex) {
+            const amount = parseFloat(document.getElementById('multiLmsrAmount').value);
+            if (!amount || amount <= 0) {
+                alert('請輸入有效的交易數量');
+                return;
+            }
+            
+            const holdingKey = `myMultiOption${optionIndex}`;
+            const currentHolding = currentTopic[holdingKey] || 0;
+            
+            if (amount > currentHolding) {
+                alert(`持倉不足！您目前持有 ${currentHolding} 個 ${currentTopic.options[optionIndex]} 代幣`);
+                return;
+            }
+            
+            // 簡單的收入計算
+            const revenue = amount * (1 / currentTopic.options.length) * 0.95;
+            
+            if (confirm(`確認賣出 ${amount} 個 ${currentTopic.options[optionIndex]} 代幣？\n預計收入: ${revenue.toFixed(2)} USDT`)) {
+                userBalance += revenue;
+                currentTopic[holdingKey] -= amount;
+                
+                updateBalanceDisplay();
+                document.getElementById('multiLmsrAmount').value = '';
+                alert(`交易成功！賣出 ${amount} 個 ${currentTopic.options[optionIndex]} 代幣`);
+            }
+        }
+
         // 更新资金池显示
         function updatePoolDisplay() {
             if (!currentTopic) return;
 
             const isOuter = currentTopic.status === 'outer';
+            const isMultiOption = currentTopic.options && currentTopic.options.length > 2;
             
-            // 更新內盤交易界面的显示（如果存在这些元素）
-            if (currentTopic.innerPool) {
+            // 更新內盤交易界面的显示（只對二元選項）
+            if (currentTopic.innerPool && !isMultiOption) {
                 const yesAmountEl = document.getElementById('yesAmount');
                 const noAmountEl = document.getElementById('noAmount');
-                if (yesAmountEl) yesAmountEl.textContent = `${currentTopic.innerPool.yesAmount} USDT`;
-                if (noAmountEl) noAmountEl.textContent = `${currentTopic.innerPool.noAmount} USDT`;
+                if (yesAmountEl) yesAmountEl.textContent = `${currentTopic.innerPool.yesAmount || 0} USDT`;
+                if (noAmountEl) noAmountEl.textContent = `${currentTopic.innerPool.noAmount || 0} USDT`;
+            }
+
+            // 更新多選項PK界面數據
+            if (isMultiOption && !isOuter) {
+                updatePKInterface();
             }
 
             // 更新我的持仓
@@ -2666,6 +3144,34 @@
             const isOuter = currentTopic.status === 'outer';
 
             if (isOuter && currentTopic.outerPool) {
+                const isMultiOption = currentTopic.options && currentTopic.options.length > 2;
+                let outerPoolRowsHTML = '';
+                
+                if (isMultiOption) {
+                    // 多選項外盤資金池顯示
+                    currentTopic.options.forEach((option, index) => {
+                        const amount = currentTopic.outerPool[`option${index}Amount`] || 0;
+                        outerPoolRowsHTML += `
+                            <div class="pool-row">
+                                <span class="pool-label">${option}交易量：</span>
+                                <span class="pool-value">${amount} USDT</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    // 二元選項外盤資金池顯示
+                    outerPoolRowsHTML = `
+                        <div class="pool-row">
+                            <span class="pool-label">YES交易量：</span>
+                            <span class="pool-value">${currentTopic.outerPool.yesAmount} USDT</span>
+                        </div>
+                        <div class="pool-row">
+                            <span class="pool-label">NO交易量：</span>
+                            <span class="pool-value">${currentTopic.outerPool.noAmount} USDT</span>
+                        </div>
+                    `;
+                }
+                
                 // 外盘状态 - 显示完整的资金流向
                 poolDetailsSection.innerHTML = `
                     <!-- 外盘资金池 -->
@@ -2679,14 +3185,7 @@
                                 <span class="pool-label">来自内盘底池：</span>
                                 <span class="pool-value">+${currentTopic.outerPool.basePool} USDT</span>
                             </div>
-                            <div class="pool-row">
-                                <span class="pool-label">YES交易量：</span>
-                                <span class="pool-value">${currentTopic.outerPool.yesAmount} USDT</span>
-                            </div>
-                            <div class="pool-row">
-                                <span class="pool-label">NO交易量：</span>
-                                <span class="pool-value">${currentTopic.outerPool.noAmount} USDT</span>
-                            </div>
+                            ${outerPoolRowsHTML}
                             <div class="pool-row">
                                 <span class="pool-label">外盘总额：</span>
                                 <span class="pool-value">${currentTopic.outerPool.totalAmount} USDT</span>
@@ -2701,14 +3200,32 @@
                             <span class="pool-section-badge pumped">已Pump</span>
                         </div>
                         <div class="pool-info">
-                            <div class="pool-row">
-                                <span class="pool-label">原始YES投注：</span>
-                                <span class="pool-value">${currentTopic.innerPool?.yesAmount || 0} USDT</span>
-                            </div>
-                            <div class="pool-row">
-                                <span class="pool-label">原始NO投注：</span>
-                                <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} USDT</span>
-                            </div>
+                            ${(() => {
+                                if (isMultiOption) {
+                                    // 多選項顯示
+                                    return currentTopic.options.map((option, index) => {
+                                        const amount = currentTopic.innerPool[`option${index}Amount`] || 0;
+                                        return `
+                                            <div class="pool-row">
+                                                <span class="pool-label">原始${option}投注：</span>
+                                                <span class="pool-value">${amount} USDT</span>
+                                            </div>
+                                        `;
+                                    }).join('');
+                                } else {
+                                    // 二元選項顯示
+                                    return `
+                                        <div class="pool-row">
+                                            <span class="pool-label">原始YES投注：</span>
+                                            <span class="pool-value">${currentTopic.innerPool?.yesAmount || 0} USDT</span>
+                                        </div>
+                                        <div class="pool-row">
+                                            <span class="pool-label">原始NO投注：</span>
+                                            <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} USDT</span>
+                                        </div>
+                                    `;
+                                }
+                            })()}
                             <div class="pool-row" style="color: #ef4444;">
                                 <span class="pool-label">转出外盘底池：</span>
                                 <span class="pool-value">-${currentTopic.outerPool.basePool} USDT</span>
@@ -2790,6 +3307,34 @@
                     `;
                 }
 
+                const isMultiOption = currentTopic.options && currentTopic.options.length > 2;
+                let poolRowsHTML = '';
+                
+                if (isMultiOption) {
+                    // 多選項話題顯示
+                    currentTopic.options.forEach((option, index) => {
+                        const amount = currentTopic.innerPool[`option${index}Amount`] || 0;
+                        poolRowsHTML += `
+                            <div class="pool-row">
+                                <span class="pool-label">${option}：</span>
+                                <span class="pool-value">${amount} USDT</span>
+                            </div>
+                        `;
+                    });
+                } else {
+                    // 二元選項話題顯示
+                    poolRowsHTML = `
+                        <div class="pool-row">
+                            <span class="pool-label">YES投注：</span>
+                            <span class="pool-value">${currentTopic.innerPool?.yesAmount || 0} USDT</span>
+                        </div>
+                        <div class="pool-row">
+                            <span class="pool-label">NO投注：</span>
+                            <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} USDT</span>
+                        </div>
+                    `;
+                }
+
                 poolDetailsSection.innerHTML = `
                     <!-- 内盘资金池 -->
                     <div class="pool-section">
@@ -2798,14 +3343,7 @@
                             <span class="pool-section-badge ${isPrivate ? 'private' : ''}">${isPrivate ? '私密' : '活躍'}</span>
                         </div>
                         <div class="pool-info">
-                            <div class="pool-row">
-                                <span class="pool-label">YES投注：</span>
-                                <span class="pool-value">${currentTopic.innerPool?.yesAmount || 0} USDT</span>
-                            </div>
-                            <div class="pool-row">
-                                <span class="pool-label">NO投注：</span>
-                                <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} USDT</span>
-                            </div>
+                            ${poolRowsHTML}
                             <div class="pool-row">
                                 <span class="pool-label">内盤總額：</span>
                                 <span class="pool-value">${innerTotal} USDT</span>
@@ -2870,31 +3408,103 @@
             if (!currentTopic) return;
 
             const isOuter = currentTopic.status === 'outer';
+            const isMultiOption = currentTopic.options && currentTopic.options.length > 2;
             const myInnerPositions = document.getElementById('myInnerPositions');
             const myOuterPositions = document.getElementById('myOuterPositions');
 
             // 更新內盤持倉
-            document.getElementById('myInnerYes').textContent = `${currentTopic.myInnerYes || 0} USDT`;
-            document.getElementById('myInnerNo').textContent = `${currentTopic.myInnerNo || 0} USDT`;
+            if (isMultiOption) {
+                // 多選項內盤持倉 - 動態生成內容
+                const innerPositionsContent = document.querySelector('#myInnerPositions .pool-info');
+                if (innerPositionsContent) {
+                    let positionsHTML = '';
+                    let totalInnerValue = 0;
+                    
+                    currentTopic.options.forEach((option, index) => {
+                        const amount = currentTopic[`myOption${index}`] || 0;
+                        totalInnerValue += amount;
+                        positionsHTML += `
+                            <div class="pool-row">
+                                <span class="pool-label">${option}：</span>
+                                <span class="pool-value">${amount} USDT</span>
+                            </div>
+                        `;
+                    });
+                    
+                    positionsHTML += `
+                        <div class="pool-row">
+                            <span class="pool-label">總計：</span>
+                            <span class="pool-value">${totalInnerValue} USDT</span>
+                        </div>
+                    `;
+                    
+                    innerPositionsContent.innerHTML = positionsHTML;
+                }
+            } else {
+                // 二元選項內盤持倉
+                const myInnerYesEl = document.getElementById('myInnerYes');
+                const myInnerNoEl = document.getElementById('myInnerNo');
+                if (myInnerYesEl) myInnerYesEl.textContent = `${currentTopic.myInnerYes || 0} USDT`;
+                if (myInnerNoEl) myInnerNoEl.textContent = `${currentTopic.myInnerNo || 0} USDT`;
+            }
 
             // 根据状态显示/隐藏外盤持倉
             if (isOuter && currentTopic.outerPool) {
                 myOuterPositions.style.display = 'block';
                 
-                // 更新外盤持倉
-                const myOuterYes = currentTopic.myOuterYes || 0;
-                const myOuterNo = currentTopic.myOuterNo || 0;
-                document.getElementById('myOuterYes').textContent = `${myOuterYes} 个`;
-                document.getElementById('myOuterNo').textContent = `${myOuterNo} 个`;
-
-                // 计算外盤持倉估值
-                if (currentTopic.outerPool.totalAmount > 0) {
-                    const yesPrice = currentTopic.outerPool.yesAmount / currentTopic.outerPool.totalAmount;
-                    const noPrice = currentTopic.outerPool.noAmount / currentTopic.outerPool.totalAmount;
-                    const totalValue = (myOuterYes * yesPrice + myOuterNo * noPrice).toFixed(2);
-                    document.getElementById('myOuterValue').textContent = `${totalValue} USDT`;
+                if (isMultiOption) {
+                    // 多選項外盤持倉 - 動態生成內容
+                    const outerPositionsContent = document.querySelector('#myOuterPositions .pool-info');
+                    if (outerPositionsContent) {
+                        let positionsHTML = '';
+                        let totalOuterValue = 0;
+                        
+                        currentTopic.options.forEach((option, index) => {
+                            const tokens = currentTopic[`myOuterOption${index}`] || 0;
+                            // 簡化的價格計算（基於份額比例）
+                            const optionAmount = currentTopic.outerPool[`option${index}Amount`] || 0;
+                            const price = currentTopic.outerPool.totalAmount > 0 ? 
+                                optionAmount / currentTopic.outerPool.totalAmount : 0;
+                            const value = tokens * price;
+                            totalOuterValue += value;
+                            
+                            positionsHTML += `
+                                <div class="pool-row">
+                                    <span class="pool-label">${option}代幣：</span>
+                                    <span class="pool-value">${tokens} 個</span>
+                                </div>
+                            `;
+                        });
+                        
+                        positionsHTML += `
+                            <div class="pool-row">
+                                <span class="pool-label">估值：</span>
+                                <span class="pool-value">${totalOuterValue.toFixed(2)} USDT</span>
+                            </div>
+                        `;
+                        
+                        outerPositionsContent.innerHTML = positionsHTML;
+                    }
                 } else {
-                    document.getElementById('myOuterValue').textContent = '0 USDT';
+                    // 二元選項外盤持倉
+                    const myOuterYes = currentTopic.myOuterYes || 0;
+                    const myOuterNo = currentTopic.myOuterNo || 0;
+                    const myOuterYesEl = document.getElementById('myOuterYes');
+                    const myOuterNoEl = document.getElementById('myOuterNo');
+                    if (myOuterYesEl) myOuterYesEl.textContent = `${myOuterYes} 个`;
+                    if (myOuterNoEl) myOuterNoEl.textContent = `${myOuterNo} 个`;
+
+                    // 计算外盤持倉估值
+                    if (currentTopic.outerPool.totalAmount > 0) {
+                        const yesPrice = currentTopic.outerPool.yesAmount / currentTopic.outerPool.totalAmount;
+                        const noPrice = currentTopic.outerPool.noAmount / currentTopic.outerPool.totalAmount;
+                        const totalValue = (myOuterYes * yesPrice + myOuterNo * noPrice).toFixed(2);
+                        const myOuterValueEl = document.getElementById('myOuterValue');
+                        if (myOuterValueEl) myOuterValueEl.textContent = `${totalValue} USDT`;
+                    } else {
+                        const myOuterValueEl = document.getElementById('myOuterValue');
+                        if (myOuterValueEl) myOuterValueEl.textContent = '0 USDT';
+                    }
                 }
             } else {
                 myOuterPositions.style.display = 'none';
@@ -2912,21 +3522,117 @@
 
         // 下注
         function placeBet() {
-            if (!selectedOption) {
-                alert('请先選擇YES或NO');
+            const isMultiOption = currentTopic.options && currentTopic.options.length > 2;
+            
+            if (isMultiOption) {
+                // 多選項邏輯
+                if (selectedMultiOption === null) {
+                    alert('請先選擇一個選項');
+                    return;
+                }
+
+                const amount = parseInt(document.getElementById('multiOptionAmount').value);
+                if (!amount || amount <= 0) {
+                    alert('請輸入有效的下注金額');
+                    return;
+                }
+
+                // 直接確認多選項下注
+                confirmMultiOptionBet();
+            } else {
+                // 二元選項邏輯
+                if (!selectedOption) {
+                    alert('请先選擇YES或NO');
+                    return;
+                }
+
+                const amount = parseInt(document.getElementById('betAmount').value);
+                if (!amount || amount <= 0) {
+                    alert('請輸入有效的下注金額');
+                    return;
+                }
+
+                // 显示確認模态框
+                document.getElementById('confirmText').textContent = 
+                    `您确定要下注 ${amount} USDT 到 ${selectedOption.toUpperCase()} 吗？`;
+                document.getElementById('confirmModal').classList.add('active');
+            }
+        }
+
+        // 確認多選項下注
+        function confirmMultiOptionBet() {
+            const inputAmount = parseInt(document.getElementById('multiOptionAmount').value);
+            
+            // 檢查餘額
+            if (inputAmount > userBalance) {
+                const shortage = inputAmount - userBalance;
+                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${inputAmount} USDT\n當前餘額: ${userBalance} USDT\n不足金額: ${shortage} USDT\n\n是否立即充值？`);
+                
+                if (shouldRecharge) {
+                    showRecharge();
+                } else {
+                    checkInnerBalance();
+                }
                 return;
             }
-
-            const amount = parseInt(document.getElementById('betAmount').value);
-            if (!amount || amount <= 0) {
-                alert('請輸入有效的下注金額');
+            
+            // 計算5%手續費
+            const fee = inputAmount * 0.05;
+            const netAmount = inputAmount - fee;
+            
+            // 確認交易
+            if (!confirm(`確認下注 ${inputAmount} USDT 到 ${currentTopic.options[selectedMultiOption]}？\n手續費: ${fee.toFixed(2)} USDT (5%)\n實際下注: ${netAmount.toFixed(2)} USDT`)) {
                 return;
             }
-
-            // 显示確認模态框
-            document.getElementById('confirmText').textContent = 
-                `您确定要下注 ${amount} USDT 到 ${selectedOption.toUpperCase()} 吗？`;
-            document.getElementById('confirmModal').classList.add('active');
+            
+            // 扣除餘額
+            userBalance -= inputAmount;
+            
+            // 確保內盤數據結構存在
+            if (!currentTopic.innerPool) {
+                currentTopic.innerPool = { totalAmount: 0 };
+                for (let i = 0; i < currentTopic.options.length; i++) {
+                    currentTopic.innerPool[`option${i}Amount`] = 0;
+                }
+            }
+            
+            // 更新內盤數據
+            const optionKey = `option${selectedMultiOption}Amount`;
+            const myOptionKey = `myOption${selectedMultiOption}`;
+            
+            currentTopic.innerPool[optionKey] = (currentTopic.innerPool[optionKey] || 0) + netAmount;
+            currentTopic.innerPool.totalAmount += netAmount;
+            currentTopic[myOptionKey] = (currentTopic[myOptionKey] || 0) + netAmount;
+            
+            // 更新sampleTopics中的數據
+            const topicIndex = sampleTopics.findIndex(t => t.id === currentTopic.id);
+            if (topicIndex !== -1) {
+                sampleTopics[topicIndex] = {...currentTopic};
+            }
+            
+            // 檢查是否觸發Pump
+            const pumpThreshold = currentTopic.pumpCondition || 1000;
+            if (currentTopic.innerPool.totalAmount >= pumpThreshold && 
+                currentTopic.status === 'inner' && 
+                !currentTopic.isPrivate) {
+                triggerPump();
+            } else {
+                updateTradingInterface();
+            }
+            
+            updatePoolDisplay();
+            updateBalanceDisplay();
+            
+            const selectedOptionName = currentTopic.options[selectedMultiOption];
+            
+            // 清空輸入和選擇
+            document.getElementById('multiOptionAmount').value = '';
+            selectedMultiOption = null;
+            document.querySelectorAll('.option-card').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            alert(`下注成功！\n選項: ${selectedOptionName}\n下注金額: ${netAmount.toFixed(2)} USDT`);
         }
 
         // 確認下注
@@ -3431,6 +4137,14 @@
             checkInnerBalance();
         }
 
+        // 設置多選項快捷金額
+        function setMultiOptionQuickAmount(amount) {
+            document.getElementById('multiOptionAmount').value = amount;
+            
+            // 檢查餘額
+            checkInnerBalance();
+        }
+
         // 設置快速金額 (外盤)
         function setLMSRQuickAmount(amount) {
             document.getElementById('lmsrAmount').value = amount;
@@ -3445,6 +4159,14 @@
             
             // 觸發LMSR價格更新和餘額檢查
             updateLMSRPrices();
+            checkLMSRBalance();
+        }
+
+        // 設置多選項LMSR快捷金額
+        function setMultiLMSRQuickAmount(amount) {
+            document.getElementById('multiLmsrAmount').value = amount;
+            
+            // 檢查餘額
             checkLMSRBalance();
         }
 
@@ -3470,26 +4192,51 @@
 
         // 檢查LMSR交易餘額
         function checkLMSRBalance() {
-            const amount = parseFloat(document.getElementById('lmsrAmount').value) || 0;
-            if (amount <= 0) return;
-            
-            // 計算預期成本（基於當前價格）
-            const yesPrice = parseFloat(document.getElementById('yesPriceDisplay').textContent) || 0.5;
-            const noPrice = parseFloat(document.getElementById('noPriceDisplay').textContent) || 0.5;
-            
-            // 使用較高的價格來估算最大成本
-            const maxPrice = Math.max(yesPrice, noPrice);
-            const estimatedCost = amount * maxPrice * 1.05; // 包含5%手續費
-            
-            const outerBalanceElement = document.getElementById('outerUserBalance');
-            const outerRechargeBtn = document.getElementById('outerRechargeBtn');
-            
-            if (estimatedCost > userBalance) {
-                if (outerBalanceElement) outerBalanceElement.classList.add('insufficient');
-                if (outerRechargeBtn) outerRechargeBtn.style.display = 'block';
-            } else {
-                if (outerBalanceElement) outerBalanceElement.classList.remove('insufficient');
-                if (outerRechargeBtn) outerRechargeBtn.style.display = 'none';
+            // 檢查二元選項LMSR
+            const lmsrAmountEl = document.getElementById('lmsrAmount');
+            if (lmsrAmountEl) {
+                const amount = parseFloat(lmsrAmountEl.value) || 0;
+                if (amount > 0) {
+                    // 計算預期成本（基於當前價格）
+                    const yesPrice = parseFloat(document.getElementById('yesPriceDisplay').textContent) || 0.5;
+                    const noPrice = parseFloat(document.getElementById('noPriceDisplay').textContent) || 0.5;
+                    
+                    // 使用較高的價格來估算最大成本
+                    const maxPrice = Math.max(yesPrice, noPrice);
+                    const estimatedCost = amount * maxPrice * 1.05; // 包含5%手續費
+                    
+                    const outerBalanceElement = document.getElementById('outerUserBalance');
+                    const outerRechargeBtn = document.getElementById('outerRechargeBtn');
+                    
+                    if (estimatedCost > userBalance) {
+                        if (outerBalanceElement) outerBalanceElement.classList.add('insufficient');
+                        if (outerRechargeBtn) outerRechargeBtn.style.display = 'block';
+                    } else {
+                        if (outerBalanceElement) outerBalanceElement.classList.remove('insufficient');
+                        if (outerRechargeBtn) outerRechargeBtn.style.display = 'none';
+                    }
+                }
+            }
+
+            // 檢查多選項LMSR
+            const multiLmsrAmountEl = document.getElementById('multiLmsrAmount');
+            if (multiLmsrAmountEl) {
+                const amount = parseFloat(multiLmsrAmountEl.value) || 0;
+                if (amount > 0) {
+                    // 多選項LMSR簡化估算（使用平均價格）
+                    const estimatedCost = amount * 0.6 * 1.05; // 假設平均價格0.6，包含5%手續費
+                    
+                    const multiOuterBalanceElement = document.getElementById('multiOuterUserBalance');
+                    const multiOuterRechargeBtn = document.getElementById('multiOuterRechargeBtn');
+                    
+                    if (estimatedCost > userBalance) {
+                        if (multiOuterBalanceElement) multiOuterBalanceElement.classList.add('insufficient');
+                        if (multiOuterRechargeBtn) multiOuterRechargeBtn.style.display = 'block';
+                    } else {
+                        if (multiOuterBalanceElement) multiOuterBalanceElement.classList.remove('insufficient');
+                        if (multiOuterRechargeBtn) multiOuterRechargeBtn.style.display = 'none';
+                    }
+                }
             }
         }
 
@@ -3857,12 +4604,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderTopics();
             
+            // 预渲染內盤話題以確保數據正確
+            renderInnerTopics();
+            
             // 检查URL参数
             const urlParams = new URLSearchParams(window.location.search);
             const topicId = urlParams.get('topic');
             if (topicId) {
                 showTopicDetail(parseInt(topicId));
             }
+            
+
         });
     </script>
 </body>
