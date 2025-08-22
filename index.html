@@ -94,7 +94,14 @@
         .content-area {
             flex: 1;
             padding: 2rem;
-            max-width: calc(100vw - 240px - 320px);
+            max-width: calc(100vw - 240px - 420px);
+        }
+
+        /* 創建頁面特殊佈局 */
+        #create .content-area {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 3rem;
         }
 
         .container {
@@ -105,10 +112,10 @@
 
         /* 右側交易欄 */
         .trading-sidebar {
-            width: 320px;
+            width: 420px;
             background: #111218;
             border-left: 1px solid #1f2937;
-            padding: 1.5rem;
+            padding: 2rem;
             overflow-y: auto;
             position: fixed;
             right: 0;
@@ -1073,6 +1080,408 @@
             justify-content: center;
             margin-top: 1.5rem;
         }
+
+        /* 創建頁面分區樣式 */
+        .form-section {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+            padding-bottom: 1rem;
+        }
+
+        .section-title {
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(17, 24, 39, 0.5);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+        }
+
+        .input-label {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .input-group .form-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .input-unit {
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .pump-explanation {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .explanation-title {
+            color: #60a5fa;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .explanation-list {
+            margin: 0;
+            padding-left: 1.25rem;
+            color: #9ca3af;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .explanation-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        #pumpSection.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        #pumpSection.disabled::before {
+            content: "私密話題不支援Pump功能";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 10;
+        }
+
+        #pumpSection {
+            position: relative;
+        }
+
+        .pool-section-badge.private {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* 選項設置樣式 */
+        .option-type-selector {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .radio-label {
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+
+        .custom-options-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .option-input {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            align-items: center;
+        }
+
+        .option-input .form-input {
+            flex: 1;
+        }
+
+        .option-input .option-number {
+            color: #9ca3af;
+            font-size: 0.9rem;
+            min-width: 60px;
+        }
+
+        /* PK對壘界面樣式 */
+        .pk-arena {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: rgba(17, 24, 39, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+
+        .pk-side {
+            flex: 1;
+            background: rgba(31, 41, 55, 0.8);
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pk-side:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .pk-side.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .yes-side {
+            border-left: 4px solid #10b981;
+        }
+
+        .yes-side:hover {
+            border-left-color: #059669;
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .no-side {
+            border-right: 4px solid #ef4444;
+        }
+
+        .no-side:hover {
+            border-right-color: #dc2626;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .pk-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .pk-icon {
+            font-size: 1.25rem;
+        }
+
+        .pk-label {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .pk-stats {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.85rem;
+        }
+
+        .pk-amount {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .pk-percentage {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .pk-participants {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .pk-indicator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .yes-side .pk-indicator {
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+        }
+
+        .no-side .pk-indicator {
+            background: linear-gradient(90deg, transparent, #ef4444, transparent);
+        }
+
+        .pk-vs {
+            text-align: center;
+            color: #ffffff;
+            font-weight: bold;
+            flex-shrink: 0;
+            padding: 0 0.5rem;
+        }
+
+        .vs-text {
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .vs-subtitle {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            margin-top: 0.25rem;
+        }
+
+        /* K線圖樣式 */
+        .kline-chart-container {
+            background: rgba(17, 24, 39, 0.8);
+            border-radius: 8px;
+            border: 1px solid rgba(75, 85, 99, 0.3);
+            overflow: hidden;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(31, 41, 55, 0.5);
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+        }
+
+        .chart-title {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-btn {
+            padding: 0.25rem 0.5rem;
+            background: transparent;
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            color: #9ca3af;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chart-btn:hover {
+            background: rgba(75, 85, 99, 0.3);
+            color: #ffffff;
+        }
+
+        .chart-btn.active {
+            background: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+        }
+
+        .kline-chart {
+            height: 280px;
+            position: relative;
+            padding: 1rem;
+            background: rgba(17, 24, 39, 0.5);
+        }
+
+        .kline-bar {
+            position: absolute;
+            bottom: 1rem;
+            width: 8px;
+            border-radius: 1px;
+            transition: all 0.3s;
+        }
+
+        .kline-bar.up {
+            background: linear-gradient(180deg, #10b981, #059669);
+            border: 1px solid #10b981;
+        }
+
+        .kline-bar.down {
+            background: linear-gradient(180deg, #ef4444, #dc2626);
+            border: 1px solid #ef4444;
+        }
+
+        .price-indicator {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(59, 130, 246, 0.8);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .chart-tooltip {
+            position: absolute;
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            border-radius: 4px;
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            color: #ffffff;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
@@ -1125,69 +1534,142 @@
                 <div class="create-form">
                     <h2 style="text-align: center; margin-bottom: 2rem; color: #ffffff; font-weight: 700; font-size: 1.75rem;">創建新話題</h2>
                 
-                <div class="pump-notice">
-                    <strong>Pump条件说明：</strong>当话题资金池达到1000 USDT时，将自动从内盘转换为外盤交易。
-                </div>
+                    <form id="createTopicForm">
+                        <!-- 第一部分：話題設定 -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <h3 class="section-title">📝 話題設定</h3>
+                                <p class="section-subtitle">設定話題的基本資訊</p>
+                            </div>
 
-                <form id="createTopicForm">
-                    <div class="form-group">
-                        <label class="form-label">話題內容 *</label>
-                        <textarea class="form-input form-textarea" name="content" placeholder="請輸入您要预测的話題內容..." required></textarea>
-                    </div>
+                            <div class="form-group">
+                                <label class="form-label">話題內容 *</label>
+                                <textarea class="form-input form-textarea" name="content" placeholder="請輸入您要预测的話題內容..." required></textarea>
+                            </div>
 
-                    <div class="form-group">
-                        <label class="form-label">话题头像</label>
-                        <input type="file" class="form-input" name="avatar" accept="image/*">
-                    </div>
+                            <div class="form-group">
+                                <label class="form-label">話題頭像</label>
+                                <input type="file" class="form-input" name="avatar" accept="image/*">
+                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">支援 JPG、PNG、GIF 格式，建議尺寸 200x200 像素</small>
+                            </div>
 
-                    <div class="form-group">
-                        <label class="form-label">話題類別 *</label>
-                        <select class="form-input" name="category" required>
-                            <option value="">請選擇类别</option>
-                            <option value="sports">体育赛事</option>
-                            <option value="politics">政治选举</option>
-                            <option value="crypto">加密貨幣</option>
-                            <option value="economy">經濟预测</option>
-                            <option value="entertainment">娱乐八卦</option>
-                            <option value="technology">科技发展</option>
-                            <option value="other">其他</option>
-                        </select>
-                    </div>
+                            <div class="form-group">
+                                <label class="form-label">話題類別 *</label>
+                                <select class="form-input" name="category" required>
+                                    <option value="">請選擇類別</option>
+                                    <option value="sports">體育賽事</option>
+                                    <option value="politics">政治選舉</option>
+                                    <option value="crypto">加密貨幣</option>
+                                    <option value="economy">經濟預測</option>
+                                    <option value="entertainment">娛樂八卦</option>
+                                    <option value="technology">科技發展</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
 
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="isPrivate" name="isPrivate">
-                            <label for="isPrivate" class="form-label" style="margin-bottom: 0;">私密話題（不会出现在瀑布流中）</label>
-                        </div>
-                    </div>
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="isPrivate" name="isPrivate" onchange="togglePumpSettings()">
+                                    <label for="isPrivate" class="form-label" style="margin-bottom: 0;">私密話題</label>
+                                </div>
+                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">私密話題不會出現在瀑布流中，也不會觸發Pump轉外盤</small>
+                            </div>
 
-                    <div class="form-group">
-                        <label class="form-label">选项设置</label>
-                        <div class="options-container">
-                            <div>默认为YES/NO二元選擇</div>
-                            <div id="customOptions" style="margin-top: 1rem; display: none;">
-                                <div class="option-input">
-                                    <input type="text" class="form-input" placeholder="选项1">
-                                    <button type="button" class="btn btn-secondary" onclick="removeOption(this)">删除</button>
+                            <div class="form-group">
+                                <label class="form-label">選項設置</label>
+                                <div class="options-container">
+                                    <div class="option-type-selector">
+                                        <label class="radio-option">
+                                            <input type="radio" name="optionType" value="binary" checked onchange="toggleOptionType()">
+                                            <span class="radio-label">YES/NO 二元選擇</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="optionType" value="custom" onchange="toggleOptionType()">
+                                            <span class="radio-label">自定義選項（2個或以上）</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div id="customOptions" style="display: none; margin-top: 1rem;">
+                                        <div class="custom-options-header">
+                                            <span style="color: #9ca3af; font-size: 0.9rem;">請添加至少2個選項：</span>
+                                            <button type="button" class="btn btn-outline btn-sm" onclick="addOption()">+ 添加選項</button>
+                                        </div>
+                                        <div id="optionsList">
+                                            <!-- 動態生成的選項輸入框 -->
+                                        </div>
+                                        <div class="option-notice" style="color: #6b7280; font-size: 0.85rem; margin-top: 0.5rem;">
+                                            最少需要2個選項，最多支援8個選項
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="add-option" onclick="toggleCustomOptions()">+ 添加自定义选项</div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label class="form-label">交易結束時間 *</label>
-                        <input type="datetime-local" class="form-input" name="tradingEndTime" required>
-                        <small style="color: #6b7280; margin-top: 0.5rem; display: block;">在此时间内可以pump，可进入外盤交易</small>
-                    </div>
+                        <!-- 第二部分：Pump設定 -->
+                        <div class="form-section" id="pumpSection">
+                            <div class="section-header">
+                                <h3 class="section-title">🚀 Pump設定</h3>
+                                <p class="section-subtitle">設定內盤轉外盤的條件</p>
+                            </div>
 
-                    <div class="form-group">
-                        <label class="form-label">话题結束時間 *</label>
-                        <input type="datetime-local" class="form-input" name="topicEndTime" required>
-                        <small style="color: #6b7280; margin-top: 0.5rem; display: block;">话题结束后均不可交易，此时间需大于交易結束時間</small>
-                    </div>
+                            <div class="form-group">
+                                <label class="form-label">Pump觸發條件 *</label>
+                                <div class="input-group">
+                                    <span class="input-label">資金池達到</span>
+                                    <input type="number" class="form-input" name="pumpCondition" value="1000" min="1000" step="100" required>
+                                    <span class="input-unit">USDT</span>
+                                </div>
+                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">最小值為1000 USDT，建議設定為100的倍數</small>
+                            </div>
 
-                                            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                            <div class="pump-explanation">
+                                <div class="explanation-title">💡 Pump機制說明</div>
+                                <ul class="explanation-list">
+                                    <li>內盤達到設定金額時自動觸發Pump</li>
+                                    <li>下注金額較小一方的50%轉為外盤LMSR底池</li>
+                                    <li>轉為外盤後可在瀑布流中展示和交易</li>
+                                    <li>內盤交易收取5%手續費</li>
+                                    <li>外盤交易手續費的40%持續回流內盤</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 第三部分：時間設定 -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <h3 class="section-title">⏰ 時間設定</h3>
+                                <p class="section-subtitle">設定話題的生命週期時間</p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">內盤交易結束時間 *</label>
+                                <input type="datetime-local" class="form-input" name="tradingEndTime" required onchange="updateAdvancedSettings()">
+                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">在此時間內可以進行內盤交易，可觸發Pump轉外盤</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">話題結束時間 *</label>
+                                <input type="datetime-local" class="form-input" name="topicEndTime" required onchange="updateAdvancedSettings()">
+                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">話題結束後所有交易停止並進行結算，需大於內盤交易結束時間</small>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="showAdvanced" onchange="toggleAdvancedSettings()">
+                                    <label for="showAdvanced" class="form-label" style="margin-bottom: 0;">顯示高級設定</label>
+                                </div>
+                            </div>
+
+                            <div id="advancedSettings" style="display: none;">
+                                <div class="form-group">
+                                    <label class="form-label">外盤交易結束時間</label>
+                                    <input type="datetime-local" class="form-input" name="outerTradingEndTime">
+                                    <small style="color: #6b7280; margin-top: 0.5rem; display: block;">留空則與話題結束時間相同。設定後，外盤將在此時間停止交易但話題繼續至結束時間</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 3rem;">
                             <button type="button" class="btn btn-secondary" onclick="showPage('home')">取消</button>
                             <button type="submit" class="btn btn-primary">創建話題</button>
                         </div>
@@ -1214,6 +1696,21 @@
                     
                     <div style="margin-top: 2rem; color: #9ca3af; line-height: 1.6;" id="detailDescription">
                         这里显示话题的详细描述内容...
+                    </div>
+
+                    <!-- K線圖區域 (僅外盤顯示) -->
+                    <div id="centerKlineSection" style="margin-top: 2rem; display: none;">
+                        <div class="kline-chart-container">
+                            <div class="chart-header">
+                                <span class="chart-title">💹 價格走勢圖</span>
+                                <div class="chart-controls">
+                                    <button class="chart-btn active" onclick="switchTimeframe('1m')">1分</button>
+                                    <button class="chart-btn" onclick="switchTimeframe('5m')">5分</button>
+                                    <button class="chart-btn" onclick="switchTimeframe('1h')">1小時</button>
+                                </div>
+                            </div>
+                            <div id="centerKlineChart" class="kline-chart"></div>
+                        </div>
                     </div>
 
                     <!-- 资金池状态详情 -->
@@ -1280,21 +1777,45 @@
 
         <!-- 內盤交易界面 -->
         <div id="innerTrading" class="trading-section">
-            <div class="section-title">選擇预测</div>
-            <div class="betting-interface">
-                <div class="bet-option yes" onclick="selectOption('yes')">
-                    <div class="bet-label">YES</div>
-                    <div class="bet-amount" id="yesAmount">0 USDT</div>
+            <div class="section-title">PK對壘 - 選擇陣營</div>
+            
+            <!-- PK對戰界面 -->
+            <div class="pk-arena">
+                <div class="pk-side yes-side" onclick="selectOption('yes')">
+                    <div class="pk-header">
+                        <div class="pk-icon">👍</div>
+                        <div class="pk-label">YES陣營</div>
+                    </div>
+                    <div class="pk-stats">
+                        <div class="pk-amount" id="yesAmount">0 USDT</div>
+                        <div class="pk-percentage" id="yesPercentage">0%</div>
+                        <div class="pk-participants" id="yesParticipants">0人</div>
+                    </div>
+                    <div class="pk-indicator" id="yesIndicator"></div>
                 </div>
-                <div class="bet-option no" onclick="selectOption('no')">
-                    <div class="bet-label">NO</div>
-                    <div class="bet-amount" id="noAmount">0 USDT</div>
+                
+                <div class="pk-vs">
+                    <div class="vs-text">VS</div>
+                    <div class="vs-subtitle">預測對決</div>
+                </div>
+                
+                <div class="pk-side no-side" onclick="selectOption('no')">
+                    <div class="pk-header">
+                        <div class="pk-icon">👎</div>
+                        <div class="pk-label">NO陣營</div>
+                    </div>
+                    <div class="pk-stats">
+                        <div class="pk-amount" id="noAmount">0 USDT</div>
+                        <div class="pk-percentage" id="noPercentage">0%</div>
+                        <div class="pk-participants" id="noParticipants">0人</div>
+                    </div>
+                    <div class="pk-indicator" id="noIndicator"></div>
                 </div>
             </div>
 
             <div class="amount-input-group">
                 <input type="number" class="amount-input" id="betAmount" placeholder="輸入下注金額" min="1" step="1">
-                <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">確認下注</button>
+                <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">加入陣營</button>
             </div>
         </div>
 
@@ -1464,6 +1985,9 @@
                 endTime: "2025-12-31",
                 status: "outer",
                 description: "隨著比特幣ETF獲批和機構採用增加，比特幣價格是否能在2025年底突破歷史新高15萬美元？",
+                isPrivate: false,
+                pumpCondition: 1000, // 自定義Pump條件
+                outerTradingEndTime: "2025-12-31", // 外盤交易結束時間
                 // 內盤持倉（原始下注）
                 myInnerYes: 100,
                 myInnerNo: 0,
@@ -1742,6 +2266,7 @@
             const statusBadge = document.getElementById('detailStatus');
             const innerTrading = document.getElementById('innerTrading');
             const outerTrading = document.getElementById('outerTrading');
+            const centerKlineSection = document.getElementById('centerKlineSection');
 
             if (isOuter) {
                 // 外盘状态
@@ -1752,16 +2277,34 @@
                 innerTrading.style.display = 'none';
                 outerTrading.style.display = 'block';
                 
+                // 顯示中間區域的K線圖
+                if (centerKlineSection) {
+                    centerKlineSection.style.display = 'block';
+                }
+                
                 // 更新LMSR價格显示
                 updateLMSRPrices();
+                
+                // 初始化K線圖
+                setTimeout(() => {
+                    initKlineChart();
+                }, 100);
             } else {
                 // 内盘状态
-                tradingTitle.textContent = '内盘下注';
-                tradingSubtitle.textContent = '選擇您的预测并下注';
+                tradingTitle.textContent = 'PK對壘';
+                tradingSubtitle.textContent = '選擇陣營，預測未來';
                 statusBadge.textContent = '內盤交易';
                 statusBadge.className = 'status-badge status-inner';
                 innerTrading.style.display = 'block';
                 outerTrading.style.display = 'none';
+                
+                // 隱藏中間區域的K線圖
+                if (centerKlineSection) {
+                    centerKlineSection.style.display = 'none';
+                }
+                
+                // 更新PK界面數據
+                updatePKInterface();
                 
                 // 检查是否接近Pump条件
                 if (currentTopic.totalPool >= 800) {
@@ -2048,15 +2591,67 @@
             } else {
                 // 内盘状态 - 显示当前状态和Pump进度
                 const innerTotal = currentTopic.innerPool?.totalAmount || 0;
-                const progress = Math.min(innerTotal / 1000 * 100, 100);
-                const remaining = Math.max(1000 - innerTotal, 0);
+                const isPrivate = currentTopic.isPrivate;
+                const pumpThreshold = currentTopic.pumpCondition || 1000;
+                
+                let progressSection = '';
+                let conditionSection = '';
+                
+                if (!isPrivate) {
+                    // 非私密話題顯示Pump進度
+                    const progress = Math.min(innerTotal / pumpThreshold * 100, 100);
+                    const remaining = Math.max(pumpThreshold - innerTotal, 0);
+                    
+                    progressSection = `
+                        <div class="pump-progress" style="margin: 1.5rem 0;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%;"></div>
+                            </div>
+                            <div class="progress-text">
+                                距离Pump还需 <strong style="color: #10b981;">${remaining}</strong> USDT
+                            </div>
+                        </div>
+                    `;
+                    
+                    conditionSection = `
+                        <!-- Pump条件说明 -->
+                        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #60a5fa;">
+                            <strong>⚡ Pump条件：</strong><br>
+                            • 内盘资金池达到${pumpThreshold} USDT时自动触发Pump<br>
+                            • 内盘交易收取5%手續費<br>
+                            • 下注金額较小一方的50%将转为外盘LMSR底池<br>
+                            • 转为外盘后可在瀑布流中展示和交易
+                        </div>
+                        
+                        <!-- 收益說明 -->
+                        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #10b981;">
+                            <strong>💰 收益機會：</strong><br>
+                            • <strong>內盤勝利</strong>：瓜分對方陣營的全部資金<br>
+                            • <strong>外盤交易</strong>：可在LMSR市場進行價格交易獲利<br>
+                            • <strong>手續費分紅</strong>：內盤參與者享受外盤交易手續費的40%回流<br>
+                            • <strong>早期參與優勢</strong>：越早參與，潛在收益倍數越高
+                        </div>
+                    `;
+                } else {
+                    // 私密話題顯示私密說明
+                    conditionSection = `
+                        <!-- 私密話題说明 -->
+                        <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #f87171;">
+                            <strong>🔒 私密話題：</strong><br>
+                            • 此話題為私密話題，不會出現在瀑布流中<br>
+                            • 私密話題不支援Pump功能，不會轉為外盤<br>
+                            • 內盤交易收取5%手續費<br>
+                            • 話題結束後直接進行內盤結算
+                        </div>
+                    `;
+                }
 
                 poolDetailsSection.innerHTML = `
                     <!-- 内盘资金池 -->
                     <div class="pool-section">
                         <div class="pool-section-header">
-                            <span class="pool-section-title">内盘资金池</span>
-                            <span class="pool-section-badge">活跃</span>
+                            <span class="pool-section-title">内盤資金池</span>
+                            <span class="pool-section-badge ${isPrivate ? 'private' : ''}">${isPrivate ? '私密' : '活躍'}</span>
                         </div>
                         <div class="pool-info">
                             <div class="pool-row">
@@ -2068,30 +2663,61 @@
                                 <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} USDT</span>
                             </div>
                             <div class="pool-row">
-                                <span class="pool-label">内盘总额：</span>
+                                <span class="pool-label">内盤總額：</span>
                                 <span class="pool-value">${innerTotal} USDT</span>
                             </div>
                         </div>
-                        
-                        <div class="pump-progress" style="margin: 1.5rem 0;">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${progress}%;"></div>
-                            </div>
-                            <div class="progress-text">
-                                距离Pump还需 <strong style="color: #10b981;">${remaining}</strong> USDT
-                            </div>
-                        </div>
+                        ${progressSection}
                     </div>
-
-                    <!-- Pump条件说明 -->
-                    <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #60a5fa;">
-                        <strong>⚡ Pump条件：</strong><br>
-                        • 内盘资金池达到1000 USDT时自动触发Pump<br>
-                        • 内盘交易收取5%手續費<br>
-                        • 下注金額较小一方的50%将转为外盘LMSR底池<br>
-                        • 转为外盘后可在瀑布流中展示和交易
-                    </div>
+                    ${conditionSection}
                 `;
+            }
+        }
+
+        // 更新PK界面數據
+        function updatePKInterface() {
+            if (!currentTopic || !currentTopic.innerPool) return;
+            
+            const { yesAmount, noAmount, totalAmount } = currentTopic.innerPool;
+            
+            // 計算百分比
+            const yesPercentage = totalAmount > 0 ? Math.round((yesAmount / totalAmount) * 100) : 0;
+            const noPercentage = totalAmount > 0 ? Math.round((noAmount / totalAmount) * 100) : 0;
+            
+            // 模擬參與人數（實際項目中需要從後端獲取）
+            const yesParticipants = Math.floor(yesAmount / 50) + Math.floor(Math.random() * 5);
+            const noParticipants = Math.floor(noAmount / 50) + Math.floor(Math.random() * 5);
+            
+            // 更新YES陣營數據
+            document.getElementById('yesAmount').textContent = `${yesAmount} USDT`;
+            document.getElementById('yesPercentage').textContent = `${yesPercentage}%`;
+            document.getElementById('yesParticipants').textContent = `${yesParticipants}人`;
+            
+            // 更新NO陣營數據
+            document.getElementById('noAmount').textContent = `${noAmount} USDT`;
+            document.getElementById('noPercentage').textContent = `${noPercentage}%`;
+            document.getElementById('noParticipants').textContent = `${noParticipants}人`;
+            
+            // 更新進度指示器
+            const yesIndicator = document.getElementById('yesIndicator');
+            const noIndicator = document.getElementById('noIndicator');
+            
+            if (yesIndicator) yesIndicator.style.width = `${yesPercentage}%`;
+            if (noIndicator) noIndicator.style.width = `${noPercentage}%`;
+            
+            // 更新選中狀態
+            const yesSide = document.querySelector('.yes-side');
+            const noSide = document.querySelector('.no-side');
+            
+            if (selectedOption === 'yes') {
+                yesSide?.classList.add('selected');
+                noSide?.classList.remove('selected');
+            } else if (selectedOption === 'no') {
+                noSide?.classList.add('selected');
+                yesSide?.classList.remove('selected');
+            } else {
+                yesSide?.classList.remove('selected');
+                noSide?.classList.remove('selected');
             }
         }
 
@@ -2193,8 +2819,11 @@
                 sampleTopics[topicIndex] = {...currentTopic};
             }
 
-            // 检查是否触发Pump（严格要求1000U）
-            if (currentTopic.innerPool.totalAmount >= 1000 && currentTopic.status === 'inner') {
+            // 检查是否触发Pump（使用自定義條件，私密話題不觸發）
+            const pumpThreshold = currentTopic.pumpCondition || 1000;
+            if (currentTopic.innerPool.totalAmount >= pumpThreshold && 
+                currentTopic.status === 'inner' && 
+                !currentTopic.isPrivate) {
                 triggerPump();
             } else {
                 // 如果还是内盘，更新界面提示
@@ -2278,29 +2907,344 @@
         }
 
         // 自定义选项管理
-        function toggleCustomOptions() {
+        // 切換選項類型
+        function toggleOptionType() {
+            const optionType = document.querySelector('input[name="optionType"]:checked').value;
             const customOptions = document.getElementById('customOptions');
-            if (customOptions.style.display === 'none') {
+            
+            if (optionType === 'custom') {
                 customOptions.style.display = 'block';
-                addOption();
+                // 初始化2個默認選項
+                if (document.getElementById('optionsList').children.length === 0) {
+                    addOption();
+                    addOption();
+                }
             } else {
                 customOptions.style.display = 'none';
+                // 清空自定義選項
+                document.getElementById('optionsList').innerHTML = '';
             }
         }
 
         function addOption() {
-            const customOptions = document.getElementById('customOptions');
+            const optionsList = document.getElementById('optionsList');
+            const currentCount = optionsList.children.length;
+            
+            // 最多8個選項
+            if (currentCount >= 8) {
+                alert('最多只能添加8個選項');
+                return;
+            }
+            
             const optionDiv = document.createElement('div');
             optionDiv.className = 'option-input';
             optionDiv.innerHTML = `
-                <input type="text" class="form-input" placeholder="新选项">
-                <button type="button" class="btn btn-secondary" onclick="removeOption(this)">删除</button>
+                <span class="option-number">選項 ${currentCount + 1}:</span>
+                <input type="text" class="form-input" name="customOption${currentCount + 1}" placeholder="輸入選項名稱" required>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="removeOption(this)">刪除</button>
             `;
-            customOptions.appendChild(optionDiv);
+            optionsList.appendChild(optionDiv);
+            
+            updateRemoveButtons();
         }
 
         function removeOption(button) {
+            const optionsList = document.getElementById('optionsList');
+            const currentCount = optionsList.children.length;
+            
+            // 至少保留2個選項
+            if (currentCount <= 2) {
+                alert('至少需要保留2個選項');
+                return;
+            }
+            
             button.parentElement.remove();
+            updateOptionNumbers();
+            updateRemoveButtons();
+        }
+
+        function updateOptionNumbers() {
+            const optionsList = document.getElementById('optionsList');
+            const options = optionsList.children;
+            
+            for (let i = 0; i < options.length; i++) {
+                const numberSpan = options[i].querySelector('.option-number');
+                const input = options[i].querySelector('input');
+                numberSpan.textContent = `選項 ${i + 1}:`;
+                input.name = `customOption${i + 1}`;
+            }
+        }
+
+        function updateRemoveButtons() {
+            const optionsList = document.getElementById('optionsList');
+            const removeButtons = optionsList.querySelectorAll('.btn-secondary');
+            const currentCount = optionsList.children.length;
+            
+            // 當只有2個選項時禁用刪除按鈕
+            removeButtons.forEach(button => {
+                if (currentCount <= 2) {
+                    button.disabled = true;
+                    button.style.opacity = '0.5';
+                } else {
+                    button.disabled = false;
+                    button.style.opacity = '1';
+                }
+            });
+        }
+
+        // 切換Pump設定的可用性
+        function togglePumpSettings() {
+            const isPrivate = document.getElementById('isPrivate').checked;
+            const pumpSection = document.getElementById('pumpSection');
+            
+            if (isPrivate) {
+                pumpSection.classList.add('disabled');
+                // 禁用Pump設定中的輸入
+                const pumpInput = document.querySelector('input[name="pumpCondition"]');
+                if (pumpInput) pumpInput.disabled = true;
+            } else {
+                pumpSection.classList.remove('disabled');
+                // 啟用Pump設定中的輸入
+                const pumpInput = document.querySelector('input[name="pumpCondition"]');
+                if (pumpInput) pumpInput.disabled = false;
+            }
+        }
+
+        // 切換高級設定的顯示
+        function toggleAdvancedSettings() {
+            const showAdvanced = document.getElementById('showAdvanced').checked;
+            const advancedSettings = document.getElementById('advancedSettings');
+            
+            if (showAdvanced) {
+                advancedSettings.style.display = 'block';
+            } else {
+                advancedSettings.style.display = 'none';
+                // 清空高級設定的值
+                const outerTradingEndTime = document.querySelector('input[name="outerTradingEndTime"]');
+                if (outerTradingEndTime) outerTradingEndTime.value = '';
+            }
+        }
+
+        // 當話題結束時間改變時，更新外盤交易結束時間的默認值
+        function updateAdvancedSettings() {
+            const topicEndTime = document.querySelector('input[name="topicEndTime"]').value;
+            const outerTradingEndTime = document.querySelector('input[name="outerTradingEndTime"]');
+            
+            if (outerTradingEndTime && !outerTradingEndTime.value) {
+                outerTradingEndTime.value = topicEndTime;
+            }
+        }
+
+        // K線圖相關功能
+        let currentTimeframe = '1m';
+        let klineData = [];
+        let chartInterval = null;
+
+        // 初始化K線圖
+        function initKlineChart() {
+            if (!currentTopic || currentTopic.status !== 'outer') return;
+            
+            // 生成模擬K線數據
+            generateKlineData();
+            renderKlineChart();
+            
+            // 啟動實時更新
+            if (chartInterval) clearInterval(chartInterval);
+            chartInterval = setInterval(() => {
+                updateKlineData();
+                renderKlineChart();
+            }, 2000); // 每2秒更新一次
+        }
+
+        // 生成模擬K線數據
+        function generateKlineData() {
+            const { yesAmount, noAmount } = currentTopic.outerPool;
+            const totalAmount = yesAmount + noAmount;
+            const basePrice = totalAmount > 0 ? yesAmount / totalAmount : 0.5;
+            
+            klineData = [];
+            const now = Date.now();
+            const barCount = 30; // 顯示30根K線
+            
+            for (let i = barCount - 1; i >= 0; i--) {
+                const timestamp = now - i * 60000; // 每分鐘一根K線
+                const variation = (Math.random() - 0.5) * 0.1; // ±5%變動
+                const price = Math.max(0.1, Math.min(0.9, basePrice + variation));
+                
+                const open = i === barCount - 1 ? basePrice : klineData[klineData.length - 1]?.close || price;
+                const high = Math.max(open, price + Math.random() * 0.05);
+                const low = Math.min(open, price - Math.random() * 0.05);
+                const close = price;
+                
+                klineData.push({
+                    timestamp,
+                    open: Math.max(0.1, Math.min(0.9, open)),
+                    high: Math.max(0.1, Math.min(0.9, high)),
+                    low: Math.max(0.1, Math.min(0.9, low)),
+                    close: Math.max(0.1, Math.min(0.9, close)),
+                    volume: Math.floor(Math.random() * 1000) + 100
+                });
+            }
+        }
+
+        // 更新K線數據
+        function updateKlineData() {
+            if (klineData.length === 0) return;
+            
+            const lastBar = klineData[klineData.length - 1];
+            const variation = (Math.random() - 0.5) * 0.02; // ±1%變動
+            const newClose = Math.max(0.1, Math.min(0.9, lastBar.close + variation));
+            
+            // 更新最後一根K線
+            klineData[klineData.length - 1] = {
+                ...lastBar,
+                high: Math.max(lastBar.high, newClose),
+                low: Math.min(lastBar.low, newClose),
+                close: newClose,
+                volume: lastBar.volume + Math.floor(Math.random() * 50)
+            };
+            
+            // 有時候添加新的K線
+            if (Math.random() < 0.1) {
+                const newBar = {
+                    timestamp: Date.now(),
+                    open: newClose,
+                    high: newClose + Math.random() * 0.02,
+                    low: newClose - Math.random() * 0.02,
+                    close: newClose,
+                    volume: Math.floor(Math.random() * 500) + 50
+                };
+                
+                klineData.push(newBar);
+                if (klineData.length > 30) {
+                    klineData.shift(); // 保持30根K線
+                }
+            }
+        }
+
+        // 渲染K線圖
+        function renderKlineChart() {
+            const chartContainer = document.getElementById('centerKlineChart');
+            if (!chartContainer || klineData.length === 0) return;
+            
+            // 清空現有內容
+            chartContainer.innerHTML = '';
+            
+            // 計算價格範圍
+            const prices = klineData.flatMap(d => [d.high, d.low]);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            const priceRange = maxPrice - minPrice || 0.1;
+            
+            const chartWidth = chartContainer.clientWidth - 32;
+            const chartHeight = 248;
+            const barWidth = chartWidth / klineData.length * 0.8;
+            
+            // 渲染K線
+            klineData.forEach((bar, index) => {
+                const x = (index + 0.5) * (chartWidth / klineData.length);
+                const isUp = bar.close > bar.open;
+                
+                // 計算位置
+                const bodyTop = ((maxPrice - Math.max(bar.open, bar.close)) / priceRange) * chartHeight;
+                const bodyHeight = Math.abs(bar.close - bar.open) / priceRange * chartHeight || 1;
+                const wickTop = ((maxPrice - bar.high) / priceRange) * chartHeight;
+                const wickBottom = ((maxPrice - bar.low) / priceRange) * chartHeight;
+                
+                // 創建K線柱
+                const barElement = document.createElement('div');
+                barElement.className = `kline-bar ${isUp ? 'up' : 'down'}`;
+                barElement.style.left = `${x - barWidth/2}px`;
+                barElement.style.width = `${barWidth}px`;
+                barElement.style.height = `${bodyHeight}px`;
+                barElement.style.bottom = `${chartHeight - bodyTop - bodyHeight + 16}px`;
+                
+                // 添加懸停事件
+                barElement.addEventListener('mouseenter', (e) => showTooltip(e, bar));
+                barElement.addEventListener('mouseleave', hideTooltip);
+                
+                chartContainer.appendChild(barElement);
+                
+                // 添加上下影線
+                if (bar.high !== Math.max(bar.open, bar.close)) {
+                    const wickUpElement = document.createElement('div');
+                    wickUpElement.style.position = 'absolute';
+                    wickUpElement.style.left = `${x - 0.5}px`;
+                    wickUpElement.style.width = '1px';
+                    wickUpElement.style.height = `${bodyTop - wickTop}px`;
+                    wickUpElement.style.bottom = `${chartHeight - wickTop + 16}px`;
+                    wickUpElement.style.background = isUp ? '#10b981' : '#ef4444';
+                    chartContainer.appendChild(wickUpElement);
+                }
+                
+                if (bar.low !== Math.min(bar.open, bar.close)) {
+                    const wickDownElement = document.createElement('div');
+                    wickDownElement.style.position = 'absolute';
+                    wickDownElement.style.left = `${x - 0.5}px`;
+                    wickDownElement.style.width = '1px';
+                    wickDownElement.style.height = `${wickBottom - bodyTop - bodyHeight}px`;
+                    wickDownElement.style.bottom = `${16}px`;
+                    wickDownElement.style.background = isUp ? '#10b981' : '#ef4444';
+                    chartContainer.appendChild(wickDownElement);
+                }
+            });
+            
+            // 添加當前價格指示器
+            const currentPrice = klineData[klineData.length - 1]?.close || 0.5;
+            const priceY = ((maxPrice - currentPrice) / priceRange) * chartHeight;
+            
+            const priceIndicator = document.createElement('div');
+            priceIndicator.className = 'price-indicator';
+            priceIndicator.style.top = `${priceY}px`;
+            priceIndicator.textContent = currentPrice.toFixed(3);
+            chartContainer.appendChild(priceIndicator);
+        }
+
+        // 顯示工具提示
+        function showTooltip(event, bar) {
+            let tooltip = document.querySelector('.chart-tooltip');
+            if (!tooltip) {
+                tooltip = document.createElement('div');
+                tooltip.className = 'chart-tooltip';
+                document.body.appendChild(tooltip);
+            }
+            
+            const time = new Date(bar.timestamp).toLocaleTimeString();
+            tooltip.innerHTML = `
+                <div>時間: ${time}</div>
+                <div>開: ${bar.open.toFixed(3)}</div>
+                <div>高: ${bar.high.toFixed(3)}</div>
+                <div>低: ${bar.low.toFixed(3)}</div>
+                <div>收: ${bar.close.toFixed(3)}</div>
+                <div>量: ${bar.volume}</div>
+            `;
+            
+            tooltip.style.left = `${event.pageX + 10}px`;
+            tooltip.style.top = `${event.pageY - 10}px`;
+            tooltip.style.opacity = '1';
+        }
+
+        // 隱藏工具提示
+        function hideTooltip() {
+            const tooltip = document.querySelector('.chart-tooltip');
+            if (tooltip) {
+                tooltip.style.opacity = '0';
+            }
+        }
+
+        // 切換時間框架
+        function switchTimeframe(timeframe) {
+            currentTimeframe = timeframe;
+            
+            // 更新按鈕狀態
+            document.querySelectorAll('.chart-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 重新生成數據
+            generateKlineData();
+            renderKlineChart();
         }
 
         // 創建話題表单提交
@@ -2308,12 +3252,24 @@
             e.preventDefault();
             
             const formData = new FormData(e.target);
+            const isPrivate = formData.get('isPrivate') === 'on';
+            const pumpCondition = parseInt(formData.get('pumpCondition')) || 1000;
+            
+            // 處理頭像 - 如果是文件則顯示文件名，否則使用首字符
+            let avatar;
+            const avatarFile = formData.get('avatar');
+            if (avatarFile && avatarFile.name) {
+                avatar = '📷'; // 使用相機emoji表示已上傳圖片
+            } else {
+                avatar = formData.get('content').charAt(0).toUpperCase();
+            }
+            
             const newTopic = {
                 id: Date.now(),
                 title: formData.get('content'),
                 category: formData.get('category'),
                 categoryName: e.target.category.selectedOptions[0].text,
-                avatar: formData.get('content').charAt(0).toUpperCase(),
+                avatar: avatar,
                 innerPool: {
                     yesAmount: 0,
                     noAmount: 0,
@@ -2322,9 +3278,12 @@
                 outerPool: null,
                 isOuter: false,
                 endTime: formData.get('topicEndTime').split('T')[0],
+                tradingEndTime: formData.get('tradingEndTime'), // 內盤交易結束時間
                 status: 'inner',
                 description: formData.get('content'),
-                isPrivate: formData.get('isPrivate') === 'on',
+                isPrivate: isPrivate,
+                pumpCondition: isPrivate ? null : pumpCondition, // 私密話題不設定Pump條件
+                outerTradingEndTime: formData.get('outerTradingEndTime') || formData.get('topicEndTime'), // 高級設定
                 myInnerYes: 0,
                 myInnerNo: 0,
                 myOuterYes: 0,
