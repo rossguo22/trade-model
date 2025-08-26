@@ -766,7 +766,7 @@
             margin-top: 1rem;
         }
 
-        /* 资金池分区样式 */
+        /* 獎金池分区样式 */
         .pool-section {
             margin-bottom: 1.5rem;
         }
@@ -795,13 +795,13 @@
             letter-spacing: 0.05em;
         }
 
-        .pool-section-badge:not(.outer) {
+        .pool-section-badge:not(.trade) {
             background: rgba(59, 130, 246, 0.1);
             color: #60a5fa;
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
-        .pool-section-badge.outer {
+        .pool-section-badge.trade {
             background: rgba(16, 185, 129, 0.1);
             color: #34d399;
             border: 1px solid rgba(16, 185, 129, 0.3);
@@ -824,13 +824,13 @@
             letter-spacing: 0.05em;
         }
 
-        .status-inner {
+        .status-pk {
             background: rgba(59, 130, 246, 0.1);
             color: #60a5fa;
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
-        .status-outer {
+        .status-trade {
             background: rgba(16, 185, 129, 0.1);
             color: #34d399;
             border: 1px solid rgba(16, 185, 129, 0.3);
@@ -1475,7 +1475,7 @@
             transition: width 0.3s ease;
         }
 
-        /* 多選項外盤LMSR樣式 */
+        /* 多選項Trade LMSR樣式 */
         .multi-lmsr-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -1735,7 +1735,7 @@
                 <span class="nav-icon">🏠</span>熱門話題
             </a>
             <a href="#" class="nav-item" onclick="showPage('inner')">
-                <span class="nav-icon">📊</span>內盤話題(演示)
+                <span class="nav-icon">📊</span>PK話題(演示)
             </a>
             <a href="#" class="nav-item" onclick="showPage('create')">
                 <span class="nav-icon">➕</span>創建話題
@@ -1758,12 +1758,12 @@
             </div>
         </div>
 
-        <!-- 內盤話題頁面 -->
+        <!-- PK話題頁面 -->
         <div id="inner" class="page">
             <div class="content-area">
-                <h1 style="text-align: center; margin-bottom: 2rem; color: #ffffff; font-weight: 700; font-size: 2rem;">內盤話題</h1>
+                <h1 style="text-align: center; margin-bottom: 2rem; color: #ffffff; font-weight: 700; font-size: 2rem;">PK話題</h1>
                 <div class="waterfall" id="innerTopicWaterfall">
-                    <!-- 內盤話題卡片將通過JavaScript動態生成 -->
+                    <!-- PK話題卡片將通過JavaScript動態生成 -->
                 </div>
             </div>
         </div>
@@ -1812,7 +1812,7 @@
                                     <input type="checkbox" id="isPrivate" name="isPrivate" onchange="togglePumpSettings()">
                                     <label for="isPrivate" class="form-label" style="margin-bottom: 0;">私密話題</label>
                                 </div>
-                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">私密話題不會出現在瀑布流中，也不會觸發Pump轉外盤</small>
+                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">私密話題不會出現在瀑布流中，也不會觸發Pump轉Trade</small>
                             </div>
 
                             <div class="form-group">
@@ -1849,7 +1849,7 @@
                         <div class="form-section" id="pumpSection">
                             <div class="section-header">
                                 <h3 class="section-title">🚀 Pump設定</h3>
-                                <p class="section-subtitle">設定內盤轉外盤的條件</p>
+                                <p class="section-subtitle">設定PK轉Trade的條件</p>
                             </div>
 
                             <div class="form-group">
@@ -1863,13 +1863,12 @@
                             </div>
 
                             <div class="pump-explanation">
-                                <div class="explanation-title">💡 Pump機制說明</div>
+                                <div class="explanation-title">💡 PK–Pump–Trade 機制說明</div>
                                 <ul class="explanation-list">
-                                    <li>內盤達到設定金額時自動觸發Pump</li>
-                                    <li>下注金額較小一方的50%轉為外盤LMSR底池</li>
-                                    <li>轉為外盤後可在瀑布流中展示和交易</li>
-                                    <li>內盤交易收取5%手續費</li>
-                                    <li>外盤交易手續費的40%持續回流內盤</li>
+                                    <li><strong>PK階段：</strong>一開始是PK模式，玩家選「是」或「否」，互相比拼支持力度</li>
+                                    <li><strong>Pump階段：</strong>當PK資金達到目標，系統自動Pump升級，把部分資金注入下一階段市場</li>
+                                    <li><strong>Trade階段：</strong>話題升級為公開交易市場，任何人都能參與，價格由演算法自動調整</li>
+                                    <li><strong>回饋機制：</strong>公開交易的手續費中，40%會持續回饋給PK階段的玩家</li>
                                 </ul>
                             </div>
                         </div>
@@ -1882,15 +1881,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">內盤交易結束時間 *</label>
+                                <label class="form-label">PK結束時間 *</label>
                                 <input type="datetime-local" class="form-input" name="tradingEndTime" required onchange="updateAdvancedSettings()">
-                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">在此時間內可以進行內盤交易，可觸發Pump轉外盤</small>
+                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">在此時間內可以進行PK對決，可觸發Pump轉Trade</small>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">話題結束時間 *</label>
                                 <input type="datetime-local" class="form-input" name="topicEndTime" required onchange="updateAdvancedSettings()">
-                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">話題結束後所有交易停止並進行結算，需大於內盤交易結束時間</small>
+                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">話題結束後所有交易停止並進行結算，需大於PK結束時間</small>
                             </div>
 
                             <div class="form-group">
@@ -1902,9 +1901,9 @@
 
                             <div id="advancedSettings" style="display: none;">
                                 <div class="form-group">
-                                    <label class="form-label">外盤交易結束時間</label>
+                                    <label class="form-label">Trade結束時間</label>
                                     <input type="datetime-local" class="form-input" name="outerTradingEndTime">
-                                    <small style="color: #6b7280; margin-top: 0.5rem; display: block;">留空則與話題結束時間相同。設定後，外盤將在此時間停止交易但話題繼續至結束時間</small>
+                                    <small style="color: #6b7280; margin-top: 0.5rem; display: block;">留空則與話題結束時間相同。設定後，Trade將在此時間停止交易但話題繼續至結束時間</small>
                                 </div>
                             </div>
                         </div>
@@ -1928,7 +1927,7 @@
                             <h1 class="topic-title" id="detailTitle">话题标题</h1>
                             <div class="topic-meta">
                                 <span class="topic-category" id="detailCategory">类别</span>
-                                <span class="status-badge status-inner" id="detailStatus">內盤交易</span>
+                                <span class="status-badge status-pk" id="detailStatus">PK交易</span>
                                 <span id="detailEndTime">結束時間：2024-12-31 23:59</span>
                             </div>
                         </div>
@@ -1938,7 +1937,7 @@
                         这里显示话题的详细描述内容...
                     </div>
 
-                    <!-- K線圖區域 (僅外盤顯示) -->
+                    <!-- K線圖區域 (僅Trade顯示) -->
                     <div id="centerKlineSection" style="margin-top: 2rem; display: none;">
                         <div class="kline-chart-container">
                             <div class="chart-header">
@@ -1953,9 +1952,9 @@
                         </div>
                     </div>
 
-                    <!-- 资金池状态详情 -->
+                    <!-- 獎金池状态详情 -->
                     <div style="margin-top: 2rem;" id="poolDetailsSection">
-                        <!-- 资金池信息将通过JavaScript动态生成 -->
+                        <!-- 獎金池信息将通过JavaScript动态生成 -->
                     </div>
                 </div>
             </div>
@@ -2015,7 +2014,7 @@
             <div class="trading-subtitle" id="tradingSubtitle">選擇您的预测并下注</div>
         </div>
 
-        <!-- 內盤交易界面 -->
+        <!-- PK交易界面 -->
         <div id="innerTrading" class="trading-section">
             <div class="section-title">陣營對決 - 選擇立場</div>
             
@@ -2072,7 +2071,7 @@
             </div>
         </div>
 
-        <!-- 多選項內盤交易界面 -->
+        <!-- 多選項PK交易界面 -->
         <div id="multiOptionTrading" class="trading-section multi-option-trading">
             <div class="section-title">多選項預測 - 選擇最佳答案</div>
             
@@ -2100,7 +2099,7 @@
             </div>
         </div>
 
-        <!-- 多選項外盤交易界面 -->
+        <!-- 多選項Trade交易界面 -->
         <div id="multiOptionOuter" class="trading-section multi-option-trading">
             <div class="section-title">多選項LMSR交易</div>
             
@@ -2129,7 +2128,7 @@
             <button class="btn btn-outline recharge-btn" onclick="showRecharge()" style="width: 100%; margin-top: 1rem; display: none;" id="multiOuterRechargeBtn">💰 充值</button>
         </div>
 
-        <!-- 外盤交易界面 -->
+        <!-- Trade交易界面 -->
         <div id="outerTrading" class="trading-section" style="display: none;">
             <div class="section-title">LMSR交易</div>
             
@@ -2202,11 +2201,11 @@
         <div class="trading-section">
             <div class="section-title">我的持仓</div>
             
-            <!-- 外盤持倉 -->
+            <!-- Trade持倉 -->
             <div class="pool-section" id="myOuterPositions" style="display: none;">
                 <div class="pool-section-header">
-                    <span class="pool-section-title">外盤持倉</span>
-                    <span class="pool-section-badge outer">LMSR代幣</span>
+                    <span class="pool-section-title">Trade持倉</span>
+                    <span class="pool-section-badge trade">LMSR代幣</span>
                 </div>
                 <div class="pool-info">
                     <div class="pool-row">
@@ -2224,10 +2223,10 @@
                 </div>
             </div>
 
-            <!-- 內盤持倉 -->
+            <!-- PK持倉 -->
             <div class="pool-section" id="myInnerPositions">
                 <div class="pool-section-header">
-                    <span class="pool-section-title">內盤持倉</span>
+                    <span class="pool-section-title">PK持倉</span>
                     <span class="pool-section-badge">原始下注</span>
                 </div>
                 <div class="pool-info">
@@ -2269,9 +2268,9 @@
     <div id="pumpModal" class="modal">
         <div class="modal-content">
             <div class="modal-title">🎉 Pump成功！</div>
-            <div>恭喜！话题已成功从内盘转换为外盘，现在可以进行LMSR交易了！</div>
+                            <div>恭喜！话题已成功从PK转换为Trade，现在可以进行LMSR交易了！</div>
             <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="closePumpModal()">查看外盘</button>
+                <button class="btn btn-primary" onclick="closePumpModal()">查看Trade</button>
             </div>
         </div>
     </div>
@@ -2291,19 +2290,19 @@
                 category: "crypto",
                 categoryName: "加密貨幣",
                 avatar: "₿",
-                // 内盘数据（Pump前的原始下注）
+                // PK数据（Pump前的原始下注）
                 innerPool: {
                     yesAmount: 600,
                     noAmount: 400,
                     totalAmount: 1000
                 },
-                // 外盘数据（LMSR底池 + 交易）
+                // Trade数据（LMSR底池 + 交易）
                 outerPool: {
-                    basePool: 200, // 从内盘小方50%转入的底池
-                    yesAmount: 320, // 外盘YES交易量
-                    noAmount: 280,  // 外盘NO交易量
+                    basePool: 200, // 从PK小方50%转入的底池
+                    yesAmount: 320, // Trade YES交易量
+                    noAmount: 280,  // Trade NO交易量
                     totalAmount: 600,
-                    tradingFeeToInner: 12 // 外盤交易手續費转入内盘的金额
+                    tradingFeeToInner: 12 // Trade交易手續費转入PK的金额
                 },
                 isOuter: true,
                 endTime: "2025-12-31",
@@ -2311,11 +2310,11 @@
                 description: "隨著比特幣ETF獲批和機構採用增加，比特幣價格是否能在2025年底突破歷史新高15萬美元？",
                 isPrivate: false,
                 pumpCondition: 1000, // 自定義Pump條件
-                outerTradingEndTime: "2025-12-31", // 外盤交易結束時間
-                // 內盤持倉（原始下注）
+                outerTradingEndTime: "2025-12-31", // Trade交易結束時間
+                // PK持倉（原始下注）
                 myInnerYes: 100,
                 myInnerNo: 0,
-                // 外盤持倉（LMSR代幣）
+                // Trade持倉（LMSR代幣）
                 myOuterYes: 15,
                 myOuterNo: 0
             },
@@ -2331,7 +2330,7 @@
                     totalAmount: 2000
                 },
                 outerPool: {
-                    basePool: 400, // 从内盘小方(YES)50%转入
+                    basePool: 400, // 从PK小方(YES)50%转入
                     yesAmount: 600,
                     noAmount: 800,
                     totalAmount: 1400,
@@ -2385,7 +2384,7 @@
                 outerPool: {
                     // 取最小選項(其他100)的50%作為底池
                     basePool: 50,
-                    // 多選項外盤使用平均分配作為初始流動性
+                    // 多選項Trade使用平均分配作為初始流動性
                     option0Amount: 120,  // 巴西初始份額
                     option1Amount: 100,  // 阿根廷初始份額
                     option2Amount: 80,   // 法國初始份額
@@ -2405,7 +2404,7 @@
                 myOption2: 0,
                 myOption3: 0,
                 myOption4: 0,
-                // 外盤多選項持倉（LMSR代幣）
+                // Trade多選項持倉（LMSR代幣）
                 myOuterOption0: 5,  // 我持有的巴西LMSR代幣
                 myOuterOption1: 2,  // 我持有的阿根廷LMSR代幣
                 myOuterOption2: 0,
@@ -2434,7 +2433,7 @@
                 description: "2024年第96屆奧斯卡金像獎最佳影片獎花落誰家？基於影片質量、票房表現和學院偏好進行預測。",
                 isPrivate: false,
                 pumpCondition: 1000,
-                // 內盤多選項持倉
+                // PK多選項持倉
                 myOption0: 30,  // 我在沙丘2的投注
                 myOption1: 0,   // 我在奧本海默的投注
                 myOption2: 20,  // 我在花月殺手的投注
@@ -2520,7 +2519,7 @@
                 card.className = 'topic-card';
                 card.onclick = () => showTopicDetail(topic.id);
                 
-                // 计算外盘总资金池
+                // 计算Trade总獎金池
                 const outerTotalPool = topic.outerPool.basePool + topic.outerPool.totalAmount;
                 const isMultiOption = topic.options && topic.options.length > 2;
                 
@@ -2529,7 +2528,7 @@
                 let leadingPercentage = '50.0';
                 
                 if (isMultiOption) {
-                    // 多選項外盤（未來擴展）
+                    // 多選項Trade（未來擴展）
                     leadingOption = topic.options[0] || '選項1';
                     leadingPercentage = '20.0';  // 簡單平均
                 } else {
@@ -2557,7 +2556,7 @@
                     <div class="topic-stats">
                         <div class="stat">
                             <div class="stat-value">${outerTotalPool}</div>
-                            <div class="stat-label">外盘总池(USDT)</div>
+                            <div class="stat-label">Trade总池(USDT)</div>
                         </div>
                         <div class="stat">
                             <div class="stat-value">${leadingPercentage}%</div>
@@ -2577,26 +2576,26 @@
 
         }
 
-        // 渲染內盤話題瀑布流
+        // 渲染PK話題瀑布流
         function renderInnerTopics() {
             const waterfall = document.getElementById('innerTopicWaterfall');
             waterfall.innerHTML = '';
 
-            const innerTopics = sampleTopics.filter(topic => topic.status === 'inner');
+            const pkTopics = sampleTopics.filter(topic => topic.status === 'inner');
 
-            innerTopics.forEach(topic => {
+            pkTopics.forEach(topic => {
                 const card = document.createElement('div');
                 card.className = 'topic-card';
                 card.onclick = () => showTopicDetail(topic.id);
                 
-                // 計算內盤資金池信息
-                const innerTotalPool = topic.innerPool.totalAmount;
+                // 計算PK資金池信息
+                const pkTotalPool = topic.innerPool.totalAmount;
                 const isMultiOption = topic.options && topic.options.length > 2;
                 const pumpThreshold = topic.pumpCondition || 1000;
-                const pumpProgress = Math.min((innerTotalPool / pumpThreshold) * 100, 100).toFixed(1);
+                const pumpProgress = Math.min((pkTotalPool / pumpThreshold) * 100, 100).toFixed(1);
                 
                 // 計算到Pump還需多少
-                const pumpRemaining = Math.max(pumpThreshold - innerTotalPool, 0);
+                const pumpRemaining = Math.max(pumpThreshold - pkTotalPool, 0);
                 
                 // 計算最受歡迎的選項
                 let leadingOption = 'YES';
@@ -2613,13 +2612,13 @@
                         }
                     }
                     leadingOption = topic.options[maxIndex] || '選項1';
-                    leadingPercentage = innerTotalPool > 0 ? ((maxAmount / innerTotalPool) * 100).toFixed(1) : '0.0';
+                    leadingPercentage = pkTotalPool > 0 ? ((maxAmount / pkTotalPool) * 100).toFixed(1) : '0.0';
                 } else {
                     const yesAmount = topic.innerPool.yesAmount || 0;
-                    leadingPercentage = innerTotalPool > 0 ? ((yesAmount / innerTotalPool) * 100).toFixed(1) : '50.0';
+                    leadingPercentage = pkTotalPool > 0 ? ((yesAmount / pkTotalPool) * 100).toFixed(1) : '50.0';
                     if (yesAmount < (topic.innerPool.noAmount || 0)) {
                         leadingOption = 'NO';
-                        leadingPercentage = innerTotalPool > 0 ? (((topic.innerPool.noAmount || 0) / innerTotalPool) * 100).toFixed(1) : '50.0';
+                        leadingPercentage = pkTotalPool > 0 ? (((topic.innerPool.noAmount || 0) / pkTotalPool) * 100).toFixed(1) : '50.0';
                     }
                 }
                 
@@ -2636,8 +2635,8 @@
                     </div>
                     <div class="topic-stats">
                         <div class="stat">
-                            <div class="stat-value">${innerTotalPool}</div>
-                            <div class="stat-label">內盤總池(USDT)</div>
+                            <div class="stat-value">${pkTotalPool}</div>
+                            <div class="stat-label">PK總池(USDT)</div>
                         </div>
                         <div class="stat">
                             <div class="stat-value">${leadingPercentage}%</div>
@@ -2661,13 +2660,13 @@
                 waterfall.appendChild(card);
             });
 
-            // 如果沒有內盤話題，顯示空狀態
+            // 如果沒有PK話題，顯示空狀態
             if (waterfall.children.length === 0) {
                 waterfall.innerHTML = `
                     <div style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
-                        <h3 style="margin-bottom: 0.5rem;">暫無內盤話題</h3>
-                        <p>所有話題都已進入外盤階段，或創建新話題開始交易</p>
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">📊</div>
+                        <h3 style="margin-bottom: 0.5rem;">暫無PK話題</h3>
+                        <p>所有話題都已進入Trade階段，或創建新話題開始交易</p>
                     </div>
                 `;
             }
@@ -2732,11 +2731,11 @@
             if (multiOptionOuter) multiOptionOuter.style.display = 'none';
 
             if (isOuter) {
-                // 外盘状态
+                // Trade状态
                 tradingTitle.textContent = 'LMSR交易';
                 tradingSubtitle.textContent = '基于市场價格的预测市场交易';
-                statusBadge.textContent = '外盤交易';
-                statusBadge.className = 'status-badge status-outer';
+                statusBadge.textContent = 'Trade交易';
+                statusBadge.className = 'status-badge status-trade';
                 
                 if (isMultiOption) {
                     if (multiOptionOuter) multiOptionOuter.style.display = 'block';
@@ -2759,9 +2758,9 @@
                     initKlineChart();
                 }, 100);
             } else {
-                // 内盘状态
-                statusBadge.textContent = '內盤交易';
-                statusBadge.className = 'status-badge status-inner';
+                // PK状态
+                statusBadge.textContent = 'PK交易';
+                statusBadge.className = 'status-badge status-pk';
                 
                 if (isMultiOption) {
                     tradingTitle.textContent = '多選項預測';
@@ -2797,15 +2796,15 @@
         function updateLMSRPrices() {
             if (!currentTopic || currentTopic.status !== 'outer' || !currentTopic.outerPool) return;
 
-            // 使用外盘数据计算LMSR價格
-            const outerPool = currentTopic.outerPool;
-            const totalAmount = outerPool.totalAmount;
-            const yesAmount = outerPool.yesAmount;
-            const noAmount = outerPool.noAmount;
-            
-            // 基本價格计算（基于外盘资金池比例）
-            const yesPrice = (yesAmount / totalAmount).toFixed(3);
-            const noPrice = (noAmount / totalAmount).toFixed(3);
+                            // 使用Trade数据计算LMSR價格
+                const tradePool = currentTopic.outerPool;
+                const totalAmount = tradePool.totalAmount;
+                const yesAmount = tradePool.yesAmount;
+                const noAmount = tradePool.noAmount;
+                
+                // 基本價格计算（基于Trade獎金池比例）
+                const yesPrice = (yesAmount / totalAmount).toFixed(3);
+                const noPrice = (noAmount / totalAmount).toFixed(3);
 
             // 更新價格显示
             document.getElementById('yesPriceDisplay').textContent = yesPrice;
@@ -2845,10 +2844,10 @@
 
         // LMSR買入功能
         function buyLMSR(option) {
-            if (!currentTopic || currentTopic.status !== 'outer' || !currentTopic.outerPool) {
-                alert('只能在外盘状态下进行LMSR交易');
-                return;
-            }
+                    if (!currentTopic || currentTopic.status !== 'outer' || !currentTopic.outerPool) {
+            alert('只能在Trade状态下进行LMSR交易');
+            return;
+        }
 
             const amount = parseFloat(document.getElementById('lmsrAmount').value);
             if (!amount || amount <= 0) {
@@ -2887,14 +2886,14 @@
                 
                 // 扣除餘額
                 userBalance -= cost;
-                // 更新外盤持倉
+                // 更新Trade持倉
                 if (option === 'yes') {
                     currentTopic.myOuterYes = (currentTopic.myOuterYes || 0) + amount;
                 } else {
                     currentTopic.myOuterNo = (currentTopic.myOuterNo || 0) + amount;
                 }
 
-                // 更新外盘资金池
+                // 更新Trade獎金池
                 currentTopic.outerPool.totalAmount += netCost;
                 if (option === 'yes') {
                     currentTopic.outerPool.yesAmount += netCost;
@@ -2902,9 +2901,9 @@
                     currentTopic.outerPool.noAmount += netCost;
                 }
 
-                // 手續費的40%回流到内盘
-                const feeToInner = tradingFee * 0.4;
-                currentTopic.outerPool.tradingFeeToInner += feeToInner;
+                // 手續費的40%回流到PK
+                const feeToPK = tradingFee * 0.4;
+                currentTopic.outerPool.tradingFeeToInner += feeToPK;
 
                 // 更新sampleTopics中的数据
                 const topicIndex = sampleTopics.findIndex(t => t.id === currentTopic.id);
@@ -2922,16 +2921,16 @@
                 // 更新餘額顯示
                 updateBalanceDisplay();
 
-                alert(`交易成功！\n買入: ${amount} 个 ${option.toUpperCase()}\n总花费: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT (40%已回流内盘)`);
+                alert(`交易成功！\n買入: ${amount} 个 ${option.toUpperCase()}\n总花费: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT (40%已回流PK)`);
             }
         }
 
         // LMSR賣出函數
         function sellLMSR(option) {
-            if (!currentTopic || currentTopic.status !== 'outer' || !currentTopic.outerPool) {
-                alert('只能在外盤狀態下進行LMSR交易');
-                return;
-            }
+                    if (!currentTopic || currentTopic.status !== 'outer' || !currentTopic.outerPool) {
+            alert('只能在Trade狀態下進行LMSR交易');
+            return;
+        }
 
             const amount = parseFloat(document.getElementById('lmsrAmount').value);
             if (!amount || amount <= 0) {
@@ -2957,14 +2956,14 @@
 
             // 確認交易
             if (confirm(`確認賣出 ${amount} 個 ${option.toUpperCase()} 代幣？\n賣出收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT \n淨收入: ${netRevenue.toFixed(2)} USDT`)) {
-                // 更新外盤持倉
+                // 更新Trade持倉
                 if (option === 'yes') {
                     currentTopic.myOuterYes = (currentTopic.myOuterYes || 0) - amount;
                 } else {
                     currentTopic.myOuterNo = (currentTopic.myOuterNo || 0) - amount;
                 }
 
-                // 更新外盤資金池（從池中取出資金）
+                // 更新Trade資金池（從池中取出資金）
                 currentTopic.outerPool.totalAmount -= netRevenue;
                 if (option === 'yes') {
                     currentTopic.outerPool.yesAmount -= netRevenue;
@@ -2972,9 +2971,9 @@
                     currentTopic.outerPool.noAmount -= netRevenue;
                 }
 
-                // 手續費的40%回流到內盤
-                const feeToInner = tradingFee * 0.4;
-                currentTopic.outerPool.tradingFeeToInner += feeToInner;
+                // 手續費的40%回流到PK
+                const feeToPK = tradingFee * 0.4;
+                currentTopic.outerPool.tradingFeeToInner += feeToPK;
 
                 // 更新sampleTopics中的數據
                 const topicIndex = sampleTopics.findIndex(t => t.id === currentTopic.id);
@@ -2993,11 +2992,11 @@
                 userBalance += netRevenue;
                 updateBalanceDisplay();
 
-                alert(`交易成功！\n賣出: ${amount} 個 ${option.toUpperCase()}\n總收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT (40%已回流內盤)`);
+                alert(`交易成功！\n賣出: ${amount} 個 ${option.toUpperCase()}\n總收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT (40%已回流PK)`);
             }
         }
 
-        // 更新多選項內盤界面
+        // 更新多選項PK界面
         function updateMultiOptionInterface() {
             if (!currentTopic || !currentTopic.options) return;
             
@@ -3030,7 +3029,7 @@
             });
         }
 
-        // 更新多選項外盤LMSR界面
+        // 更新多選項Trade LMSR界面
         function updateMultiLMSRInterface() {
             if (!currentTopic || !currentTopic.options) return;
             
@@ -3138,14 +3137,14 @@
             }
         }
 
-        // 更新资金池显示
+        // 更新獎金池显示
         function updatePoolDisplay() {
             if (!currentTopic) return;
 
             const isOuter = currentTopic.status === 'outer';
             const isMultiOption = currentTopic.options && currentTopic.options.length > 2;
             
-            // 更新內盤交易界面的显示（只對二元選項）
+            // 更新PK交易界面的显示（只對二元選項）
             if (currentTopic.innerPool && !isMultiOption) {
                 const yesAmountEl = document.getElementById('yesAmount');
                 const noAmountEl = document.getElementById('noAmount');
@@ -3161,11 +3160,11 @@
             // 更新我的持仓
             updateMyPositions();
 
-            // 更新中间区域的资金池详情
+            // 更新中间区域的獎金池详情
             updatePoolDetailsSection();
         }
 
-        // 更新中间区域的资金池详情显示
+        // 更新中间区域的獎金池详情显示
         function updatePoolDetailsSection() {
             if (!currentTopic) return;
 
@@ -3177,55 +3176,55 @@
                 let outerPoolRowsHTML = '';
                 
                 if (isMultiOption) {
-                    // 多選項外盤資金池顯示
+                    // 多選項Trade資金池顯示
                     currentTopic.options.forEach((option, index) => {
                         const amount = currentTopic.outerPool[`option${index}Amount`] || 0;
                         outerPoolRowsHTML += `
                             <div class="pool-row">
-                                <span class="pool-label">${option}交易量：</span>
+                                <span class="pool-label">${option}獎池：</span>
                                 <span class="pool-value">${amount} USDT</span>
                             </div>
                         `;
                     });
                 } else {
-                    // 二元選項外盤資金池顯示
+                    // 二元選項Trade資金池顯示
                     outerPoolRowsHTML = `
                         <div class="pool-row">
-                            <span class="pool-label">YES交易量：</span>
+                            <span class="pool-label">YES獎池：</span>
                             <span class="pool-value">${currentTopic.outerPool.yesAmount} USDT</span>
                         </div>
                         <div class="pool-row">
-                            <span class="pool-label">NO交易量：</span>
+                            <span class="pool-label">NO獎池：</span>
                             <span class="pool-value">${currentTopic.outerPool.noAmount} USDT</span>
                         </div>
                     `;
                 }
                 
-                // 外盘状态 - 显示完整的资金流向
+                // Trade状态 - 显示完整的獎金流向
                 poolDetailsSection.innerHTML = `
-                    <!-- 外盘资金池 -->
-                    <div class="pool-section">
-                        <div class="pool-section-header">
-                            <span class="pool-section-title">外盘资金池</span>
-                            <span class="pool-section-badge outer">LMSR</span>
-                        </div>
+                                            <!-- Trade獎金池 -->
+                        <div class="pool-section">
+                            <div class="pool-section-header">
+                                <span class="pool-section-title">Trade獎金池</span>
+                                <span class="pool-section-badge trade">LMSR</span>
+                            </div>
                         <div class="pool-info">
                             <div class="pool-row" style="color: #10b981;">
-                                <span class="pool-label">来自内盘底池：</span>
+                                <span class="pool-label">来自PK底池：</span>
                                 <span class="pool-value">+${currentTopic.outerPool.basePool} USDT</span>
                             </div>
                             ${outerPoolRowsHTML}
                             <div class="pool-row">
-                                <span class="pool-label">外盘总额：</span>
+                                <span class="pool-label">Trade总额：</span>
                                 <span class="pool-value">${currentTopic.outerPool.totalAmount} USDT</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 内盘资金池 -->
+                    <!-- PK獎金池 -->
                     <div class="pool-section">
                         <div class="pool-section-header">
-                            <span class="pool-section-title">内盘资金池</span>
+                            <span class="pool-section-title">PK獎金池</span>
                             <span class="pool-section-badge pumped">已Pump</span>
                         </div>
                         <div class="pool-info">
@@ -3256,7 +3255,7 @@
                                 }
                             })()}
                             <div class="pool-row" style="color: #ef4444;">
-                                <span class="pool-label">转出外盘底池：</span>
+                                <span class="pool-label">转出Trade底池：</span>
                                 <span class="pool-value">-${currentTopic.outerPool.basePool} USDT</span>
                             </div>
                             <div class="pool-row" style="color: #10b981;">
@@ -3264,7 +3263,7 @@
                                 <span class="pool-value">+${currentTopic.outerPool.tradingFeeToInner || 0} USDT</span>
                             </div>
                             <div class="pool-row">
-                                <span class="pool-label">内盘当前总额：</span>
+                                <span class="pool-label">PK当前总额：</span>
                                 <span class="pool-value">${((currentTopic.innerPool?.totalAmount || 0) - currentTopic.outerPool.basePool + (currentTopic.outerPool.tradingFeeToInner || 0)).toFixed(2)} USDT</span>
                             </div>
                         </div>
@@ -3273,13 +3272,13 @@
                     <!-- Pump机制说明 -->
                     <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #fbbf24;">
                         <strong>💡 Pump机制说明：</strong><br>
-                        • 内盘达到1000U时触发Pump<br>
-                        • 小方的50%转入外盘底池<br>
-                        • 外盤交易手續費的40%持续回流内盘
+                        • PK达到1000U时触发Pump<br>
+                        • 小方的50%转入Trade底池<br>
+                        • Trade交易手續費的40%持续回流PK
                     </div>
                 `;
             } else {
-                // 内盘状态 - 显示当前状态和Pump进度
+                // PK状态 - 显示当前状态和Pump进度
                 const innerTotal = currentTopic.innerPool?.totalAmount || 0;
                 const isPrivate = currentTopic.isPrivate;
                 const pumpThreshold = currentTopic.pumpCondition || 1000;
@@ -3307,18 +3306,18 @@
                         <!-- Pump条件说明 -->
                         <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #60a5fa;">
                             <strong>⚡ Pump条件：</strong><br>
-                            • 内盘资金池达到${pumpThreshold} USDT时自动触发Pump<br>
-                            • 内盘交易收取5%手續費<br>
-                            • 下注金額较小一方的50%将转为外盘LMSR底池<br>
-                            • 转为外盘后可在瀑布流中展示和交易
+                            • PK獎金池达到${pumpThreshold} USDT时自动触发Pump<br>
+                            • PK交易收取5%手續費<br>
+                            • 下注金額较小一方的50%将转为Trade LMSR底池<br>
+                            • 转为Trade后可在瀑布流中展示和交易
                         </div>
                         
                         <!-- 收益說明 -->
                         <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #10b981;">
                             <strong>💰 收益機會：</strong><br>
-                            • <strong>內盤勝利</strong>：瓜分對方陣營的全部資金<br>
-                            • <strong>外盤交易</strong>：可在LMSR市場進行價格交易獲利<br>
-                            • <strong>手續費分紅</strong>：內盤參與者享受外盤交易手續費的40%回流<br>
+                            • <strong>PK勝利</strong>：瓜分對方陣營的全部資金<br>
+                            • <strong>Trade交易</strong>：可在LMSR市場進行價格交易獲利<br>
+• <strong>手續費分紅</strong>：PK參與者享受Trade交易手續費的40%回流<br>
                             • <strong>早期參與優勢</strong>：越早參與，潛在收益倍數越高
                         </div>
                     `;
@@ -3329,9 +3328,9 @@
                         <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #f87171;">
                             <strong>🔒 私密話題：</strong><br>
                             • 此話題為私密話題，不會出現在瀑布流中<br>
-                            • 私密話題不支援Pump功能，不會轉為外盤<br>
-                            • 內盤交易收取5%手續費<br>
-                            • 話題結束後直接進行內盤結算
+                            • 私密話題不支援Pump功能，不會轉為Trade<br>
+                            • PK交易收取5%手續費<br>
+• 話題結束後直接進行PK結算
                         </div>
                     `;
                 }
@@ -3365,16 +3364,16 @@
                 }
 
                 poolDetailsSection.innerHTML = `
-                    <!-- 内盘资金池 -->
+                                            <!-- PK獎金池 -->
                     <div class="pool-section">
                         <div class="pool-section-header">
-                            <span class="pool-section-title">内盤資金池</span>
+                            <span class="pool-section-title">PK獎金池</span>
                             <span class="pool-section-badge ${isPrivate ? 'private' : ''}">${isPrivate ? '私密' : '活躍'}</span>
                         </div>
                         <div class="pool-info">
                             ${poolRowsHTML}
                             <div class="pool-row">
-                                <span class="pool-label">内盤總額：</span>
+                                <span class="pool-label">PK獎金總額：</span>
                                 <span class="pool-value">${innerTotal} USDT</span>
                             </div>
                         </div>
@@ -3441,9 +3440,9 @@
             const myInnerPositions = document.getElementById('myInnerPositions');
             const myOuterPositions = document.getElementById('myOuterPositions');
 
-            // 更新內盤持倉
+            // 更新PK持倉
             if (isMultiOption) {
-                // 多選項內盤持倉 - 動態生成內容
+                // 多選項PK持倉 - 動態生成內容
                 const innerPositionsContent = document.querySelector('#myInnerPositions .pool-info');
                 if (innerPositionsContent) {
                     let positionsHTML = '';
@@ -3470,19 +3469,19 @@
                     innerPositionsContent.innerHTML = positionsHTML;
                 }
             } else {
-                // 二元選項內盤持倉
+                // 二元選項PK持倉
                 const myInnerYesEl = document.getElementById('myInnerYes');
                 const myInnerNoEl = document.getElementById('myInnerNo');
                 if (myInnerYesEl) myInnerYesEl.textContent = `${currentTopic.myInnerYes || 0} USDT`;
                 if (myInnerNoEl) myInnerNoEl.textContent = `${currentTopic.myInnerNo || 0} USDT`;
             }
 
-            // 根据状态显示/隐藏外盤持倉
+            // 根据状态显示/隐藏Trade持倉
             if (isOuter && currentTopic.outerPool) {
                 myOuterPositions.style.display = 'block';
                 
                 if (isMultiOption) {
-                    // 多選項外盤持倉 - 動態生成內容
+                    // 多選項Trade持倉 - 動態生成內容
                     const outerPositionsContent = document.querySelector('#myOuterPositions .pool-info');
                     if (outerPositionsContent) {
                         let positionsHTML = '';
@@ -3515,7 +3514,7 @@
                         outerPositionsContent.innerHTML = positionsHTML;
                     }
                 } else {
-                    // 二元選項外盤持倉
+                    // 二元選項Trade持倉
                     const myOuterYes = currentTopic.myOuterYes || 0;
                     const myOuterNo = currentTopic.myOuterNo || 0;
                     const myOuterYesEl = document.getElementById('myOuterYes');
@@ -3523,7 +3522,7 @@
                     if (myOuterYesEl) myOuterYesEl.textContent = `${myOuterYes} 个`;
                     if (myOuterNoEl) myOuterNoEl.textContent = `${myOuterNo} 个`;
 
-                    // 计算外盤持倉估值
+                    // 计算Trade持倉估值
                     if (currentTopic.outerPool.totalAmount > 0) {
                         const yesPrice = currentTopic.outerPool.yesAmount / currentTopic.outerPool.totalAmount;
                         const noPrice = currentTopic.outerPool.noAmount / currentTopic.outerPool.totalAmount;
@@ -3617,7 +3616,7 @@
             // 扣除餘額
             userBalance -= inputAmount;
             
-            // 確保內盤數據結構存在
+            // 確保PK數據結構存在
             if (!currentTopic.innerPool) {
                 currentTopic.innerPool = { totalAmount: 0 };
                 for (let i = 0; i < currentTopic.options.length; i++) {
@@ -3625,7 +3624,7 @@
                 }
             }
             
-            // 更新內盤數據
+            // 更新PK數據
             const optionKey = `option${selectedMultiOption}Amount`;
             const myOptionKey = `myOption${selectedMultiOption}`;
             
@@ -3693,12 +3692,12 @@
             // 扣除餘額
             userBalance -= inputAmount;
             
-            // 确保内盘数据结构存在
+                            // 确保PK数据结构存在
             if (!currentTopic.innerPool) {
                 currentTopic.innerPool = { yesAmount: 0, noAmount: 0, totalAmount: 0 };
             }
             
-            // 更新内盘数据（使用扣除手續費後的金額）
+                            // 更新PK数据（使用扣除手續費後的金額）
             if (selectedOption === 'yes') {
                 currentTopic.innerPool.yesAmount += netAmount;
                 currentTopic.myInnerYes = (currentTopic.myInnerYes || 0) + netAmount;
@@ -3721,7 +3720,7 @@
                 !currentTopic.isPrivate) {
                 triggerPump();
             } else {
-                // 如果还是内盘，更新界面提示
+                // 如果还是PK，更新界面提示
                 updateTradingInterface();
             }
 
@@ -3747,14 +3746,14 @@
             const smallerSide = inner.yesAmount < inner.noAmount ? 'yes' : 'no';
             const smallerAmount = Math.min(inner.yesAmount, inner.noAmount);
             
-            // 小方的50%作为外盘底池
+            // 小方的50%作为Trade底池
             const basePool = smallerAmount * 0.5;
             
-            // 根据内盘资金比例设置初始虚拟流动性
+            // 根据PK獎金比例设置初始虚拟流动性
             const yesRatio = inner.yesAmount / inner.totalAmount;
             const noRatio = inner.noAmount / inner.totalAmount;
             
-            // 创建外盘数据结构
+            // 创建Trade数据结构
             currentTopic.outerPool = {
                 basePool: basePool,
                 yesAmount: yesRatio * basePool * 2, // 初始虚拟流动性
@@ -3789,7 +3788,7 @@
 
         function closePumpModal() {
             document.getElementById('pumpModal').classList.remove('active');
-            // 切换到外盤交易界面
+            // 切换到Trade交易界面
             document.getElementById('innerTrading').style.display = 'none';
             document.getElementById('outerTrading').style.display = 'block';
             document.getElementById('tradingTitle').textContent = 'LMSR交易';
@@ -3923,7 +3922,7 @@
             }
         }
 
-        // 當話題結束時間改變時，更新外盤交易結束時間的默認值
+        // 當話題結束時間改變時，更新Trade交易結束時間的默認值
         function updateAdvancedSettings() {
             const topicEndTime = document.querySelector('input[name="topicEndTime"]').value;
             const outerTradingEndTime = document.querySelector('input[name="outerTradingEndTime"]');
@@ -4148,7 +4147,7 @@
         // 快速下單功能
         let userBalance = 10000; // 模擬用戶餘額
 
-        // 設置快速金額 (內盤)
+        // 設置快速金額 (PK)
         function setQuickAmount(amount) {
             document.getElementById('betAmount').value = amount;
             
@@ -4174,7 +4173,7 @@
             checkInnerBalance();
         }
 
-        // 設置快速金額 (外盤)
+        // 設置快速金額 (Trade)
         function setLMSRQuickAmount(amount) {
             document.getElementById('lmsrAmount').value = amount;
             
@@ -4199,14 +4198,14 @@
             checkLMSRBalance();
         }
 
-        // 檢查內盤交易餘額
+        // 檢查PK交易餘額
         function checkInnerBalance() {
             // 檢查二元選項（betAmount）
             const betAmountEl = document.getElementById('betAmount');
             if (betAmountEl) {
                 const amount = parseFloat(betAmountEl.value) || 0;
                 if (amount > 0) {
-                    const totalCost = amount; // 內盤是全額投入，手續費從中扣除
+                    const totalCost = amount; // PK是全額投入，手續費從中扣除
                     
                     const balanceElement = document.getElementById('userBalance');
                     const rechargeBtn = document.getElementById('rechargeBtn');
@@ -4226,7 +4225,7 @@
             if (multiOptionAmountEl) {
                 const amount = parseFloat(multiOptionAmountEl.value) || 0;
                 if (amount > 0) {
-                    const totalCost = amount; // 內盤是全額投入，手續費從中扣除
+                    const totalCost = amount; // PK是全額投入，手續費從中扣除
                     
                     const multiBalanceElement = document.getElementById('multiUserBalance');
                     const multiRechargeBtn = document.getElementById('multiRechargeBtn');
@@ -4403,7 +4402,7 @@
                 outerPool: null,
                 isOuter: false,
                 endTime: formData.get('topicEndTime').split('T')[0],
-                tradingEndTime: formData.get('tradingEndTime'), // 內盤交易結束時間
+                tradingEndTime: formData.get('tradingEndTime'), // PK交易結束時間
                 status: 'inner',
                 description: formData.get('content'),
                 isPrivate: isPrivate,
@@ -4448,10 +4447,10 @@
                     totalInvested += myTotal;
                     
                     // 計算當前持倉價值
-                    let currentValue = myInnerTotal; // 內盤按原值計算
+                    let currentValue = myInnerTotal; // PK按原值計算
                     
-                    // 計算交易量（包括內盤和外盤的所有交易）
-                    totalTradingVolume += myInnerTotal; // 內盤投入
+                    // 計算交易量（包括PK和Trade的所有交易）
+                    totalTradingVolume += myInnerTotal; // PK投入
                     
                     if (topic.status === 'outer' && topic.outerPool && topic.outerPool.totalAmount > 0) {
                         const yesPrice = topic.outerPool.yesAmount / topic.outerPool.totalAmount;
@@ -4459,7 +4458,7 @@
                         const outerValue = myOuterYes * yesPrice + myOuterNo * noPrice;
                         currentValue = myInnerTotal + outerValue;
                         
-                        // 外盤交易量估算（假設代幣是以當前價格買入的）
+                        // Trade交易量估算（假設代幣是以當前價格買入的）
                         const outerTradeValue = myOuterYes * yesPrice + myOuterNo * noPrice;
                         totalTradingVolume += outerTradeValue;
                         
@@ -4468,7 +4467,7 @@
                     }
                     
                     // 為每個話題添加模擬的歷史交易量
-                    totalTradingVolume += (topic.innerPool?.totalAmount || 0) * 2; // 模擬多次內盤交易
+                    totalTradingVolume += (topic.innerPool?.totalAmount || 0) * 2; // 模擬多次PK交易
                     
                     totalValue += currentValue;
                 }
@@ -4541,15 +4540,15 @@
                 if (myInnerTotal > myOuterTotal) {
                     position = myInnerYes > myInnerNo ? 'YES' : 'NO';
                     positionAmount = Math.max(myInnerYes, myInnerNo);
-                    positionType = '内盘';
+                    positionType = 'PK';
                 } else if (myOuterTotal > 0) {
                     position = myOuterYes > myOuterNo ? 'YES' : 'NO';
                     positionAmount = Math.max(myOuterYes, myOuterNo);
-                    positionType = '外盘';
+                    positionType = 'Trade';
                 } else {
                     position = myInnerYes > myInnerNo ? 'YES' : 'NO';
                     positionAmount = Math.max(myInnerYes, myInnerNo);
-                    positionType = '内盘';
+                    positionType = 'PK';
                 }
 
                 // 计算当前价值
@@ -4570,7 +4569,7 @@
                         <div class="position-info">
                             <div class="position-title">${topic.title}</div>
                             <div class="position-details">
-                                <span>持仓：${position} ${positionAmount} ${positionType === '外盘' ? '个' : 'USDT'}</span>
+                                <span>持仓：${position} ${positionAmount} ${positionType === 'Trade' ? '个' : 'USDT'}</span>
                                 <span>状态：${positionType}</span>
                                 <span>结束：${topic.endTime}</span>
                             </div>
@@ -4662,7 +4661,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderTopics();
             
-            // 预渲染內盤話題以確保數據正確
+            // 预渲染PK話題以確保數據正確
             renderInnerTopics();
             
             // 检查URL参数
