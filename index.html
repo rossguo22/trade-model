@@ -1593,11 +1593,42 @@
             border-color: #3b82f6;
         }
 
-        .kline-chart {
+        .kline-chart, .line-chart {
             height: 280px;
             position: relative;
             padding: 1rem;
             background: rgba(17, 24, 39, 0.5);
+        }
+
+        /* 折线图样式 */
+        .line-chart {
+            position: relative;
+            padding: 1rem;
+        }
+
+        .line-chart svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .line-chart-label {
+            position: absolute;
+            bottom: 0;
+            font-size: 0.7rem;
+            color: #9ca3af;
+            white-space: nowrap;
+        }
+
+        .price-indicator {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(17, 24, 39, 0.9);
+            color: #ffffff;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
         .kline-bar {
@@ -1937,18 +1968,18 @@
                         这里显示话题的详细描述内容...
                     </div>
 
-                    <!-- K線圖區域 (僅Trade顯示) -->
+                    <!-- 價格走勢圖區域 (僅Trade顯示) -->
                     <div id="centerKlineSection" style="margin-top: 2rem; display: none;">
                         <div class="kline-chart-container">
                             <div class="chart-header">
-                                <span class="chart-title">💹 價格走勢圖</span>
+                                <span class="chart-title">📈 價格走勢圖</span>
                                 <div class="chart-controls">
                                     <button class="chart-btn active" onclick="switchTimeframe('1m')">1分</button>
                                     <button class="chart-btn" onclick="switchTimeframe('5m')">5分</button>
                                     <button class="chart-btn" onclick="switchTimeframe('1h')">1小時</button>
                                 </div>
                             </div>
-                            <div id="centerKlineChart" class="kline-chart"></div>
+                            <div id="centerKlineChart" class="line-chart"></div>
                         </div>
                     </div>
 
@@ -2136,13 +2167,13 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem;">
                 <div class="price-card yes-price">
                     <div class="price-label">YES</div>
-                    <div class="price-value" id="yesPriceDisplay">0.500</div>
-                    <div class="price-unit">USDT</div>
+                    <div class="price-value" id="yesPriceDisplay">50.0%</div>
+                    <div class="price-unit">價格</div>
                 </div>
                 <div class="price-card no-price">
                     <div class="price-label">NO</div>
-                    <div class="price-value" id="noPriceDisplay">0.500</div>
-                    <div class="price-unit">USDT</div>
+                    <div class="price-value" id="noPriceDisplay">50.0%</div>
+                    <div class="price-unit">價格</div>
                 </div>
             </div>
 
@@ -2197,50 +2228,32 @@
 
 
 
-        <!-- 我的持仓 -->
-        <div class="trading-section">
-            <div class="section-title">我的持仓</div>
-            
-            <!-- Trade持倉 -->
-            <div class="pool-section" id="myOuterPositions" style="display: none;">
-                <div class="pool-section-header">
-                    <span class="pool-section-title">Trade持倉</span>
-                    <span class="pool-section-badge trade">LMSR代幣</span>
-                </div>
-                <div class="pool-info">
-                    <div class="pool-row">
-                        <span class="pool-label">YES代幣：</span>
-                        <span class="pool-value" id="myOuterYes">0 个</span>
+                    <!-- 我的持仓 -->
+            <div class="trading-section">
+                <div class="section-title">我的持仓</div>
+                
+                <!-- Trade持倉 -->
+                <div class="pool-section" id="myOuterPositions" style="display: none;">
+                    <div class="pool-section-header">
+                        <span class="pool-section-title">Trade持倉</span>
+                        <span class="pool-section-badge trade">LMSR代幣</span>
                     </div>
-                    <div class="pool-row">
-                        <span class="pool-label">NO代幣：</span>
-                        <span class="pool-value" id="myOuterNo">0 个</span>
-                    </div>
-                    <div class="pool-row">
-                        <span class="pool-label">估值：</span>
-                        <span class="pool-value" id="myOuterValue">0 USDT</span>
+                    <div class="pool-info">
+                        <!-- 动态生成Trade持仓信息 -->
                     </div>
                 </div>
-            </div>
 
-            <!-- PK持倉 -->
-            <div class="pool-section" id="myInnerPositions">
-                <div class="pool-section-header">
-                    <span class="pool-section-title">PK持倉</span>
-                    <span class="pool-section-badge">原始下注</span>
-                </div>
-                <div class="pool-info">
-                    <div class="pool-row">
-                        <span class="pool-label">YES持仓：</span>
-                        <span class="pool-value" id="myInnerYes">0 USDT</span>
+                <!-- PK持倉 -->
+                <div class="pool-section" id="myInnerPositions">
+                    <div class="pool-section-header">
+                        <span class="pool-section-title">PK持倉</span>
+                        <span class="pool-section-badge">原始下注</span>
                     </div>
-                    <div class="pool-row">
-                        <span class="pool-label">NO持仓：</span>
-                        <span class="pool-value" id="myInnerNo">0 USDT</span>
+                    <div class="pool-info">
+                        <!-- 动态生成PK持仓信息 -->
                     </div>
                 </div>
             </div>
-        </div>
 
         <!-- 分享按钮 -->
         <div class="trading-section">
@@ -2301,7 +2314,8 @@
                     basePool: 200, // 从PK小方50%转入的底池
                     yesAmount: 320, // Trade YES交易量
                     noAmount: 280,  // Trade NO交易量
-                    totalAmount: 600,
+                    totalAmount: 600, // 当前资金池
+                    totalVolume: 1500, // 总流水（所有交易的累计金额）
                     tradingFeeToInner: 12 // Trade交易手續費转入PK的金额
                 },
                 isOuter: true,
@@ -2316,7 +2330,10 @@
                 myInnerNo: 0,
                 // Trade持倉（LMSR代幣）
                 myOuterYes: 15,
-                myOuterNo: 0
+                myOuterNo: 0,
+                // 平均價格記錄
+                myOuterYesAvgPrice: 0.65,
+                myOuterNoAvgPrice: 0.0
             },
             {
                 id: 2,
@@ -2334,6 +2351,7 @@
                     yesAmount: 600,
                     noAmount: 800,
                     totalAmount: 1400,
+                    totalVolume: 2800, // 总流水
                     tradingFeeToInner: 28
                 },
                 isOuter: true,
@@ -2753,7 +2771,7 @@
                 // 更新LMSR價格显示
                 updateLMSRPrices();
                 
-                // 初始化K線圖
+                // 初始化價格走勢圖
                 setTimeout(() => {
                     initKlineChart();
                 }, 100);
@@ -2803,19 +2821,19 @@
                 const noAmount = tradePool.noAmount;
                 
                 // 基本價格计算（基于Trade獎金池比例）
-                const yesPrice = (yesAmount / totalAmount).toFixed(3);
-                const noPrice = (noAmount / totalAmount).toFixed(3);
+                const yesPrice = yesAmount / totalAmount;
+                const noPrice = noAmount / totalAmount;
 
-            // 更新價格显示
-            document.getElementById('yesPriceDisplay').textContent = yesPrice;
-            document.getElementById('noPriceDisplay').textContent = noPrice;
+            // 更新價格显示（百分比格式）
+            document.getElementById('yesPriceDisplay').textContent = `${(yesPrice * 100).toFixed(1)}%`;
+            document.getElementById('noPriceDisplay').textContent = `${(noPrice * 100).toFixed(1)}%`;
 
             // 监听数量輸入变化，更新預計花費和收入
             const amountInput = document.getElementById('lmsrAmount');
             const updateCostInfo = () => {
                 const amount = parseFloat(amountInput.value) || 0;
-                const yesCostBase = amount * parseFloat(yesPrice);
-                const noCostBase = amount * parseFloat(noPrice);
+                const yesCostBase = amount * yesPrice;
+                const noCostBase = amount * noPrice;
                 
                 // 包含5%手續費的总成本（買入）
                 const yesCostTotal = (yesCostBase * 1.05).toFixed(2);
@@ -2881,20 +2899,39 @@
             const tradingFee = cost * 0.05;
             const netCost = cost - tradingFee;
 
+            // 計算平均價格（不包含手續費）
+            const averagePrice = netCost / amount;
+            
+            // 計算潛在收益（購買的代幣如果贏了能獲得的總金額）
+            const potentialProfit = amount; // 如果赢了，每个代币价值1 USDT，所以总收益是代币数量
+            
             // 確認交易
-            if (confirm(`確認買入 ${amount} 个 ${option.toUpperCase()} 代幣？\n交易成本: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT \n净成本: ${netCost.toFixed(2)} USDT`)) {
+            if (confirm(`確認買入 ${amount} 个 ${option.toUpperCase()} 代幣？\n平均價格: ${(averagePrice * 100).toFixed(1)}%\n總花費: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT\n潛在收益: ${potentialProfit.toFixed(2)} USDT`)) {
                 
                 // 扣除餘額
                 userBalance -= cost;
-                // 更新Trade持倉
+                // 更新Trade持倉和平均價格
                 if (option === 'yes') {
-                    currentTopic.myOuterYes = (currentTopic.myOuterYes || 0) + amount;
+                    const currentYes = currentTopic.myOuterYes || 0;
+                    const currentYesAvg = currentTopic.myOuterYesAvgPrice || 0;
+                    const newTotal = currentYes + amount;
+                    // 計算新的平均價格
+                    currentTopic.myOuterYesAvgPrice = currentYes > 0 ? 
+                        ((currentYes * currentYesAvg) + (amount * priceBase)) / newTotal : priceBase;
+                    currentTopic.myOuterYes = newTotal;
                 } else {
-                    currentTopic.myOuterNo = (currentTopic.myOuterNo || 0) + amount;
+                    const currentNo = currentTopic.myOuterNo || 0;
+                    const currentNoAvg = currentTopic.myOuterNoAvgPrice || 0;
+                    const newTotal = currentNo + amount;
+                    // 計算新的平均價格
+                    currentTopic.myOuterNoAvgPrice = currentNo > 0 ? 
+                        ((currentNo * currentNoAvg) + (amount * priceBase)) / newTotal : priceBase;
+                    currentTopic.myOuterNo = newTotal;
                 }
 
-                // 更新Trade獎金池
+                // 更新Trade獎金池和总流水
                 currentTopic.outerPool.totalAmount += netCost;
+                currentTopic.outerPool.totalVolume = (currentTopic.outerPool.totalVolume || 0) + cost; // 总流水包含手续费
                 if (option === 'yes') {
                     currentTopic.outerPool.yesAmount += netCost;
                 } else {
@@ -2921,7 +2958,7 @@
                 // 更新餘額顯示
                 updateBalanceDisplay();
 
-                alert(`交易成功！\n買入: ${amount} 个 ${option.toUpperCase()}\n总花费: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT (40%已回流PK)`);
+                alert(`交易成功！\n買入: ${amount} 个 ${option.toUpperCase()}\n平均價格: ${(averagePrice * 100).toFixed(1)}%\n總花費: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT\n潛在收益: ${potentialProfit.toFixed(2)} USDT `);
             }
         }
 
@@ -2945,17 +2982,25 @@
                 return;
             }
 
-            // 計算賣出收入
-            const yesPrice = parseFloat(document.getElementById('yesPriceDisplay').textContent);
-            const noPrice = parseFloat(document.getElementById('noPriceDisplay').textContent);
+            // 計算賣出收入（从数据源获取价格而不是显示文本）
+            const yesPrice = currentTopic.outerPool.yesAmount / currentTopic.outerPool.totalAmount;
+            const noPrice = currentTopic.outerPool.noAmount / currentTopic.outerPool.totalAmount;
             const revenue = option === 'yes' ? amount * yesPrice : amount * noPrice;
 
             // 計算2%手續費
             const tradingFee = revenue * 0.05;
             const netRevenue = revenue - tradingFee;
 
+            // 計算平均價格（不包含手續費）
+            const averagePrice = netRevenue / amount;
+            
+            // 計算當前價格用於顯示
+            const currentPrice = option === 'yes' ? 
+                currentTopic.outerPool.yesAmount / (currentTopic.outerPool.yesAmount + currentTopic.outerPool.noAmount) :
+                currentTopic.outerPool.noAmount / (currentTopic.outerPool.yesAmount + currentTopic.outerPool.noAmount);
+            
             // 確認交易
-            if (confirm(`確認賣出 ${amount} 個 ${option.toUpperCase()} 代幣？\n賣出收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT \n淨收入: ${netRevenue.toFixed(2)} USDT`)) {
+            if (confirm(`確認賣出 ${amount} 個 ${option.toUpperCase()} 代幣？\n平均價格: ${(averagePrice * 100).toFixed(1)}%\n當前價格: ${(currentPrice * 100).toFixed(1)}%\n總收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT`)) {
                 // 更新Trade持倉
                 if (option === 'yes') {
                     currentTopic.myOuterYes = (currentTopic.myOuterYes || 0) - amount;
@@ -2963,8 +3008,9 @@
                     currentTopic.myOuterNo = (currentTopic.myOuterNo || 0) - amount;
                 }
 
-                // 更新Trade資金池（從池中取出資金）
+                // 更新Trade資金池（從池中取出資金）和总流水
                 currentTopic.outerPool.totalAmount -= netRevenue;
+                currentTopic.outerPool.totalVolume = (currentTopic.outerPool.totalVolume || 0) + revenue; // 总流水包含手续费
                 if (option === 'yes') {
                     currentTopic.outerPool.yesAmount -= netRevenue;
                 } else {
@@ -2992,7 +3038,7 @@
                 userBalance += netRevenue;
                 updateBalanceDisplay();
 
-                alert(`交易成功！\n賣出: ${amount} 個 ${option.toUpperCase()}\n總收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT (40%已回流PK)`);
+                alert(`交易成功！\n賣出: ${amount} 個 ${option.toUpperCase()}\n平均價格: ${(averagePrice * 100).toFixed(1)}%\n當前價格: ${(currentPrice * 100).toFixed(1)}%\n總收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT `);
             }
         }
 
@@ -3200,26 +3246,33 @@
                     `;
                 }
                 
-                // Trade状态 - 显示完整的獎金流向
+                // Trade状态 - 显示市场信息和价格走势
                 poolDetailsSection.innerHTML = `
-                                            <!-- Trade獎金池 -->
+                        <!-- Trade信息 -->
                         <div class="pool-section">
                             <div class="pool-section-header">
-                                <span class="pool-section-title">Trade獎金池</span>
+                                <span class="pool-section-title">Trade信息</span>
                                 <span class="pool-section-badge trade">LMSR</span>
                             </div>
-                        <div class="pool-info">
-                            <div class="pool-row" style="color: #10b981;">
-                                <span class="pool-label">来自PK底池：</span>
-                                <span class="pool-value">+${currentTopic.outerPool.basePool} USDT</span>
-                            </div>
-                            ${outerPoolRowsHTML}
-                            <div class="pool-row">
-                                <span class="pool-label">Trade总额：</span>
-                                <span class="pool-value">${currentTopic.outerPool.totalAmount} USDT</span>
+                            <div class="pool-info">
+                                <div class="pool-row">
+                                    <span class="pool-label">总流水：</span>
+                                    <span class="pool-value">${currentTopic.outerPool.totalVolume || 0} USDT</span>
+                                </div>
+                                <div class="pool-row">
+                                    <span class="pool-label">市場流動性：</span>
+                                    <span class="pool-value">${currentTopic.outerPool.totalAmount} USDT</span>
+                                </div>
+                                <div class="pool-row">
+                                    <span class="pool-label">当前YES价格：</span>
+                                    <span class="pool-value" style="color: #10b981;">${((currentTopic.outerPool.yesAmount / (currentTopic.outerPool.yesAmount + currentTopic.outerPool.noAmount)) * 100).toFixed(1)}%</span>
+                                </div>
+                                <div class="pool-row">
+                                    <span class="pool-label">当前NO价格：</span>
+                                    <span class="pool-value" style="color: #ef4444;">${((currentTopic.outerPool.noAmount / (currentTopic.outerPool.yesAmount + currentTopic.outerPool.noAmount)) * 100).toFixed(1)}%</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
                     <!-- PK獎金池 -->
                     <div class="pool-section">
@@ -3470,10 +3523,55 @@
                 }
             } else {
                 // 二元選項PK持倉
-                const myInnerYesEl = document.getElementById('myInnerYes');
-                const myInnerNoEl = document.getElementById('myInnerNo');
-                if (myInnerYesEl) myInnerYesEl.textContent = `${currentTopic.myInnerYes || 0} USDT`;
-                if (myInnerNoEl) myInnerNoEl.textContent = `${currentTopic.myInnerNo || 0} USDT`;
+                const myInnerYes = currentTopic.myInnerYes || 0;
+                const myInnerNo = currentTopic.myInnerNo || 0;
+                
+                // 动态生成PK持仓显示
+                const innerPositionsContent = document.querySelector('#myInnerPositions .pool-info');
+                if (innerPositionsContent) {
+                    let positionsHTML = '';
+                    let totalValue = 0;
+                    
+                    // 只显示有持仓的选项
+                    if (myInnerYes > 0) {
+                        totalValue += myInnerYes;
+                        positionsHTML += `
+                            <div class="pool-row">
+                                <span class="pool-label">YES持仓：</span>
+                                <span class="pool-value">${myInnerYes} USDT</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (myInnerNo > 0) {
+                        totalValue += myInnerNo;
+                        positionsHTML += `
+                            <div class="pool-row">
+                                <span class="pool-label">NO持仓：</span>
+                                <span class="pool-value">${myInnerNo} USDT</span>
+                            </div>
+                        `;
+                    }
+                    
+                    // 如果有任何持仓，显示总计
+                    if (myInnerYes > 0 || myInnerNo > 0) {
+                        positionsHTML += `
+                            <div class="pool-row" style="border-top: 1px solid #374151; margin-top: 0.5rem; padding-top: 0.5rem; font-weight: 700;">
+                                <span class="pool-label">總計：</span>
+                                <span class="pool-value">${totalValue} USDT</span>
+                            </div>
+                        `;
+                    } else {
+                        // 如果没有持仓，显示提示信息
+                        positionsHTML = `
+                            <div class="pool-row" style="text-align: center; color: #9ca3af; padding: 1rem;">
+                                <span>暂无PK持仓</span>
+                            </div>
+                        `;
+                    }
+                    
+                    innerPositionsContent.innerHTML = positionsHTML;
+                }
             }
 
             // 根据状态显示/隐藏Trade持倉
@@ -3517,21 +3615,93 @@
                     // 二元選項Trade持倉
                     const myOuterYes = currentTopic.myOuterYes || 0;
                     const myOuterNo = currentTopic.myOuterNo || 0;
-                    const myOuterYesEl = document.getElementById('myOuterYes');
-                    const myOuterNoEl = document.getElementById('myOuterNo');
-                    if (myOuterYesEl) myOuterYesEl.textContent = `${myOuterYes} 个`;
-                    if (myOuterNoEl) myOuterNoEl.textContent = `${myOuterNo} 个`;
-
-                    // 计算Trade持倉估值
-                    if (currentTopic.outerPool.totalAmount > 0) {
-                        const yesPrice = currentTopic.outerPool.yesAmount / currentTopic.outerPool.totalAmount;
-                        const noPrice = currentTopic.outerPool.noAmount / currentTopic.outerPool.totalAmount;
-                        const totalValue = (myOuterYes * yesPrice + myOuterNo * noPrice).toFixed(2);
-                        const myOuterValueEl = document.getElementById('myOuterValue');
-                        if (myOuterValueEl) myOuterValueEl.textContent = `${totalValue} USDT`;
-                    } else {
-                        const myOuterValueEl = document.getElementById('myOuterValue');
-                        if (myOuterValueEl) myOuterValueEl.textContent = '0 USDT';
+                    const myOuterYesAvgPrice = currentTopic.myOuterYesAvgPrice || 0;
+                    const myOuterNoAvgPrice = currentTopic.myOuterNoAvgPrice || 0;
+                    
+                    // 动态生成持仓显示
+                    const outerPositionsContent = document.querySelector('#myOuterPositions .pool-info');
+                    if (outerPositionsContent) {
+                        let positionsHTML = '';
+                        let totalValue = 0;
+                        
+                        // 计算当前价格
+                        const yesCurrentPrice = currentTopic.outerPool.totalAmount > 0 ? 
+                            currentTopic.outerPool.yesAmount / currentTopic.outerPool.totalAmount : 0;
+                        const noCurrentPrice = currentTopic.outerPool.totalAmount > 0 ? 
+                            currentTopic.outerPool.noAmount / currentTopic.outerPool.totalAmount : 0;
+                        
+                        // 只显示有持仓的代币
+                        if (myOuterYes > 0) {
+                            const yesValue = (myOuterYes * yesCurrentPrice);
+                            totalValue += yesValue;
+                            positionsHTML += `
+                                <div class="pool-row">
+                                    <span class="pool-label">YES代幣：</span>
+                                    <span class="pool-value">${myOuterYes} 个</span>
+                                </div>
+                                <div class="pool-row">
+                                    <span class="pool-label">平均購買價格：</span>
+                                    <span class="pool-value">${(myOuterYesAvgPrice * 100).toFixed(1)}%</span>
+                                </div>
+                                <div class="pool-row">
+                                    <span class="pool-label">當前價格：</span>
+                                    <span class="pool-value">${(yesCurrentPrice * 100).toFixed(1)}%</span>
+                                </div>
+                                <div class="pool-row">
+                                    <span class="pool-label">當前估值：</span>
+                                    <span class="pool-value">${yesValue.toFixed(2)} USDT</span>
+                                </div>
+                            `;
+                        }
+                        
+                        if (myOuterNo > 0) {
+                            const noValue = (myOuterNo * noCurrentPrice);
+                            totalValue += noValue;
+                            
+                            // 如果有YES持仓，添加分隔线
+                            if (myOuterYes > 0) {
+                                positionsHTML += `<div class="pool-row" style="border-top: 1px solid #374151; margin-top: 0.5rem; padding-top: 0.5rem;">`;
+                            } else {
+                                positionsHTML += `<div class="pool-row">`;
+                            }
+                            
+                            positionsHTML += `
+                                    <span class="pool-label">NO代幣：</span>
+                                    <span class="pool-value">${myOuterNo} 个</span>
+                                </div>
+                                <div class="pool-row">
+                                    <span class="pool-label">平均購買價格：</span>
+                                    <span class="pool-value">${(myOuterNoAvgPrice * 100).toFixed(1)}%</span>
+                                </div>
+                                <div class="pool-row">
+                                    <span class="pool-label">當前價格：</span>
+                                    <span class="pool-value">${(noCurrentPrice * 100).toFixed(1)}%</span>
+                                </div>
+                                <div class="pool-row">
+                                    <span class="pool-label">當前估值：</span>
+                                    <span class="pool-value">${noValue.toFixed(2)} USDT</span>
+                                </div>
+                            `;
+                        }
+                        
+                        // 如果有任何持仓，显示总估值
+                        if (myOuterYes > 0 || myOuterNo > 0) {
+                            positionsHTML += `
+                                <div class="pool-row" style="border-top: 1px solid #374151; margin-top: 0.5rem; padding-top: 0.5rem; font-weight: 700;">
+                                    <span class="pool-label">總估值：</span>
+                                    <span class="pool-value">${totalValue.toFixed(2)} USDT</span>
+                                </div>
+                            `;
+                        } else {
+                            // 如果没有持仓，显示提示信息
+                            positionsHTML = `
+                                <div class="pool-row" style="text-align: center; color: #9ca3af; padding: 1rem;">
+                                    <span>暂无Trade持仓</span>
+                                </div>
+                            `;
+                        }
+                        
+                        outerPositionsContent.innerHTML = positionsHTML;
                     }
                 }
             } else {
@@ -3935,165 +4105,207 @@
         // K線圖相關功能
         let currentTimeframe = '1m';
         let klineData = [];
+        let priceData = [];
         let chartInterval = null;
 
-        // 初始化K線圖
+        // 初始化價格走勢圖
         function initKlineChart() {
             if (!currentTopic || currentTopic.status !== 'outer') return;
             
-            // 生成模擬K線數據
-            generateKlineData();
-            renderKlineChart();
+            // 生成模擬價格數據
+            generatePriceData();
+            renderPriceChart();
             
             // 啟動實時更新
             if (chartInterval) clearInterval(chartInterval);
             chartInterval = setInterval(() => {
-                updateKlineData();
-                renderKlineChart();
-            }, 2000); // 每2秒更新一次
+                updatePriceData();
+                renderPriceChart();
+            }, 3000); // 每3秒更新一次
         }
 
-        // 生成模擬K線數據
-        function generateKlineData() {
+        // 生成模擬價格數據
+        function generatePriceData() {
             const { yesAmount, noAmount } = currentTopic.outerPool;
             const totalAmount = yesAmount + noAmount;
-            const basePrice = totalAmount > 0 ? yesAmount / totalAmount : 0.5;
+            const baseYesPrice = totalAmount > 0 ? yesAmount / totalAmount : 0.5;
+            const baseNoPrice = 1 - baseYesPrice;
             
-            klineData = [];
+            priceData = [];
             const now = Date.now();
-            const barCount = 30; // 顯示30根K線
+            const pointCount = 20; // 顯示20個價格點
             
-            for (let i = barCount - 1; i >= 0; i--) {
-                const timestamp = now - i * 60000; // 每分鐘一根K線
-                const variation = (Math.random() - 0.5) * 0.1; // ±5%變動
-                const price = Math.max(0.1, Math.min(0.9, basePrice + variation));
+            for (let i = pointCount - 1; i >= 0; i--) {
+                const timestamp = now - i * 30000; // 每30秒一個價格點
+                const yesVariation = (Math.random() - 0.5) * 0.08; // ±4%變動
+                const noVariation = (Math.random() - 0.5) * 0.08;
                 
-                const open = i === barCount - 1 ? basePrice : klineData[klineData.length - 1]?.close || price;
-                const high = Math.max(open, price + Math.random() * 0.05);
-                const low = Math.min(open, price - Math.random() * 0.05);
-                const close = price;
+                const yesPrice = Math.max(0.1, Math.min(0.9, baseYesPrice + yesVariation));
+                const noPrice = Math.max(0.1, Math.min(0.9, baseNoPrice + noVariation));
                 
-                klineData.push({
+                priceData.push({
                     timestamp,
-                    open: Math.max(0.1, Math.min(0.9, open)),
-                    high: Math.max(0.1, Math.min(0.9, high)),
-                    low: Math.max(0.1, Math.min(0.9, low)),
-                    close: Math.max(0.1, Math.min(0.9, close)),
-                    volume: Math.floor(Math.random() * 1000) + 100
+                    yesPrice: Math.max(0.1, Math.min(0.9, yesPrice)),
+                    noPrice: Math.max(0.1, Math.min(0.9, noPrice))
                 });
             }
         }
 
-        // 更新K線數據
-        function updateKlineData() {
-            if (klineData.length === 0) return;
+        // 更新價格數據
+        function updatePriceData() {
+            if (priceData.length === 0) return;
             
-            const lastBar = klineData[klineData.length - 1];
-            const variation = (Math.random() - 0.5) * 0.02; // ±1%變動
-            const newClose = Math.max(0.1, Math.min(0.9, lastBar.close + variation));
+            const lastPoint = priceData[priceData.length - 1];
+            const yesVariation = (Math.random() - 0.5) * 0.01; // ±0.5%變動
+            const noVariation = (Math.random() - 0.5) * 0.01;
             
-            // 更新最後一根K線
-            klineData[klineData.length - 1] = {
-                ...lastBar,
-                high: Math.max(lastBar.high, newClose),
-                low: Math.min(lastBar.low, newClose),
-                close: newClose,
-                volume: lastBar.volume + Math.floor(Math.random() * 50)
+            const newYesPrice = Math.max(0.1, Math.min(0.9, lastPoint.yesPrice + yesVariation));
+            const newNoPrice = Math.max(0.1, Math.min(0.9, lastPoint.noPrice + noVariation));
+            
+            // 更新最後一個價格點
+            priceData[priceData.length - 1] = {
+                ...lastPoint,
+                yesPrice: newYesPrice,
+                noPrice: newNoPrice
             };
             
-            // 有時候添加新的K線
-            if (Math.random() < 0.1) {
-                const newBar = {
+            // 有時候添加新的價格點
+            if (Math.random() < 0.15) {
+                const newPoint = {
                     timestamp: Date.now(),
-                    open: newClose,
-                    high: newClose + Math.random() * 0.02,
-                    low: newClose - Math.random() * 0.02,
-                    close: newClose,
-                    volume: Math.floor(Math.random() * 500) + 50
+                    yesPrice: newYesPrice + (Math.random() - 0.5) * 0.02,
+                    noPrice: newNoPrice + (Math.random() - 0.5) * 0.02
                 };
                 
-                klineData.push(newBar);
-                if (klineData.length > 30) {
-                    klineData.shift(); // 保持30根K線
+                priceData.push(newPoint);
+                if (priceData.length > 20) {
+                    priceData.shift(); // 保持20個價格點
                 }
             }
         }
 
-        // 渲染K線圖
-        function renderKlineChart() {
+        // 渲染價格走勢圖
+        function renderPriceChart() {
             const chartContainer = document.getElementById('centerKlineChart');
-            if (!chartContainer || klineData.length === 0) return;
+            if (!chartContainer || priceData.length === 0) return;
             
             // 清空現有內容
             chartContainer.innerHTML = '';
             
             // 計算價格範圍
-            const prices = klineData.flatMap(d => [d.high, d.low]);
-            const minPrice = Math.min(...prices);
-            const maxPrice = Math.max(...prices);
+            const allYesPrices = priceData.map(p => p.yesPrice);
+            const allNoPrices = priceData.map(p => p.noPrice);
+            const minPrice = Math.min(...allYesPrices, ...allNoPrices);
+            const maxPrice = Math.max(...allYesPrices, ...allNoPrices);
             const priceRange = maxPrice - minPrice || 0.1;
             
             const chartWidth = chartContainer.clientWidth - 32;
-            const chartHeight = 248;
-            const barWidth = chartWidth / klineData.length * 0.8;
+            const chartHeight = 200;
+            const pointWidth = chartWidth / priceData.length;
             
-            // 渲染K線
-            klineData.forEach((bar, index) => {
-                const x = (index + 0.5) * (chartWidth / klineData.length);
-                const isUp = bar.close > bar.open;
+            // 創建SVG容器
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', chartWidth);
+            svg.setAttribute('height', chartHeight);
+            svg.style.position = 'absolute';
+            svg.style.top = '16px';
+            svg.style.left = '16px';
+            chartContainer.appendChild(svg);
+            
+            // 繪製YES價格線
+            let yesPath = '';
+            priceData.forEach((point, index) => {
+                const x = (index / (priceData.length - 1)) * chartWidth;
+                const y = chartHeight - ((point.yesPrice - minPrice) / priceRange) * chartHeight;
                 
-                // 計算位置
-                const bodyTop = ((maxPrice - Math.max(bar.open, bar.close)) / priceRange) * chartHeight;
-                const bodyHeight = Math.abs(bar.close - bar.open) / priceRange * chartHeight || 1;
-                const wickTop = ((maxPrice - bar.high) / priceRange) * chartHeight;
-                const wickBottom = ((maxPrice - bar.low) / priceRange) * chartHeight;
-                
-                // 創建K線柱
-                const barElement = document.createElement('div');
-                barElement.className = `kline-bar ${isUp ? 'up' : 'down'}`;
-                barElement.style.left = `${x - barWidth/2}px`;
-                barElement.style.width = `${barWidth}px`;
-                barElement.style.height = `${bodyHeight}px`;
-                barElement.style.bottom = `${chartHeight - bodyTop - bodyHeight + 16}px`;
-                
-                // 添加懸停事件
-                barElement.addEventListener('mouseenter', (e) => showTooltip(e, bar));
-                barElement.addEventListener('mouseleave', hideTooltip);
-                
-                chartContainer.appendChild(barElement);
-                
-                // 添加上下影線
-                if (bar.high !== Math.max(bar.open, bar.close)) {
-                    const wickUpElement = document.createElement('div');
-                    wickUpElement.style.position = 'absolute';
-                    wickUpElement.style.left = `${x - 0.5}px`;
-                    wickUpElement.style.width = '1px';
-                    wickUpElement.style.height = `${bodyTop - wickTop}px`;
-                    wickUpElement.style.bottom = `${chartHeight - wickTop + 16}px`;
-                    wickUpElement.style.background = isUp ? '#10b981' : '#ef4444';
-                    chartContainer.appendChild(wickUpElement);
-                }
-                
-                if (bar.low !== Math.min(bar.open, bar.close)) {
-                    const wickDownElement = document.createElement('div');
-                    wickDownElement.style.position = 'absolute';
-                    wickDownElement.style.left = `${x - 0.5}px`;
-                    wickDownElement.style.width = '1px';
-                    wickDownElement.style.height = `${wickBottom - bodyTop - bodyHeight}px`;
-                    wickDownElement.style.bottom = `${16}px`;
-                    wickDownElement.style.background = isUp ? '#10b981' : '#ef4444';
-                    chartContainer.appendChild(wickDownElement);
+                if (index === 0) {
+                    yesPath += `M ${x} ${y}`;
+                } else {
+                    yesPath += ` L ${x} ${y}`;
                 }
             });
             
-            // 添加當前價格指示器
-            const currentPrice = klineData[klineData.length - 1]?.close || 0.5;
-            const priceY = ((maxPrice - currentPrice) / priceRange) * chartHeight;
+            const yesLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            yesLine.setAttribute('d', yesPath);
+            yesLine.setAttribute('stroke', '#10b981');
+            yesLine.setAttribute('stroke-width', '2');
+            yesLine.setAttribute('fill', 'none');
+            svg.appendChild(yesLine);
             
+            // 繪製NO價格線
+            let noPath = '';
+            priceData.forEach((point, index) => {
+                const x = (index / (priceData.length - 1)) * chartWidth;
+                const y = chartHeight - ((point.noPrice - minPrice) / priceRange) * chartHeight;
+                
+                if (index === 0) {
+                    noPath += `M ${x} ${y}`;
+                } else {
+                    noPath += ` L ${x} ${y}`;
+                }
+            });
+            
+            const noLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            noLine.setAttribute('d', noPath);
+            noLine.setAttribute('stroke', '#ef4444');
+            noLine.setAttribute('stroke-width', '2');
+            noLine.setAttribute('fill', 'none');
+            svg.appendChild(noLine);
+            
+            // 添加數據點
+            priceData.forEach((point, index) => {
+                const x = (index / (priceData.length - 1)) * chartWidth;
+                const yesY = chartHeight - ((point.yesPrice - minPrice) / priceRange) * chartHeight;
+                const noY = chartHeight - ((point.noPrice - minPrice) / priceRange) * chartHeight;
+                
+                // YES數據點
+                const yesCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                yesCircle.setAttribute('cx', x);
+                yesCircle.setAttribute('cy', yesY);
+                yesCircle.setAttribute('r', '3');
+                yesCircle.setAttribute('fill', '#10b981');
+                svg.appendChild(yesCircle);
+                
+                // NO數據點
+                const noCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                noCircle.setAttribute('cx', x);
+                noCircle.setAttribute('cy', noY);
+                noCircle.setAttribute('r', '3');
+                noCircle.setAttribute('fill', '#ef4444');
+                svg.appendChild(noCircle);
+                
+                // 添加時間標籤
+                const timeLabel = document.createElement('div');
+                timeLabel.className = 'line-chart-label';
+                timeLabel.textContent = new Date(point.timestamp).toLocaleTimeString('zh-TW', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                timeLabel.style.cssText = `
+                    position: absolute;
+                    left: ${x + 16}px;
+                    bottom: 0;
+                    font-size: 0.7rem;
+                    color: #9ca3af;
+                    transform: translateX(-50%);
+                `;
+                chartContainer.appendChild(timeLabel);
+            });
+            
+            // 添加圖例
+            const legend = document.createElement('div');
+            legend.style.cssText = 'position: absolute; top: 0.5rem; left: 0.5rem; display: flex; gap: 1rem; font-size: 0.8rem;';
+            legend.innerHTML = `
+                <span style="color: #10b981;">● YES價格</span>
+                <span style="color: #ef4444;">● NO價格</span>
+            `;
+            chartContainer.appendChild(legend);
+            
+            // 添加當前價格指示器
+            const lastPoint = priceData[priceData.length - 1];
             const priceIndicator = document.createElement('div');
             priceIndicator.className = 'price-indicator';
-            priceIndicator.style.top = `${priceY}px`;
-            priceIndicator.textContent = currentPrice.toFixed(3);
+            priceIndicator.textContent = `YES: ${lastPoint.yesPrice.toFixed(3)} | NO: ${lastPoint.noPrice.toFixed(3)}`;
             chartContainer.appendChild(priceIndicator);
         }
 
@@ -4140,8 +4352,8 @@
             event.target.classList.add('active');
             
             // 重新生成數據
-            generateKlineData();
-            renderKlineChart();
+            generatePriceData();
+                            renderPriceChart();
         }
 
         // 快速下單功能
@@ -4249,8 +4461,10 @@
                 const amount = parseFloat(lmsrAmountEl.value) || 0;
                 if (amount > 0) {
                     // 計算預期成本（基於當前價格）
-                    const yesPrice = parseFloat(document.getElementById('yesPriceDisplay').textContent) || 0.5;
-                    const noPrice = parseFloat(document.getElementById('noPriceDisplay').textContent) || 0.5;
+                    const yesPrice = currentTopic?.outerPool ? 
+                        currentTopic.outerPool.yesAmount / currentTopic.outerPool.totalAmount : 0.5;
+                    const noPrice = currentTopic?.outerPool ? 
+                        currentTopic.outerPool.noAmount / currentTopic.outerPool.totalAmount : 0.5;
                     
                     // 使用較高的價格來估算最大成本
                     const maxPrice = Math.max(yesPrice, noPrice);
