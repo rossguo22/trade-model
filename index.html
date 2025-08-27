@@ -1082,6 +1082,44 @@
             margin-top: 1.5rem;
         }
 
+        /* 确认和成功弹窗详情样式 */
+        .confirm-details, .success-details {
+            text-align: left;
+            background: rgba(31, 41, 55, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(31, 41, 55, 0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        /* 选项中的支持比例样式 */
+        #confirmRatio, #successRatio {
+            font-size: 0.9em;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
         /* 創建頁面分區樣式 */
         .form-section {
             background: rgba(31, 41, 55, 0.5);
@@ -2269,10 +2307,55 @@
     <div id="confirmModal" class="modal">
         <div class="modal-content">
             <div class="modal-title">確認下注</div>
-            <div id="confirmText">您确定要下注 100 USDT 到 YES 吗？</div>
+            <div class="confirm-details">
+                <div class="detail-row">
+                    <span class="detail-label">選項：</span>
+                    <span class="detail-value" id="confirmOption">YES <span id="confirmRatio">(65%)</span></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">下注額：</span>
+                    <span class="detail-value" id="confirmNetAmount">95.00 USDT</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">手續費：</span>
+                    <span class="detail-value" id="confirmFee">5.00 USDT (5%)</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">總資金池：</span>
+                    <span class="detail-value" id="confirmTotalPool">1,000 USDT</span>
+                </div>
+            </div>
             <div class="modal-buttons">
                 <button class="btn btn-secondary" onclick="closeModal()">取消</button>
                 <button class="btn btn-primary" onclick="confirmBet()">確認</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 下单成功模态框 -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">✅ 下注成功！</div>
+            <div class="success-details">
+                <div class="detail-row">
+                    <span class="detail-label">選項：</span>
+                    <span class="detail-value" id="successOption">YES <span id="successRatio">(65%)</span></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">下注額：</span>
+                    <span class="detail-value" id="successNetAmount">95.00 USDT</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">手續費：</span>
+                    <span class="detail-value" id="successFee">5.00 USDT</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">總資金池：</span>
+                    <span class="detail-value" id="successTotalPool">1,000 USDT</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="closeSuccessModal()">確定</button>
             </div>
         </div>
     </div>
@@ -3735,8 +3818,22 @@
                     return;
                 }
 
-                // 直接確認多選項下注
-                confirmMultiOptionBet();
+                // 计算手续费和净下注额
+                const fee = amount * 0.05;
+                const netAmount = amount - fee;
+                
+                // 计算当前选项的支持比例
+                const totalPool = currentTopic.innerPool?.totalAmount || 0;
+                const optionKey = `option${selectedMultiOption}Amount`;
+                const optionAmount = currentTopic.innerPool?.[optionKey] || 0;
+                const supportRatio = totalPool > 0 ? ((optionAmount / totalPool) * 100).toFixed(1) : '0.0';
+                
+                // 显示確認模态框
+                document.getElementById('confirmOption').innerHTML = `${currentTopic.options[selectedMultiOption]} <span id="confirmRatio">(${supportRatio}%)</span>`;
+                document.getElementById('confirmNetAmount').textContent = `${netAmount.toFixed(2)} USDT`;
+                document.getElementById('confirmFee').textContent = `${fee.toFixed(2)} USDT (5%)`;
+                document.getElementById('confirmTotalPool').textContent = `${totalPool.toFixed(2)} USDT`;
+                document.getElementById('confirmModal').classList.add('active');
             } else {
                 // 二元選項邏輯
                 if (!selectedOption) {
@@ -3750,92 +3847,32 @@
                     return;
                 }
 
+                // 计算手续费和净下注额
+                const fee = amount * 0.05;
+                const netAmount = amount - fee;
+                
+                // 计算当前选项的支持比例
+                const totalPool = currentTopic.innerPool?.totalAmount || 0;
+                const optionAmount = selectedOption === 'yes' ? 
+                    (currentTopic.innerPool?.yesAmount || 0) : 
+                    (currentTopic.innerPool?.noAmount || 0);
+                const supportRatio = totalPool > 0 ? ((optionAmount / totalPool) * 100).toFixed(1) : '0.0';
+                
                 // 显示確認模态框
-                document.getElementById('confirmText').textContent = 
-                    `您确定要下注 ${amount} USDT 到 ${selectedOption.toUpperCase()} 吗？`;
+                document.getElementById('confirmOption').innerHTML = `${selectedOption.toUpperCase()} <span id="confirmRatio">(${supportRatio}%)</span>`;
+                document.getElementById('confirmNetAmount').textContent = `${netAmount.toFixed(2)} USDT`;
+                document.getElementById('confirmFee').textContent = `${fee.toFixed(2)} USDT (5%)`;
+                document.getElementById('confirmTotalPool').textContent = `${totalPool.toFixed(2)} USDT`;
                 document.getElementById('confirmModal').classList.add('active');
             }
         }
 
-        // 確認多選項下注
-        function confirmMultiOptionBet() {
-            const inputAmount = parseInt(document.getElementById('multiOptionAmount').value);
-            
-            // 檢查餘額
-            if (inputAmount > userBalance) {
-                const shortage = inputAmount - userBalance;
-                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${inputAmount} USDT\n當前餘額: ${userBalance} USDT\n不足金額: ${shortage} USDT\n\n是否立即充值？`);
-                
-                if (shouldRecharge) {
-                    showRecharge();
-                } else {
-                    checkInnerBalance();
-                }
-                return;
-            }
-            
-            // 計算5%手續費
-            const fee = inputAmount * 0.05;
-            const netAmount = inputAmount - fee;
-            
-            // 確認交易
-            if (!confirm(`確認下注 ${inputAmount} USDT 到 ${currentTopic.options[selectedMultiOption]}？\n手續費: ${fee.toFixed(2)} USDT (5%)\n實際下注: ${netAmount.toFixed(2)} USDT`)) {
-                return;
-            }
-            
-            // 扣除餘額
-            userBalance -= inputAmount;
-            
-            // 確保PK數據結構存在
-            if (!currentTopic.innerPool) {
-                currentTopic.innerPool = { totalAmount: 0 };
-                for (let i = 0; i < currentTopic.options.length; i++) {
-                    currentTopic.innerPool[`option${i}Amount`] = 0;
-                }
-            }
-            
-            // 更新PK數據
-            const optionKey = `option${selectedMultiOption}Amount`;
-            const myOptionKey = `myOption${selectedMultiOption}`;
-            
-            currentTopic.innerPool[optionKey] = (currentTopic.innerPool[optionKey] || 0) + netAmount;
-            currentTopic.innerPool.totalAmount += netAmount;
-            currentTopic[myOptionKey] = (currentTopic[myOptionKey] || 0) + netAmount;
-            
-            // 更新sampleTopics中的數據
-            const topicIndex = sampleTopics.findIndex(t => t.id === currentTopic.id);
-            if (topicIndex !== -1) {
-                sampleTopics[topicIndex] = {...currentTopic};
-            }
-            
-            // 檢查是否觸發Pump
-            const pumpThreshold = currentTopic.pumpCondition || 1000;
-            if (currentTopic.innerPool.totalAmount >= pumpThreshold && 
-                currentTopic.status === 'inner' && 
-                !currentTopic.isPrivate) {
-                triggerPump();
-            } else {
-                updateTradingInterface();
-            }
-            
-            updatePoolDisplay();
-            updateBalanceDisplay();
-            
-            const selectedOptionName = currentTopic.options[selectedMultiOption];
-            
-            // 清空輸入和選擇
-            document.getElementById('multiOptionAmount').value = '';
-            selectedMultiOption = null;
-            document.querySelectorAll('.option-card').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            alert(`下注成功！\n選項: ${selectedOptionName}\n下注金額: ${netAmount.toFixed(2)} USDT`);
-        }
+
 
         // 確認下注
         function confirmBet() {
-            const inputAmount = parseInt(document.getElementById('betAmount').value);
+            const isMultiOption = currentTopic.options && currentTopic.options.length > 2;
+            const inputAmount = parseInt(document.getElementById(isMultiOption ? 'multiOptionAmount' : 'betAmount').value);
             
             // 檢查餘額
             if (inputAmount > userBalance) {
@@ -3854,28 +3891,40 @@
             const fee = inputAmount * 0.05;
             const netAmount = inputAmount - fee;
             
-            // 確認交易
-            if (!confirm(`確認下注 ${inputAmount} USDT？\n手續費: ${fee.toFixed(2)} USDT (5%)\n實際下注: ${netAmount.toFixed(2)} USDT`)) {
-                return;
-            }
-            
             // 扣除餘額
             userBalance -= inputAmount;
             
-                            // 确保PK数据结构存在
-            if (!currentTopic.innerPool) {
-                currentTopic.innerPool = { yesAmount: 0, noAmount: 0, totalAmount: 0 };
-            }
-            
-                            // 更新PK数据（使用扣除手續費後的金額）
-            if (selectedOption === 'yes') {
-                currentTopic.innerPool.yesAmount += netAmount;
-                currentTopic.myInnerYes = (currentTopic.myInnerYes || 0) + netAmount;
+            // 确保PK数据结构存在并更新数据
+            if (isMultiOption) {
+                // 多选项逻辑
+                if (!currentTopic.innerPool) {
+                    currentTopic.innerPool = { totalAmount: 0 };
+                    for (let i = 0; i < currentTopic.options.length; i++) {
+                        currentTopic.innerPool[`option${i}Amount`] = 0;
+                    }
+                }
+                
+                const optionKey = `option${selectedMultiOption}Amount`;
+                const myOptionKey = `myOption${selectedMultiOption}`;
+                
+                currentTopic.innerPool[optionKey] = (currentTopic.innerPool[optionKey] || 0) + netAmount;
+                currentTopic.innerPool.totalAmount += netAmount;
+                currentTopic[myOptionKey] = (currentTopic[myOptionKey] || 0) + netAmount;
             } else {
-                currentTopic.innerPool.noAmount += netAmount;
-                currentTopic.myInnerNo = (currentTopic.myInnerNo || 0) + netAmount;
+                // 二元选项逻辑
+                if (!currentTopic.innerPool) {
+                    currentTopic.innerPool = { yesAmount: 0, noAmount: 0, totalAmount: 0 };
+                }
+                
+                if (selectedOption === 'yes') {
+                    currentTopic.innerPool.yesAmount += netAmount;
+                    currentTopic.myInnerYes = (currentTopic.myInnerYes || 0) + netAmount;
+                } else {
+                    currentTopic.innerPool.noAmount += netAmount;
+                    currentTopic.myInnerNo = (currentTopic.myInnerNo || 0) + netAmount;
+                }
+                currentTopic.innerPool.totalAmount += netAmount;
             }
-            currentTopic.innerPool.totalAmount += netAmount;
 
             // 更新sampleTopics中的数据
             const topicIndex = sampleTopics.findIndex(t => t.id === currentTopic.id);
@@ -3897,15 +3946,45 @@
             updatePoolDisplay();
             closeModal();
             
+            // 计算下注选项的支持比例并显示成功弹窗
+            const totalPool = currentTopic.innerPool.totalAmount;
+            let optionAmount, optionText, supportRatio;
+            
+            if (isMultiOption) {
+                const optionKey = `option${selectedMultiOption}Amount`;
+                optionAmount = currentTopic.innerPool[optionKey];
+                optionText = currentTopic.options[selectedMultiOption];
+                supportRatio = totalPool > 0 ? ((optionAmount / totalPool) * 100).toFixed(1) : '0.0';
+            } else {
+                optionAmount = selectedOption === 'yes' ? currentTopic.innerPool.yesAmount : currentTopic.innerPool.noAmount;
+                optionText = selectedOption.toUpperCase();
+                supportRatio = totalPool > 0 ? ((optionAmount / totalPool) * 100).toFixed(1) : '0.0';
+            }
+            
+            // 显示成功弹窗
+            document.getElementById('successOption').innerHTML = `${optionText} <span id="successRatio">(${supportRatio}%)</span>`;
+            document.getElementById('successNetAmount').textContent = `${netAmount.toFixed(2)} USDT`;
+            document.getElementById('successFee').textContent = `${fee.toFixed(2)} USDT`;
+            document.getElementById('successTotalPool').textContent = `${totalPool.toFixed(2)} USDT`;
+            document.getElementById('successModal').classList.add('active');
+            
             // 更新餘額顯示
             updateBalanceDisplay();
             
             // 清空輸入
-            document.getElementById('betAmount').value = '';
-            selectedOption = null;
-            document.querySelectorAll('.bet-option').forEach(el => {
-                el.classList.remove('selected');
-            });
+            if (isMultiOption) {
+                document.getElementById('multiOptionAmount').value = '';
+                selectedMultiOption = null;
+                document.querySelectorAll('.option-card').forEach(el => {
+                    el.classList.remove('selected');
+                });
+            } else {
+                document.getElementById('betAmount').value = '';
+                selectedOption = null;
+                document.querySelectorAll('.bet-option').forEach(el => {
+                    el.classList.remove('selected');
+                });
+            }
         }
 
         // 触发Pump机制
@@ -3954,6 +4033,10 @@
         // 关闭模态框
         function closeModal() {
             document.getElementById('confirmModal').classList.remove('active');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.remove('active');
         }
 
         function closePumpModal() {
