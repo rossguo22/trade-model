@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+    <!-- 注意：實際使用USDT穩定幣，但UI顯示使用$符號以提升用戶體驗 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BitX 交易原型</title>
@@ -1589,6 +1590,212 @@
             overflow: hidden;
         }
 
+        /* 分享卡片樣式 */
+        .share-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+
+        .share-modal.show {
+            display: flex;
+        }
+
+        .share-card {
+            background: linear-gradient(135deg, #1a1b23 0%, #2d1b69 50%, #1a1b23 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: shareCardSlideIn 0.5s ease-out;
+        }
+
+        @keyframes shareCardSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .share-card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .share-card-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #3b82f6, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .share-card-subtitle {
+            color: #9ca3af;
+            font-size: 1rem;
+        }
+
+        .share-card-content {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid #374151;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .trade-summary {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .trade-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #374151;
+        }
+
+        .trade-row:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .trade-label {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .trade-value {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .trade-highlight {
+            color: #3b82f6;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .share-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .share-btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: 1px solid #3b82f6;
+        }
+
+        .share-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .share-btn-secondary {
+            background: rgba(31, 41, 55, 0.8);
+            color: #d1d5db;
+            border: 1px solid #374151;
+        }
+
+        .share-btn-secondary:hover {
+            background: #374151;
+            transform: translateY(-2px);
+        }
+
+        .share-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .share-close-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: scale(1.1);
+        }
+
+        .share-watermark {
+            position: absolute;
+            bottom: 1rem;
+            right: 1.5rem;
+            color: #6b7280;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .celebration-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: celebrationFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes celebrationFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(10deg); }
+        }
+
+        .profit-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #10b981;
+        }
+
         .chart-header {
             display: flex;
             justify-content: space-between;
@@ -1926,9 +2133,9 @@
                                 <div class="input-group">
                                     <span class="input-label">資金池達到</span>
                                     <input type="number" class="form-input" name="pumpCondition" value="1000" min="1000" step="100" required>
-                                    <span class="input-unit">USDT</span>
+                                    <span class="input-unit">$</span>
                                 </div>
-                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">最小值為1000 USDT，建議設定為100的倍數</small>
+                                <small style="color: #6b7280; margin-top: 0.5rem; display: block;">最小值為1000$，建議設定為100的倍數</small>
                             </div>
 
                             <div class="pump-explanation">
@@ -2095,7 +2302,7 @@
                         <div class="pk-label">YES陣營</div>
                     </div>
                     <div class="pk-stats">
-                        <div class="pk-amount" id="yesAmount">0 USDT</div>
+                        <div class="pk-amount" id="yesAmount">0$</div>
                         <div class="pk-percentage" id="yesPercentage">0%</div>
                         <div class="pk-participants" id="yesParticipants">0人</div>
                     </div>
@@ -2113,7 +2320,7 @@
                         <div class="pk-label">NO陣營</div>
                     </div>
                     <div class="pk-stats">
-                        <div class="pk-amount" id="noAmount">0 USDT</div>
+                        <div class="pk-amount" id="noAmount">0$</div>
                         <div class="pk-percentage" id="noPercentage">0%</div>
                         <div class="pk-participants" id="noParticipants">0人</div>
                     </div>
@@ -2132,7 +2339,7 @@
                     <input type="number" class="amount-input" id="betAmount" placeholder="輸入下注金額" min="1" step="1" oninput="checkInnerBalance()">
                     <div class="balance-display">
                         <span class="balance-label">餘額:</span>
-                        <span class="balance-amount" id="userBalance">10,000 USDT</span>
+                        <span class="balance-amount" id="userBalance">10,000$</span>
                     </div>
                 </div>
                 <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">加入陣營</button>
@@ -2160,7 +2367,7 @@
                     <input type="number" class="amount-input" id="multiOptionAmount" placeholder="輸入下注金額" min="1" step="1" oninput="checkInnerBalance()">
                     <div class="balance-display">
                         <span class="balance-label">餘額:</span>
-                        <span class="balance-amount" id="multiUserBalance">10,000 USDT</span>
+                        <span class="balance-amount" id="multiUserBalance">10,000$</span>
                     </div>
                 </div>
                 <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">確認下注</button>
@@ -2184,7 +2391,7 @@
                     <input type="number" class="amount-input" id="multiLmsrAmount" placeholder="輸入交易數量" min="0.1" step="0.1" oninput="checkLMSRBalance()">
                     <div class="balance-display">
                         <span class="balance-label">餘額:</span>
-                        <span class="balance-amount" id="multiOuterUserBalance">10,000 USDT</span>
+                        <span class="balance-amount" id="multiOuterUserBalance">10,000$</span>
                     </div>
                 </div>
             </div>
@@ -2229,7 +2436,7 @@
                         <input type="number" class="amount-input" id="lmsrAmount" placeholder="輸入交易數量" min="0.1" step="0.1" oninput="checkLMSRBalance()">
                         <div class="balance-display">
                             <span class="balance-label">餘額:</span>
-                            <span class="balance-amount" id="outerUserBalance">10,000 USDT</span>
+                            <span class="balance-amount" id="outerUserBalance">10,000$</span>
                         </div>
                     </div>
                 </div>
@@ -2239,11 +2446,11 @@
                         <div style="text-align: center; margin-bottom: 0.5rem; color: #9ca3af; font-size: 0.85rem;">買入</div>
                         <button class="btn btn-success lmsr-buy-btn" onclick="buyLMSR('yes')" style="width: 100%; margin-bottom: 0.5rem;">
                             <span>買入 YES</span>
-                            <small id="yesBuyInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計花費: 0 USDT</small>
+                            <small id="yesBuyInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計花費: 0$</small>
                         </button>
                         <button class="btn btn-danger lmsr-buy-btn" onclick="buyLMSR('no')" style="width: 100%;">
                             <span>買入 NO</span>
-                            <small id="noBuyInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計花費: 0 USDT</small>
+                            <small id="noBuyInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計花費: 0$</small>
                         </button>
                     </div>
                     
@@ -2251,11 +2458,11 @@
                         <div style="text-align: center; margin-bottom: 0.5rem; color: #9ca3af; font-size: 0.85rem;">賣出</div>
                         <button class="btn btn-outline btn-success" onclick="sellLMSR('yes')" style="width: 100%; margin-bottom: 0.5rem;">
                             <span>賣出 YES</span>
-                            <small id="yesSellInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計收入: 0 USDT</small>
+                            <small id="yesSellInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計收入: 0$</small>
                         </button>
                         <button class="btn btn-outline btn-danger" onclick="sellLMSR('no')" style="width: 100%;">
                             <span>賣出 NO</span>
-                            <small id="noSellInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計收入: 0 USDT</small>
+                            <small id="noSellInfo" style="display: block; font-size: 0.75rem; opacity: 0.8;">預計收入: 0$</small>
                         </button>
                     </div>
                 </div>
@@ -2314,15 +2521,15 @@
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">下注額：</span>
-                    <span class="detail-value" id="confirmNetAmount">95.00 USDT</span>
+                    <span class="detail-value" id="confirmNetAmount">95.00$</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">手續費：</span>
-                    <span class="detail-value" id="confirmFee">5.00 USDT (5%)</span>
+                    <span class="detail-value" id="confirmFee">5.00$ (5%)</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">總資金池：</span>
-                    <span class="detail-value" id="confirmTotalPool">1,000 USDT</span>
+                    <span class="detail-value" id="confirmTotalPool">1,000$</span>
                 </div>
             </div>
             <div class="modal-buttons">
@@ -2343,15 +2550,15 @@
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">下注額：</span>
-                    <span class="detail-value" id="successNetAmount">95.00 USDT</span>
+                    <span class="detail-value" id="successNetAmount">95.00$</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">手續費：</span>
-                    <span class="detail-value" id="successFee">5.00 USDT</span>
+                    <span class="detail-value" id="successFee">5.00$</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">總資金池：</span>
-                    <span class="detail-value" id="successTotalPool">1,000 USDT</span>
+                    <span class="detail-value" id="successTotalPool">1,000$</span>
                 </div>
             </div>
             <div class="modal-buttons">
@@ -2368,6 +2575,49 @@
             <div class="modal-buttons">
                 <button class="btn btn-primary" onclick="closePumpModal()">查看Trade</button>
             </div>
+        </div>
+    </div>
+
+    <!-- 分享卡片模態框 -->
+    <div id="shareModal" class="share-modal">
+        <div class="share-card">
+            <button class="share-close-btn" onclick="closeShareModal()">&times;</button>
+            
+            <!-- 慶祝動畫表情符號 -->
+            <div class="celebration-emoji" style="top: 1rem; left: 2rem;">🎉</div>
+            <div class="celebration-emoji" style="top: 2rem; right: 3rem; animation-delay: 0.5s;">🚀</div>
+            <div class="celebration-emoji" style="top: 3rem; left: 4rem; animation-delay: 1s;">💰</div>
+            
+            <div class="share-card-header">
+                <div class="share-card-title">交易成功！</div>
+                <div class="share-card-subtitle">恭喜你完成了一筆精彩的交易</div>
+            </div>
+            
+            <div class="share-card-content">
+                <div class="trade-summary" id="tradeSummary">
+                    <!-- 交易詳情將由JavaScript動態填充 -->
+                </div>
+            </div>
+            
+            <div class="share-buttons">
+                <button class="share-btn share-btn-primary" onclick="shareToSocial('twitter')">
+                    🐦 分享到 Twitter
+                </button>
+                <button class="share-btn share-btn-primary" onclick="shareToSocial('facebook')">
+                    📘 分享到 Facebook
+                </button>
+            </div>
+            
+            <div class="share-buttons">
+                <button class="share-btn share-btn-secondary" onclick="copyShareLink()">
+                    📋 複製分享連結
+                </button>
+                <button class="share-btn share-btn-secondary" onclick="downloadShareCard()">
+                    💾 下載卡片圖片
+                </button>
+            </div>
+            
+            <div class="share-watermark">BitX 交易平台</div>
         </div>
     </div>
 
@@ -2657,7 +2907,7 @@
                     <div class="topic-stats">
                         <div class="stat">
                             <div class="stat-value">${outerTotalPool}</div>
-                            <div class="stat-label">Trade总池(USDT)</div>
+                            <div class="stat-label">Trade总池($)</div>
                         </div>
                         <div class="stat">
                             <div class="stat-value">${leadingPercentage}%</div>
@@ -2737,7 +2987,7 @@
                     <div class="topic-stats">
                         <div class="stat">
                             <div class="stat-value">${pkTotalPool}</div>
-                            <div class="stat-label">PK總池(USDT)</div>
+                            <div class="stat-label">PK總池($)</div>
                         </div>
                         <div class="stat">
                             <div class="stat-value">${leadingPercentage}%</div>
@@ -2750,7 +3000,7 @@
                     </div>
                     <div class="topic-progress">
                         <div style="font-size: 0.8rem; color: #9ca3af; margin-bottom: 0.5rem;">
-                            距離Pump還需: <strong style="color: #f59e0b;">${pumpRemaining} USDT</strong>
+                            距離Pump還需: <strong style="color: #f59e0b;">${pumpRemaining}$</strong>
                         </div>
                         <div style="background: #374151; border-radius: 4px; height: 6px; overflow: hidden;">
                             <div style="background: linear-gradient(90deg, #10b981, #059669); height: 100%; width: ${pumpProgress}%; transition: width 0.3s ease;"></div>
@@ -2927,12 +3177,12 @@
                 const noRevenueTotal = (noCostBase * 0.95).toFixed(2);
                 
                 // 更新買入信息
-                document.getElementById('yesBuyInfo').textContent = `預計花費: ${yesCostTotal} USDT `;
-                document.getElementById('noBuyInfo').textContent = `預計花費: ${noCostTotal} USDT `;
+                document.getElementById('yesBuyInfo').textContent = `預計花費: ${yesCostTotal}$ `;
+                document.getElementById('noBuyInfo').textContent = `預計花費: ${noCostTotal}$ `;
                 
                 // 更新賣出信息
-                document.getElementById('yesSellInfo').textContent = `預計收入: ${yesRevenueTotal} USDT`;
-                document.getElementById('noSellInfo').textContent = `預計收入: ${noRevenueTotal} USDT`;
+                document.getElementById('yesSellInfo').textContent = `預計收入: ${yesRevenueTotal}$`;
+                document.getElementById('noSellInfo').textContent = `預計收入: ${noRevenueTotal}$`;
             };
 
             // 绑定輸入事件
@@ -2965,7 +3215,7 @@
             // 檢查餘額
             if (cost > userBalance) {
                 const shortage = cost - userBalance;
-                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${cost.toFixed(2)} USDT\n當前餘額: ${userBalance.toFixed(2)} USDT\n不足金額: ${shortage.toFixed(2)} USDT\n\n是否立即充值？`);
+                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${cost.toFixed(2)} $\n當前餘額: ${userBalance.toFixed(2)} $\n不足金額: ${shortage.toFixed(2)} $\n\n是否立即充值？`);
                 
                 if (shouldRecharge) {
                     showRecharge();
@@ -2986,10 +3236,10 @@
             const averagePrice = netCost / amount;
             
             // 計算潛在收益（購買的代幣如果贏了能獲得的總金額）
-            const potentialProfit = amount; // 如果赢了，每个代币价值1 USDT，所以总收益是代币数量
+            const potentialProfit = amount; // 如果赢了，每个代币价值1 $，所以总收益是代币数量
             
             // 確認交易
-            if (confirm(`確認買入 ${amount} 个 ${option.toUpperCase()} 代幣？\n平均價格: ${(averagePrice * 100).toFixed(1)}%\n總花費: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT\n潛在收益: ${potentialProfit.toFixed(2)} USDT`)) {
+            if (confirm(`確認買入 ${amount} 个 ${option.toUpperCase()} 代幣？\n平均價格: ${(averagePrice * 100).toFixed(1)}%\n總花費: ${cost.toFixed(2)} $\n手續費: ${tradingFee.toFixed(2)} $\n潛在收益: ${potentialProfit.toFixed(2)} $`)) {
                 
                 // 扣除餘額
                 userBalance -= cost;
@@ -3041,7 +3291,18 @@
                 // 更新餘額顯示
                 updateBalanceDisplay();
 
-                alert(`交易成功！\n買入: ${amount} 个 ${option.toUpperCase()}\n平均價格: ${(averagePrice * 100).toFixed(1)}%\n總花費: ${cost.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT\n潛在收益: ${potentialProfit.toFixed(2)} USDT `);
+                // 顯示分享卡片而不是簡單的alert
+                const tradeData = {
+                    type: 'buy',
+                    topicTitle: currentTopic.title,
+                    option: option.toUpperCase(),
+                    amount: amount,
+                    averagePrice: averagePrice,
+                    cost: cost,
+                    fee: tradingFee,
+                    potentialProfit: potentialProfit
+                };
+                showShareModal(tradeData);
             }
         }
 
@@ -3083,7 +3344,7 @@
                 currentTopic.outerPool.noAmount / (currentTopic.outerPool.yesAmount + currentTopic.outerPool.noAmount);
             
             // 確認交易
-            if (confirm(`確認賣出 ${amount} 個 ${option.toUpperCase()} 代幣？\n平均價格: ${(averagePrice * 100).toFixed(1)}%\n當前價格: ${(currentPrice * 100).toFixed(1)}%\n總收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT`)) {
+            if (confirm(`確認賣出 ${amount} 個 ${option.toUpperCase()} 代幣？\n平均價格: ${(averagePrice * 100).toFixed(1)}%\n當前價格: ${(currentPrice * 100).toFixed(1)}%\n總收入: ${revenue.toFixed(2)} $\n手續費: ${tradingFee.toFixed(2)} $`)) {
                 // 更新Trade持倉
                 if (option === 'yes') {
                     currentTopic.myOuterYes = (currentTopic.myOuterYes || 0) - amount;
@@ -3121,7 +3382,17 @@
                 userBalance += netRevenue;
                 updateBalanceDisplay();
 
-                alert(`交易成功！\n賣出: ${amount} 個 ${option.toUpperCase()}\n平均價格: ${(averagePrice * 100).toFixed(1)}%\n當前價格: ${(currentPrice * 100).toFixed(1)}%\n總收入: ${revenue.toFixed(2)} USDT\n手續費: ${tradingFee.toFixed(2)} USDT `);
+                // 顯示分享卡片而不是簡單的alert
+                const tradeData = {
+                    type: 'sell',
+                    topicTitle: currentTopic.title,
+                    option: option.toUpperCase(),
+                    amount: amount,
+                    averagePrice: averagePrice,
+                    cost: revenue,
+                    fee: tradingFee
+                };
+                showShareModal(tradeData);
             }
         }
 
@@ -3148,7 +3419,7 @@
                         <div class="option-name">${option}</div>
                     </div>
                     <div class="option-stats">
-                        <div class="option-amount">${amount} USDT</div>
+                        <div class="option-amount">${amount} $</div>
                         <div class="option-percentage">${percentage}%</div>
                         <div class="option-participants">${participants}人支持</div>
                     </div>
@@ -3178,7 +3449,7 @@
                 card.innerHTML = `
                     <div class="lmsr-option-header">
                         <div class="lmsr-option-name">${option}</div>
-                        <div class="lmsr-option-price">${price.toFixed(3)} USDT</div>
+                        <div class="lmsr-option-price">${price.toFixed(3)} $</div>
                     </div>
                     <div class="lmsr-option-actions">
                         <button class="lmsr-mini-btn lmsr-buy-btn" onclick="buyMultiLMSR(${index})">買入</button>
@@ -3217,7 +3488,7 @@
             
             if (cost > userBalance) {
                 const shortage = cost - userBalance;
-                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${cost.toFixed(2)} USDT\n當前餘額: ${userBalance.toFixed(2)} USDT\n不足金額: ${shortage.toFixed(2)} USDT\n\n是否立即充值？`);
+                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${cost.toFixed(2)} $\n當前餘額: ${userBalance.toFixed(2)} $\n不足金額: ${shortage.toFixed(2)} $\n\n是否立即充值？`);
                 
                 if (shouldRecharge) {
                     showRecharge();
@@ -3225,7 +3496,7 @@
                 return;
             }
             
-            if (confirm(`確認買入 ${amount} 個 ${currentTopic.options[optionIndex]} 代幣？\n總花費: ${cost.toFixed(2)} USDT`)) {
+            if (confirm(`確認買入 ${amount} 個 ${currentTopic.options[optionIndex]} 代幣？\n總花費: ${cost.toFixed(2)} $`)) {
                 userBalance -= cost;
                 
                 // 更新持倉
@@ -3234,7 +3505,16 @@
                 
                 updateBalanceDisplay();
                 document.getElementById('multiLmsrAmount').value = '';
-                alert(`交易成功！買入 ${amount} 個 ${currentTopic.options[optionIndex]} 代幣`);
+                // 顯示分享卡片而不是簡單的alert
+                const tradeData = {
+                    type: 'buy',
+                    topicTitle: currentTopic.title,
+                    option: currentTopic.options[optionIndex],
+                    amount: amount,
+                    cost: amount * (1 / currentTopic.options.length),
+                    fee: 0
+                };
+                showShareModal(tradeData);
             }
         }
 
@@ -3256,13 +3536,22 @@
             // 簡單的收入計算
             const revenue = amount * (1 / currentTopic.options.length) * 0.95;
             
-            if (confirm(`確認賣出 ${amount} 個 ${currentTopic.options[optionIndex]} 代幣？\n預計收入: ${revenue.toFixed(2)} USDT`)) {
+            if (confirm(`確認賣出 ${amount} 個 ${currentTopic.options[optionIndex]} 代幣？\n預計收入: ${revenue.toFixed(2)} $`)) {
                 userBalance += revenue;
                 currentTopic[holdingKey] -= amount;
                 
                 updateBalanceDisplay();
                 document.getElementById('multiLmsrAmount').value = '';
-                alert(`交易成功！賣出 ${amount} 個 ${currentTopic.options[optionIndex]} 代幣`);
+                // 顯示分享卡片而不是簡單的alert
+                const tradeData = {
+                    type: 'sell',
+                    topicTitle: currentTopic.title,
+                    option: currentTopic.options[optionIndex],
+                    amount: amount,
+                    cost: revenue,
+                    fee: 0
+                };
+                showShareModal(tradeData);
             }
         }
 
@@ -3277,8 +3566,8 @@
             if (currentTopic.innerPool && !isMultiOption) {
                 const yesAmountEl = document.getElementById('yesAmount');
                 const noAmountEl = document.getElementById('noAmount');
-                if (yesAmountEl) yesAmountEl.textContent = `${currentTopic.innerPool.yesAmount || 0} USDT`;
-                if (noAmountEl) noAmountEl.textContent = `${currentTopic.innerPool.noAmount || 0} USDT`;
+                if (yesAmountEl) yesAmountEl.textContent = `${currentTopic.innerPool.yesAmount || 0} $`;
+                if (noAmountEl) noAmountEl.textContent = `${currentTopic.innerPool.noAmount || 0} $`;
             }
 
             // 更新多選項PK界面數據
@@ -3311,7 +3600,7 @@
                         outerPoolRowsHTML += `
                             <div class="pool-row">
                                 <span class="pool-label">${option}獎池：</span>
-                                <span class="pool-value">${amount} USDT</span>
+                                <span class="pool-value">${amount} $</span>
                             </div>
                         `;
                     });
@@ -3320,11 +3609,11 @@
                     outerPoolRowsHTML = `
                         <div class="pool-row">
                             <span class="pool-label">YES獎池：</span>
-                            <span class="pool-value">${currentTopic.outerPool.yesAmount} USDT</span>
+                            <span class="pool-value">${currentTopic.outerPool.yesAmount} $</span>
                         </div>
                         <div class="pool-row">
                             <span class="pool-label">NO獎池：</span>
-                            <span class="pool-value">${currentTopic.outerPool.noAmount} USDT</span>
+                            <span class="pool-value">${currentTopic.outerPool.noAmount} $</span>
                         </div>
                     `;
                 }
@@ -3340,11 +3629,11 @@
                             <div class="pool-info">
                                 <div class="pool-row">
                                     <span class="pool-label">总流水：</span>
-                                    <span class="pool-value">${currentTopic.outerPool.totalVolume || 0} USDT</span>
+                                    <span class="pool-value">${currentTopic.outerPool.totalVolume || 0} $</span>
                                 </div>
                                 <div class="pool-row">
                                     <span class="pool-label">市場流動性：</span>
-                                    <span class="pool-value">${currentTopic.outerPool.totalAmount} USDT</span>
+                                    <span class="pool-value">${currentTopic.outerPool.totalAmount} $</span>
                                 </div>
                                 <div class="pool-row">
                                     <span class="pool-label">当前YES价格：</span>
@@ -3372,7 +3661,7 @@
                                         return `
                                             <div class="pool-row">
                                                 <span class="pool-label">原始${option}投注：</span>
-                                                <span class="pool-value">${amount} USDT</span>
+                                                <span class="pool-value">${amount} $</span>
                                             </div>
                                         `;
                                     }).join('');
@@ -3381,26 +3670,26 @@
                                     return `
                                         <div class="pool-row">
                                             <span class="pool-label">原始YES投注：</span>
-                                            <span class="pool-value">${currentTopic.innerPool?.yesAmount || 0} USDT</span>
+                                            <span class="pool-value">${currentTopic.innerPool?.yesAmount || 0} $</span>
                                         </div>
                                         <div class="pool-row">
                                             <span class="pool-label">原始NO投注：</span>
-                                            <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} USDT</span>
+                                            <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} $</span>
                                         </div>
                                     `;
                                 }
                             })()}
                             <div class="pool-row" style="color: #ef4444;">
                                 <span class="pool-label">转出Trade底池：</span>
-                                <span class="pool-value">-${currentTopic.outerPool.basePool} USDT</span>
+                                <span class="pool-value">-${currentTopic.outerPool.basePool} $</span>
                             </div>
                             <div class="pool-row" style="color: #10b981;">
                                 <span class="pool-label">手續費回流：</span>
-                                <span class="pool-value">+${currentTopic.outerPool.tradingFeeToInner || 0} USDT</span>
+                                <span class="pool-value">+${currentTopic.outerPool.tradingFeeToInner || 0} $</span>
                             </div>
                             <div class="pool-row">
                                 <span class="pool-label">PK当前总额：</span>
-                                <span class="pool-value">${((currentTopic.innerPool?.totalAmount || 0) - currentTopic.outerPool.basePool + (currentTopic.outerPool.tradingFeeToInner || 0)).toFixed(2)} USDT</span>
+                                <span class="pool-value">${((currentTopic.innerPool?.totalAmount || 0) - currentTopic.outerPool.basePool + (currentTopic.outerPool.tradingFeeToInner || 0)).toFixed(2)} $</span>
                             </div>
                         </div>
                     </div>
@@ -3433,7 +3722,7 @@
                                 <div class="progress-fill" style="width: ${progress}%;"></div>
                             </div>
                             <div class="progress-text">
-                                距离Pump还需 <strong style="color: #10b981;">${remaining}</strong> USDT
+                                距离Pump还需 <strong style="color: #10b981;">${remaining}</strong> $
                             </div>
                         </div>
                     `;
@@ -3442,7 +3731,7 @@
                         <!-- Pump条件说明 -->
                         <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: 0.85rem; color: #60a5fa;">
                             <strong>⚡ Pump条件：</strong><br>
-                            • PK獎金池达到${pumpThreshold} USDT时自动触发Pump<br>
+                            • PK獎金池达到${pumpThreshold} $时自动触发Pump<br>
                             • PK交易收取5%手續費<br>
                             • 下注金額较小一方的50%将转为Trade LMSR底池<br>
                             • 转为Trade后可在瀑布流中展示和交易
@@ -3481,7 +3770,7 @@
                         poolRowsHTML += `
                             <div class="pool-row">
                                 <span class="pool-label">${option}：</span>
-                                <span class="pool-value">${amount} USDT</span>
+                                <span class="pool-value">${amount} $</span>
                             </div>
                         `;
                     });
@@ -3490,11 +3779,11 @@
                     poolRowsHTML = `
                         <div class="pool-row">
                             <span class="pool-label">YES投注：</span>
-                            <span class="pool-value">${currentTopic.innerPool?.yesAmount || 0} USDT</span>
+                            <span class="pool-value">${currentTopic.innerPool?.yesAmount || 0} $</span>
                         </div>
                         <div class="pool-row">
                             <span class="pool-label">NO投注：</span>
-                            <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} USDT</span>
+                            <span class="pool-value">${currentTopic.innerPool?.noAmount || 0} $</span>
                         </div>
                     `;
                 }
@@ -3510,7 +3799,7 @@
                             ${poolRowsHTML}
                             <div class="pool-row">
                                 <span class="pool-label">PK獎金總額：</span>
-                                <span class="pool-value">${innerTotal} USDT</span>
+                                <span class="pool-value">${innerTotal} $</span>
                             </div>
                         </div>
                         ${progressSection}
@@ -3535,12 +3824,12 @@
             const noParticipants = Math.floor(noAmount / 50) + Math.floor(Math.random() * 5);
             
             // 更新YES陣營數據
-            document.getElementById('yesAmount').textContent = `${yesAmount} USDT`;
+            document.getElementById('yesAmount').textContent = `${yesAmount} $`;
             document.getElementById('yesPercentage').textContent = `${yesPercentage}%`;
             document.getElementById('yesParticipants').textContent = `${yesParticipants}人`;
             
             // 更新NO陣營數據
-            document.getElementById('noAmount').textContent = `${noAmount} USDT`;
+            document.getElementById('noAmount').textContent = `${noAmount} $`;
             document.getElementById('noPercentage').textContent = `${noPercentage}%`;
             document.getElementById('noParticipants').textContent = `${noParticipants}人`;
             
@@ -3590,7 +3879,7 @@
                         positionsHTML += `
                             <div class="pool-row">
                                 <span class="pool-label">${option}：</span>
-                                <span class="pool-value">${amount} USDT</span>
+                                <span class="pool-value">${amount} $</span>
                             </div>
                         `;
                     });
@@ -3598,7 +3887,7 @@
                     positionsHTML += `
                         <div class="pool-row">
                             <span class="pool-label">總計：</span>
-                            <span class="pool-value">${totalInnerValue} USDT</span>
+                            <span class="pool-value">${totalInnerValue} $</span>
                         </div>
                     `;
                     
@@ -3621,7 +3910,7 @@
                         positionsHTML += `
                             <div class="pool-row">
                                 <span class="pool-label">YES持仓：</span>
-                                <span class="pool-value">${myInnerYes} USDT</span>
+                                <span class="pool-value">${myInnerYes} $</span>
                             </div>
                         `;
                     }
@@ -3631,7 +3920,7 @@
                         positionsHTML += `
                             <div class="pool-row">
                                 <span class="pool-label">NO持仓：</span>
-                                <span class="pool-value">${myInnerNo} USDT</span>
+                                <span class="pool-value">${myInnerNo} $</span>
                             </div>
                         `;
                     }
@@ -3641,7 +3930,7 @@
                         positionsHTML += `
                             <div class="pool-row" style="border-top: 1px solid #374151; margin-top: 0.5rem; padding-top: 0.5rem; font-weight: 700;">
                                 <span class="pool-label">總計：</span>
-                                <span class="pool-value">${totalValue} USDT</span>
+                                <span class="pool-value">${totalValue} $</span>
                             </div>
                         `;
                     } else {
@@ -3688,7 +3977,7 @@
                         positionsHTML += `
                             <div class="pool-row">
                                 <span class="pool-label">估值：</span>
-                                <span class="pool-value">${totalOuterValue.toFixed(2)} USDT</span>
+                                <span class="pool-value">${totalOuterValue.toFixed(2)} $</span>
                             </div>
                         `;
                         
@@ -3732,7 +4021,7 @@
                                 </div>
                                 <div class="pool-row">
                                     <span class="pool-label">當前估值：</span>
-                                    <span class="pool-value">${yesValue.toFixed(2)} USDT</span>
+                                    <span class="pool-value">${yesValue.toFixed(2)} $</span>
                                 </div>
                             `;
                         }
@@ -3762,7 +4051,7 @@
                                 </div>
                                 <div class="pool-row">
                                     <span class="pool-label">當前估值：</span>
-                                    <span class="pool-value">${noValue.toFixed(2)} USDT</span>
+                                    <span class="pool-value">${noValue.toFixed(2)} $</span>
                                 </div>
                             `;
                         }
@@ -3772,7 +4061,7 @@
                             positionsHTML += `
                                 <div class="pool-row" style="border-top: 1px solid #374151; margin-top: 0.5rem; padding-top: 0.5rem; font-weight: 700;">
                                     <span class="pool-label">總估值：</span>
-                                    <span class="pool-value">${totalValue.toFixed(2)} USDT</span>
+                                    <span class="pool-value">${totalValue.toFixed(2)} $</span>
                                 </div>
                             `;
                         } else {
@@ -3830,9 +4119,9 @@
                 
                 // 显示確認模态框
                 document.getElementById('confirmOption').innerHTML = `${currentTopic.options[selectedMultiOption]} <span id="confirmRatio">(${supportRatio}%)</span>`;
-                document.getElementById('confirmNetAmount').textContent = `${netAmount.toFixed(2)} USDT`;
-                document.getElementById('confirmFee').textContent = `${fee.toFixed(2)} USDT (5%)`;
-                document.getElementById('confirmTotalPool').textContent = `${totalPool.toFixed(2)} USDT`;
+                document.getElementById('confirmNetAmount').textContent = `${netAmount.toFixed(2)} $`;
+                document.getElementById('confirmFee').textContent = `${fee.toFixed(2)} $ (5%)`;
+                document.getElementById('confirmTotalPool').textContent = `${totalPool.toFixed(2)} $`;
                 document.getElementById('confirmModal').classList.add('active');
             } else {
                 // 二元選項邏輯
@@ -3860,9 +4149,9 @@
                 
                 // 显示確認模态框
                 document.getElementById('confirmOption').innerHTML = `${selectedOption.toUpperCase()} <span id="confirmRatio">(${supportRatio}%)</span>`;
-                document.getElementById('confirmNetAmount').textContent = `${netAmount.toFixed(2)} USDT`;
-                document.getElementById('confirmFee').textContent = `${fee.toFixed(2)} USDT (5%)`;
-                document.getElementById('confirmTotalPool').textContent = `${totalPool.toFixed(2)} USDT`;
+                document.getElementById('confirmNetAmount').textContent = `${netAmount.toFixed(2)} $`;
+                document.getElementById('confirmFee').textContent = `${fee.toFixed(2)} $ (5%)`;
+                document.getElementById('confirmTotalPool').textContent = `${totalPool.toFixed(2)} $`;
                 document.getElementById('confirmModal').classList.add('active');
             }
         }
@@ -3877,7 +4166,7 @@
             // 檢查餘額
             if (inputAmount > userBalance) {
                 const shortage = inputAmount - userBalance;
-                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${inputAmount} USDT\n當前餘額: ${userBalance} USDT\n不足金額: ${shortage} USDT\n\n是否立即充值？`);
+                const shouldRecharge = confirm(`💰 餘額不足，無法完成交易\n\n需要金額: ${inputAmount} $\n當前餘額: ${userBalance} $\n不足金額: ${shortage} $\n\n是否立即充值？`);
                 
                 if (shouldRecharge) {
                     showRecharge();
@@ -3963,10 +4252,32 @@
             
             // 显示成功弹窗
             document.getElementById('successOption').innerHTML = `${optionText} <span id="successRatio">(${supportRatio}%)</span>`;
-            document.getElementById('successNetAmount').textContent = `${netAmount.toFixed(2)} USDT`;
-            document.getElementById('successFee').textContent = `${fee.toFixed(2)} USDT`;
-            document.getElementById('successTotalPool').textContent = `${totalPool.toFixed(2)} USDT`;
+            document.getElementById('successNetAmount').textContent = `${netAmount.toFixed(2)} $`;
+            document.getElementById('successFee').textContent = `${fee.toFixed(2)} $`;
+            document.getElementById('successTotalPool').textContent = `${totalPool.toFixed(2)} $`;
             document.getElementById('successModal').classList.add('active');
+            
+            // 計算PK下注的潛在收益
+            let potentialProfit = 0;
+            if (totalPool > 0) {
+                // 如果用戶選擇的選項獲勝，潛在收益 = 總獎池 * (1 - 支持比例)
+                const winProbability = 1 - (optionAmount / totalPool);
+                potentialProfit = totalPool * winProbability * 0.95; // 扣除5%手續費
+            }
+            
+            // 顯示分享卡片
+            const tradeData = {
+                type: 'bet',
+                topicTitle: currentTopic.title,
+                option: optionText,
+                amount: netAmount,
+                cost: inputAmount,
+                fee: fee,
+                supportRatio: supportRatio,
+                totalPool: totalPool,
+                potentialProfit: potentialProfit
+            };
+            showShareModal(tradeData);
             
             // 更新餘額顯示
             updateBalanceDisplay();
@@ -4046,6 +4357,242 @@
             document.getElementById('outerTrading').style.display = 'block';
             document.getElementById('tradingTitle').textContent = 'LMSR交易';
             document.getElementById('tradingSubtitle').textContent = '基于市场價格交易';
+        }
+
+        // 分享卡片相關函數
+        function showShareModal(tradeData) {
+            const modal = document.getElementById('shareModal');
+            const summaryDiv = document.getElementById('tradeSummary');
+            
+            // 生成交易摘要HTML
+            let summaryHTML = '';
+            
+            // 添加話題信息
+            summaryHTML += `
+                <div class="trade-row">
+                    <span class="trade-label">📊 交易話題</span>
+                    <span class="trade-value">${tradeData.topicTitle}</span>
+                </div>
+            `;
+            
+            // 添加交易類型和選項
+            let typeLabel = '';
+            if (tradeData.type === 'buy') {
+                typeLabel = '📈 買入';
+            } else if (tradeData.type === 'sell') {
+                typeLabel = '📉 賣出';
+            } else if (tradeData.type === 'bet') {
+                typeLabel = '🎯 下注';
+            }
+            
+            summaryHTML += `
+                <div class="trade-row">
+                    <span class="trade-label">${typeLabel}</span>
+                    <span class="trade-value trade-highlight">${tradeData.option}</span>
+                </div>
+            `;
+            
+            // 添加交易數量/下注金額
+            const amountLabel = tradeData.type === 'bet' ? '💰 下注金額' : '💎 交易數量';
+            const amountValue = tradeData.type === 'bet' ? `$${tradeData.cost.toFixed(2)}` : `${tradeData.amount} 份`;
+            summaryHTML += `
+                <div class="trade-row">
+                    <span class="trade-label">${amountLabel}</span>
+                    <span class="trade-value">${amountValue}</span>
+                </div>
+            `;
+            
+            // 添加價格信息或總獎池
+            if (tradeData.type === 'bet' && tradeData.totalPool) {
+                summaryHTML += `
+                    <div class="trade-row">
+                        <span class="trade-label">🏆 總獎池</span>
+                        <span class="trade-value">$${tradeData.totalPool.toFixed(2)}</span>
+                    </div>
+                `;
+            } else if (tradeData.averagePrice) {
+                summaryHTML += `
+                    <div class="trade-row">
+                        <span class="trade-label">💰 平均價格</span>
+                        <span class="trade-value">${(tradeData.averagePrice * 100).toFixed(1)}%</span>
+                    </div>
+                `;
+            }
+            
+            // 添加成本/收入或支持比例
+            if (tradeData.type === 'bet' && tradeData.supportRatio) {
+                summaryHTML += `
+                    <div class="trade-row">
+                        <span class="trade-label">📊 支持比例</span>
+                        <span class="trade-value trade-highlight">${tradeData.supportRatio}%</span>
+                    </div>
+                `;
+            } else {
+                summaryHTML += `
+                    <div class="trade-row">
+                        <span class="trade-label">${tradeData.type === 'buy' ? '💸 總花費' : '💵 總收入'}</span>
+                        <span class="trade-value">$${tradeData.cost.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+            
+            // 手續費不顯示在分享卡片中
+            
+            // 添加潛在收益（買入或PK下注時顯示）
+            if ((tradeData.type === 'buy' || tradeData.type === 'bet') && tradeData.potentialProfit) {
+                summaryHTML += `
+                    <div class="trade-row">
+                        <span class="trade-label">🎯 潛在收益</span>
+                        <span class="trade-value">
+                            $${tradeData.potentialProfit.toFixed(2)}
+                            <span class="profit-indicator">
+                                📈 +${((tradeData.potentialProfit / tradeData.cost) * 100).toFixed(1)}%
+                            </span>
+                        </span>
+                    </div>
+                `;
+            }
+            
+            summaryDiv.innerHTML = summaryHTML;
+            modal.classList.add('show');
+            
+            // 自動隱藏慶祝表情符號
+            setTimeout(() => {
+                const emojis = modal.querySelectorAll('.celebration-emoji');
+                emojis.forEach(emoji => {
+                    emoji.style.opacity = '0.3';
+                });
+            }, 3000);
+        }
+
+        function closeShareModal() {
+            const modal = document.getElementById('shareModal');
+            modal.classList.remove('show');
+        }
+
+        // 監聽鍵盤事件以便用ESC關閉分享卡片
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const shareModal = document.getElementById('shareModal');
+                if (shareModal.classList.contains('show')) {
+                    closeShareModal();
+                }
+            }
+        });
+
+        // 點擊模態框背景關閉
+        document.addEventListener('click', function(event) {
+            const shareModal = document.getElementById('shareModal');
+            if (event.target === shareModal) {
+                closeShareModal();
+            }
+        });
+
+        function shareToSocial(platform) {
+            const tradeText = generateShareText();
+            const url = window.location.href;
+            
+            let shareUrl = '';
+            
+            switch(platform) {
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tradeText)}&url=${encodeURIComponent(url)}`;
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(tradeText)}`;
+                    break;
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+            }
+        }
+
+        function generateShareText() {
+            const summaryDiv = document.getElementById('tradeSummary');
+            const rows = summaryDiv.querySelectorAll('.trade-row');
+            
+            // 根據交易類型生成不同的開頭
+            const tradeTypeRow = Array.from(rows).find(row => 
+                row.querySelector('.trade-label').textContent.includes('買入') || 
+                row.querySelector('.trade-label').textContent.includes('賣出') ||
+                row.querySelector('.trade-label').textContent.includes('下注')
+            );
+            
+            let text = '';
+            if (tradeTypeRow) {
+                const labelText = tradeTypeRow.querySelector('.trade-label').textContent;
+                if (labelText.includes('買入')) {
+                    text = '🚀 剛在 BitX 完成一筆看漲交易！市場洞察力 MAX！\\n\\n';
+                } else if (labelText.includes('賣出')) {
+                    text = '💰 在 BitX 成功獲利出場！時機把握完美！\\n\\n';
+                } else if (labelText.includes('下注')) {
+                    text = '🎯 在 BitX 完成精彩下注！預測能力超強！\\n\\n';
+                }
+            }
+            
+            rows.forEach(row => {
+                const label = row.querySelector('.trade-label').textContent;
+                const value = row.querySelector('.trade-value').textContent;
+                text += `${label}: ${value}\\n`;
+            });
+            
+            // 添加更吸引人的結尾
+            const endings = [
+                '\\n🔥 預測市場就是這麼刺激！你也來試試？',
+                '\\n💎 每一次交易都是對未來的投票！',
+                '\\n⚡ 在 BitX，人人都可以是預言家！',
+                '\\n🎯 精準預測，豐厚回報！加入我們吧！'
+            ];
+            
+            const randomEnding = endings[Math.floor(Math.random() * endings.length)];
+            text += randomEnding;
+            text += '\\n\\n#BitX #預測市場 #區塊鏈交易 #投資智慧';
+            
+            return text;
+        }
+
+        function copyShareLink() {
+            const shareText = generateShareText();
+            const fullText = shareText + '\\n\\n🔗 ' + window.location.href;
+            
+            navigator.clipboard.writeText(fullText).then(() => {
+                // 臨時更改按鈕文字以提供反饋
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ 已複製！';
+                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(() => {
+                alert('複製失敗，請手動複製分享內容');
+            });
+        }
+
+        function downloadShareCard() {
+            // 使用 html2canvas 將分享卡片轉換為圖片
+            // 這裡提供一個簡化版本，實際應用中可以使用更專業的圖片生成庫
+            
+            const card = document.querySelector('.share-card');
+            const originalBg = card.style.background;
+            
+            // 臨時隱藏關閉按鈕以便截圖
+            const closeBtn = card.querySelector('.share-close-btn');
+            closeBtn.style.display = 'none';
+            
+            // 創建一個臨時的 canvas 來繪製卡片
+            // 注意：這是一個簡化實現，實際項目中建議使用 html2canvas 庫
+            
+            // 恢復按鈕顯示
+            setTimeout(() => {
+                closeBtn.style.display = 'flex';
+            }, 100);
+            
+            // 提示用戶
+            alert('📸 截圖功能開發中...\\n\\n您可以使用瀏覽器的截圖功能來保存分享卡片！\\n\\n💡 建議：\\n1. 右鍵點擊 -> 檢查元素\\n2. 找到分享卡片元素\\n3. 右鍵 -> 截圖節點');
         }
 
         // 分享連結
@@ -4597,7 +5144,7 @@
             
             // 更新餘額顯示
             if (balanceElement) {
-                balanceElement.textContent = `${userBalance.toLocaleString()} USDT`;
+                balanceElement.textContent = `${userBalance.toLocaleString()} $`;
                 if (amount > userBalance) {
                     balanceElement.classList.add('insufficient');
                     if (rechargeBtn) rechargeBtn.style.display = 'block';
@@ -4608,7 +5155,7 @@
             }
             
             if (outerBalanceElement) {
-                outerBalanceElement.textContent = `${userBalance.toLocaleString()} USDT`;
+                outerBalanceElement.textContent = `${userBalance.toLocaleString()} $`;
             }
         }
 
@@ -4617,7 +5164,7 @@
             alert('充值功能將跳轉到充值頁面\n\n• 支持銀行卡充值\n• 支持數字貨幣充值\n• 支持第三方支付\n\n充值後餘額將即時到賬');
             
             // 模擬充值成功
-            if (confirm('是否模擬充值 5000 USDT？')) {
+            if (confirm('是否模擬充值 5000 $？')) {
                 userBalance += 5000;
                 updateBalanceDisplay();
                 alert('充值成功！餘額已更新');
@@ -4630,12 +5177,12 @@
             const outerBalanceElement = document.getElementById('outerUserBalance');
             
             if (balanceElement) {
-                balanceElement.textContent = `${userBalance.toLocaleString()} USDT`;
+                balanceElement.textContent = `${userBalance.toLocaleString()} $`;
                 balanceElement.classList.remove('insufficient');
             }
             
             if (outerBalanceElement) {
-                outerBalanceElement.textContent = `${userBalance.toLocaleString()} USDT`;
+                outerBalanceElement.textContent = `${userBalance.toLocaleString()} $`;
                 outerBalanceElement.classList.remove('insufficient');
             }
             
@@ -4866,13 +5413,13 @@
                         <div class="position-info">
                             <div class="position-title">${topic.title}</div>
                             <div class="position-details">
-                                <span>持仓：${position} ${positionAmount} ${positionType === 'Trade' ? '个' : 'USDT'}</span>
+                                <span>持仓：${position} ${positionAmount} ${positionType === 'Trade' ? '个' : '$'}</span>
                                 <span>状态：${positionType}</span>
                                 <span>结束：${topic.endTime}</span>
                             </div>
                         </div>
                         <div class="position-value">
-                            <div class="position-amount ${valueClass}">${currentValue.toFixed(2)} USDT</div>
+                            <div class="position-amount ${valueClass}">${currentValue.toFixed(2)} $</div>
                             <div class="position-status status-active">
                                 ${profitLoss >= 0 ? '+' : ''}${profitLoss.toFixed(2)}
                             </div>
@@ -4937,13 +5484,13 @@
                         <div class="history-info">
                             <div class="history-title">${trade.title}</div>
                             <div class="history-details">
-                                <span>持仓：${trade.position} ${trade.amount} USDT</span>
+                                <span>持仓：${trade.position} ${trade.amount} $</span>
                                 <span>日期：${trade.date}</span>
                             </div>
                         </div>
                         <div class="history-value">
                             <div class="history-amount ${resultClass}">
-                                ${trade.profit >= 0 ? '+' : ''}${trade.profit.toFixed(2)} USDT
+                                ${trade.profit >= 0 ? '+' : ''}${trade.profit.toFixed(2)} $
                             </div>
                             <div class="history-status ${statusClass}">
                                 ${trade.result === 'won' ? '盈利' : '亏损'}
