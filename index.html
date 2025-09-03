@@ -563,8 +563,21 @@
 
         .amount-input-group {
             display: flex;
-            gap: 0.75rem;
+            flex-direction: column;
+            gap: 1rem;
             margin: 2rem 0;
+        }
+
+        .betting-input-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: stretch;
+        }
+
+        .betting-buttons-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .amount-input {
@@ -575,6 +588,7 @@
             background: #111218;
             color: #ffffff;
             font-size: 1rem;
+            min-width: 0; /* 防止flex收縮問題 */
         }
 
         .amount-input:focus {
@@ -835,6 +849,12 @@
             background: rgba(16, 185, 129, 0.1);
             color: #34d399;
             border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-mixed {
+            background: rgba(245, 158, 11, 0.1);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
         .status-ended {
@@ -1439,9 +1459,1007 @@
 
         .multi-option-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 0.75rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
             margin: 1rem 0;
+        }
+
+        /* 多選項二元選擇卡片樣式 */
+        .multi-option-binary-card {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .multi-option-binary-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .option-title {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+
+        .option-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .option-status.pk {
+            background: rgba(249, 115, 22, 0.2);
+            color: #fb923c;
+            border: 1px solid #fb923c;
+        }
+
+        .option-status.pumped {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+
+        .binary-choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .binary-choice {
+            background: rgba(17, 24, 39, 0.8);
+            border: 2px solid #374151;
+            border-radius: 8px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .binary-choice:hover {
+            transform: translateY(-1px);
+            border-color: #4b5563;
+        }
+
+        .binary-choice.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .binary-choice.yes.selected {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .binary-choice.no.selected {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .choice-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            text-align: center;
+        }
+
+        .binary-choice.yes .choice-label {
+            color: #10b981;
+        }
+
+        .binary-choice.no .choice-label {
+            color: #ef4444;
+        }
+
+        .choice-amount {
+            font-size: 0.8rem;
+            color: #d1d5db;
+            text-align: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .choice-percentage {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .choice-indicator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #10b981);
+            border-radius: 0 0 6px 6px;
+            transition: width 0.3s ease;
+        }
+
+        .binary-choice.yes .choice-indicator {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+
+        .binary-choice.no .choice-indicator {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+
+        .option-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #9ca3af;
+            padding-top: 0.5rem;
+            border-top: 1px solid #374151;
+        }
+
+        .pump-progress {
+            color: #f59e0b;
+        }
+
+        /* 混合狀態界面樣式 */
+        .mixed-section {
+            margin-bottom: 2rem;
+            background: rgba(17, 24, 39, 0.4);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .mixed-section-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+        }
+
+        .mixed-section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .mixed-section-subtitle {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        /* 隱藏空的section */
+        .mixed-section:empty,
+        .mixed-section[style*="display: none"] {
+            display: none !important;
+        }
+
+        /* 多選項新界面樣式 */
+        .option-list {
+            margin-bottom: 2rem;
+        }
+
+        .option-list-header h4 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .option-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .option-item-btn {
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid #374151;
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .option-item-btn:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .option-item-btn.active {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .option-item-btn.pumped {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .option-item-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .option-item-status {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .option-item-status.pk {
+            background: rgba(249, 115, 22, 0.2);
+            color: #fb923c;
+        }
+
+        .option-item-status.pumped {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .option-item-pool {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        /* 選中選項詳細界面 */
+        .selected-option-detail {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .option-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #374151;
+        }
+
+        .option-detail-header h4 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .option-status-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .pump-progress-text {
+            font-size: 0.8rem;
+            color: #f59e0b;
+        }
+
+        /* 二元PK界面 */
+        .binary-pk-interface {
+            margin-bottom: 1.5rem;
+        }
+
+        .option-pool-info {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #374151;
+        }
+
+        .pool-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .pool-stat .pool-label {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .pool-stat .pool-value {
+            font-size: 1rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* 多選項持倉顯示樣式 */
+        .option-position-header {
+            font-weight: 600;
+            border-bottom: 1px solid #374151;
+            margin-bottom: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+
+        .sub-position {
+            font-size: 0.9rem;
+            padding-left: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .sub-position .pool-label {
+            color: #9ca3af;
+        }
+
+        .yes-position {
+            color: #10b981;
+        }
+
+        .no-position {
+            color: #ef4444;
+        }
+
+        .total-row {
+            border-top: 1px solid #374151;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            font-weight: 700;
+        }
+
+        /* 中央選項區域樣式 */
+        .center-options-container {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: #9ca3af;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .option-list-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .option-list-item {
+            background: rgba(17, 24, 39, 0.8);
+            border: 2px solid #374151;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .option-list-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .option-list-item.active {
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            cursor: pointer;
+            background: rgba(31, 41, 55, 0.6);
+            transition: background 0.3s ease;
+        }
+
+        .option-header:hover {
+            background: rgba(31, 41, 55, 0.8);
+        }
+
+        .option-header-left {
+            flex: 1;
+        }
+
+        .option-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .option-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .option-expand-icon {
+            font-size: 1.2rem;
+            color: #9ca3af;
+            transition: transform 0.3s ease;
+        }
+
+        .option-list-item.expanded .option-expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .option-details {
+            display: none;
+            padding: 0 1.5rem 1.5rem;
+            border-top: 1px solid #374151;
+        }
+
+        .option-list-item.expanded .option-details {
+            display: block;
+        }
+
+        .option-pool-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pool-choice {
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid #374151;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pool-choice:hover {
+            border-color: #6b7280;
+        }
+
+        .pool-choice.yes {
+            border-color: #10b981;
+        }
+
+        .pool-choice.yes.selected {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .pool-choice.no {
+            border-color: #ef4444;
+        }
+
+        .pool-choice.no.selected {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .pool-choice-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pool-choice.yes .pool-choice-label {
+            color: #10b981;
+        }
+
+        .pool-choice.no .pool-choice-label {
+            color: #ef4444;
+        }
+
+        .pool-choice-amount {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+        }
+
+        .pool-choice-percentage {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .pool-choice.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .pool-choice.disabled:hover {
+            border-color: #374151;
+            transform: none;
+        }
+
+        .disabled-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #f59e0b;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+
+        /* 外盤選項樣式 */
+        .binary-prices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .price-item {
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid #374151;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .price-item:hover {
+            border-color: #6b7280;
+            transform: translateY(-2px);
+        }
+
+        .price-item.yes {
+            border-color: #10b981;
+        }
+
+        .price-item.yes.selected {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .price-item.no {
+            border-color: #ef4444;
+        }
+
+        .price-item.no.selected {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .price-label {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-item.yes .price-label {
+            color: #10b981;
+        }
+
+        .price-item.no .price-label {
+            color: #ef4444;
+        }
+
+        .price-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* 空狀態樣式 */
+        .no-pumped-options {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: rgba(31, 41, 55, 0.3);
+            border: 2px dashed #374151;
+            border-radius: 12px;
+            min-height: 200px;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+
+        .empty-state-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-subtitle {
+            font-size: 1rem;
+            color: #9ca3af;
+        }
+
+        /* Trade選項網格樣式 */
+        .trade-option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .trade-option-card {
+            background: rgba(17, 24, 39, 0.8);
+            border: 2px solid #374151;
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trade-option-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .trade-option-card.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .trade-option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .trade-option-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .trade-option-status {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .trade-option-prices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .trade-price-item {
+            background: rgba(31, 41, 55, 0.8);
+            border: 2px solid #374151;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .trade-price-item:hover {
+            border-color: #6b7280;
+        }
+
+        .trade-price-item.yes {
+            border-color: #10b981;
+        }
+
+        .trade-price-item.yes.selected {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .trade-price-item.no {
+            border-color: #ef4444;
+        }
+
+        .trade-price-item.no.selected {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .trade-price-label {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .trade-price-item.yes .trade-price-label {
+            color: #10b981;
+        }
+
+        .trade-price-item.no .trade-price-label {
+            color: #ef4444;
+        }
+
+        .trade-price-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .trade-option-pool {
+            background: rgba(31, 41, 55, 0.5);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        /* 單個選項交易器樣式 */
+        .single-option-trader {
+            background: rgba(17, 24, 39, 0.8);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .single-option-trader .option-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .single-option-trader h4 {
+            margin: 0 0 0.5rem 0;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .single-option-trader .selected-choice {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .single-option-trader .selected-choice.yes {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+
+        .single-option-trader .selected-choice.no {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .single-option-trader .trading-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .single-option-trader .btn {
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .single-option-trader .cost-estimate,
+        .single-option-trader .income-estimate {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .option-progress-section {
+            background: rgba(31, 41, 55, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .option-progress-label {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .option-progress-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f59e0b;
+        }
+
+        .center-option-card {
+            background: rgba(17, 24, 39, 0.8);
+            border: 2px solid #374151;
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .center-option-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .center-option-card.active {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .center-option-card.pumped {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .center-option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .center-option-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.4;
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .center-option-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .center-stat-item {
+            text-align: center;
+            padding: 0.75rem;
+            background: rgba(31, 41, 55, 0.8);
+            border-radius: 8px;
+            border: 1px solid #374151;
+        }
+
+        .center-stat-label {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-bottom: 0.25rem;
+        }
+
+        .center-stat-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .center-option-progress {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #374151;
+        }
+
+        .center-progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .center-progress-label {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .center-progress-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f59e0b;
+        }
+
+        .center-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(55, 65, 81, 0.5);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .center-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* 無選擇提示樣式 */
+        .no-selection-prompt {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: rgba(31, 41, 55, 0.3);
+            border: 2px dashed #374151;
+            border-radius: 12px;
+            min-height: 300px;
+        }
+
+        .prompt-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+
+        .prompt-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+        }
+
+        .prompt-subtitle {
+            font-size: 1rem;
+            color: #9ca3af;
         }
 
         .option-card {
@@ -1967,6 +2985,13 @@
             background: rgba(17, 24, 39, 0.8);
             border-radius: 6px;
             border: 1px solid rgba(75, 85, 99, 0.3);
+            min-width: 140px;
+            white-space: nowrap;
+        }
+        
+        .betting-input-row .balance-display {
+            margin-top: 0;
+            margin-left: 0.75rem;
         }
 
         .balance-label {
@@ -2101,20 +3126,20 @@
                                         </label>
                                         <label class="radio-option">
                                             <input type="radio" name="optionType" value="custom" onchange="toggleOptionType()">
-                                            <span class="radio-label">自定義選項（2個或以上）</span>
+                                            <span class="radio-label">多個獨立預測（每個都有YES/NO）</span>
                                         </label>
                                     </div>
                                     
                                     <div id="customOptions" style="display: none; margin-top: 1rem;">
                                         <div class="custom-options-header">
-                                            <span style="color: #9ca3af; font-size: 0.9rem;">請添加至少2個選項：</span>
-                                            <button type="button" class="btn btn-outline btn-sm" onclick="addOption()">+ 添加選項</button>
+                                            <span style="color: #9ca3af; font-size: 0.9rem;">創建多個獨立預測：</span>
+                                            <button type="button" class="btn btn-outline btn-sm" onclick="addOption()">+ 添加預測</button>
                                         </div>
                                         <div id="optionsList">
                                             <!-- 動態生成的選項輸入框 -->
                                         </div>
                                         <div class="option-notice" style="color: #6b7280; font-size: 0.85rem; margin-top: 0.5rem;">
-                                            最少需要2個選項，最多支援8個選項
+                                            每個預測都是獨立的二元選擇（YES/NO），最少2個，最多8個
                                         </div>
                                     </div>
                                 </div>
@@ -2213,18 +3238,31 @@
                         这里显示话题的详细描述内容...
                     </div>
 
-                    <!-- 價格走勢圖區域 (僅Trade顯示) -->
-                    <div id="centerKlineSection" style="margin-top: 2rem; display: none;">
-                        <div class="kline-chart-container">
-                            <div class="chart-header">
-                                <span class="chart-title">📈 價格走勢圖</span>
-                                <div class="chart-controls">
-                                    <button class="chart-btn active" onclick="switchTimeframe('1m')">1分</button>
-                                    <button class="chart-btn" onclick="switchTimeframe('5m')">5分</button>
-                                    <button class="chart-btn" onclick="switchTimeframe('1h')">1小時</button>
-                                </div>
+
+
+                    <!-- 多選項PK選項列表區域 -->
+                    <div id="centerOptionsSection" style="margin-top: 2rem; display: none;">
+                        <div class="center-options-container">
+                            <div class="section-header">
+                                <h3 class="section-title">🎯 多項獨立預測</h3>
+                                <p class="section-subtitle">選擇要預測的項目，每個項目都是獨立的二元選擇</p>
                             </div>
-                            <div id="centerKlineChart" class="line-chart"></div>
+                            <div class="option-list-container" id="optionListContainer">
+                                <!-- 動態生成選項列表 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 多選項Trade選項列表區域 -->
+                    <div id="centerTradeOptionsSection" style="margin-top: 2rem; display: none;">
+                        <div class="center-options-container">
+                            <div class="section-header">
+                                <h3 class="section-title">📈 多項Trade交易</h3>
+                                <p class="section-subtitle">選擇要交易的選項，所有選項都已進入外盤交易</p>
+                            </div>
+                            <div class="trade-option-grid" id="tradeOptionGrid">
+                                <!-- 動態生成Trade選項卡片 -->
+                            </div>
                         </div>
                     </div>
 
@@ -2329,55 +3367,166 @@
             </div>
 
             <div class="amount-input-group">
+                <!-- 第一行：快捷按鈕 -->
                 <div class="quick-amount-buttons">
                     <button class="quick-btn" onclick="setQuickAmount(100)">100</button>
                     <button class="quick-btn" onclick="setQuickAmount(500)">500</button>
                     <button class="quick-btn" onclick="setQuickAmount(1000)">1K</button>
                     <button class="quick-btn" onclick="setQuickAmount(5000)">5K</button>
                 </div>
-                <div class="input-with-balance">
+                
+                <!-- 第二行：輸入框和餘額 -->
+                <div class="betting-input-row">
                     <input type="number" class="amount-input" id="betAmount" placeholder="輸入下注金額" min="1" step="1" oninput="checkInnerBalance()">
                     <div class="balance-display">
                         <span class="balance-label">餘額:</span>
                         <span class="balance-amount" id="userBalance">10,000$</span>
                     </div>
                 </div>
-                <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">加入陣營</button>
-                <button class="btn btn-outline recharge-btn" onclick="showRecharge()" style="width: 100%; margin-top: 0.5rem; display: none;" id="rechargeBtn">💰 充值</button>
+                
+                <!-- 第三行：確認按鈕 -->
+                <div class="betting-buttons-row">
+                    <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">加入陣營</button>
+                    <button class="btn btn-outline recharge-btn" onclick="showRecharge()" style="width: 100%; display: none;" id="rechargeBtn">💰 充值</button>
+                </div>
             </div>
         </div>
 
         <!-- 多選項PK交易界面 -->
         <div id="multiOptionTrading" class="trading-section multi-option-trading">
-            <div class="section-title">多選項預測 - 選擇最佳答案</div>
-            
-            <!-- 多選項網格 -->
-            <div class="multi-option-grid" id="multiOptionGrid">
-                <!-- 動態生成選項卡片 -->
+            <!-- 未選擇時的提示 -->
+            <div id="noOptionSelected" class="no-selection-prompt">
+                <div class="prompt-icon">🎯</div>
+                <div class="prompt-title">選擇要預測的項目</div>
+                <div class="prompt-subtitle">點擊左側的選項開始預測</div>
             </div>
 
-            <div class="amount-input-group">
-                <div class="quick-amount-buttons">
-                    <button class="quick-btn" onclick="setMultiOptionQuickAmount(100)">100</button>
-                    <button class="quick-btn" onclick="setMultiOptionQuickAmount(500)">500</button>
-                    <button class="quick-btn" onclick="setMultiOptionQuickAmount(1000)">1K</button>
-                    <button class="quick-btn" onclick="setMultiOptionQuickAmount(5000)">5K</button>
-                </div>
-                <div class="input-with-balance">
-                    <input type="number" class="amount-input" id="multiOptionAmount" placeholder="輸入下注金額" min="1" step="1" oninput="checkInnerBalance()">
-                    <div class="balance-display">
-                        <span class="balance-label">餘額:</span>
-                        <span class="balance-amount" id="multiUserBalance">10,000$</span>
+            <!-- 選中選項的詳細界面 -->
+            <div id="selectedOptionDetail" class="selected-option-detail" style="display: none;">
+                <div class="option-detail-header">
+                    <h4 id="selectedOptionTitle">選項標題</h4>
+                    <div class="option-status-info">
+                        <span id="selectedOptionStatus" class="option-status pk">PK中</span>
+                        <span id="pumpProgress" class="pump-progress-text">距離上線: 200$</span>
                     </div>
                 </div>
-                <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">確認下注</button>
-                <button class="btn btn-outline recharge-btn" onclick="showRecharge()" style="width: 100%; margin-top: 0.5rem; display: none;" id="multiRechargeBtn">💰 充值</button>
+                
+                <!-- YES/NO選擇界面 -->
+                <div class="binary-pk-interface">
+                    <div class="binary-choices">
+                        <div class="binary-choice yes" onclick="selectOptionBinary('yes')" id="yesChoice">
+                            <div class="choice-label">YES</div>
+                            <div class="choice-amount" id="yesAmount">0 $</div>
+                            <div class="choice-percentage" id="yesPercentage">50.0%</div>
+                            <div class="choice-indicator" id="yesIndicator"></div>
+                        </div>
+                        <div class="binary-choice no" onclick="selectOptionBinary('no')" id="noChoice">
+                            <div class="choice-label">NO</div>
+                            <div class="choice-amount" id="noAmount">0 $</div>
+                            <div class="choice-percentage" id="noPercentage">50.0%</div>
+                            <div class="choice-indicator" id="noIndicator"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-pool-info">
+                        <div class="pool-stat">
+                            <span class="pool-label">總資金池:</span>
+                            <span class="pool-value" id="optionTotalPool">0 $</span>
+                        </div>
+                        <div class="pool-stat">
+                            <span class="pool-label">參與人數:</span>
+                            <span class="pool-value" id="optionParticipants">0 人</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 下注界面 -->
+                <div class="amount-input-group">
+                    <!-- 第一行：快捷按鈕 -->
+                    <div class="quick-amount-buttons">
+                        <button class="quick-btn" onclick="setMultiOptionQuickAmount(100)">100</button>
+                        <button class="quick-btn" onclick="setMultiOptionQuickAmount(500)">500</button>
+                        <button class="quick-btn" onclick="setMultiOptionQuickAmount(1000)">1K</button>
+                        <button class="quick-btn" onclick="setMultiOptionQuickAmount(5000)">5K</button>
+                    </div>
+                    
+                    <!-- 第二行：輸入框和餘額 -->
+                    <div class="betting-input-row">
+                        <input type="number" class="amount-input" id="multiOptionAmount" placeholder="輸入下注金額" min="1" step="1" oninput="checkInnerBalance()">
+                        <div class="balance-display">
+                            <span class="balance-label">餘額:</span>
+                            <span class="balance-amount" id="multiUserBalance">10,000$</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 第三行：確認按鈕 -->
+                    <div class="betting-buttons-row">
+                        <button class="btn btn-success" onclick="placeBet()" style="width: 100%;">確認下注</button>
+                        <button class="btn btn-outline recharge-btn" onclick="showRecharge()" style="width: 100%; display: none;" id="multiRechargeBtn">💰 充值</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 多選項混合狀態界面 -->
+        <div id="multiOptionMixed" class="trading-section multi-option-trading">
+            <div class="section-title">多項獨立預測 - 混合交易</div>
+            
+            <!-- PK階段選項 -->
+            <div id="pkSectionMulti" class="mixed-section">
+                <div class="mixed-section-header">
+                    <span class="mixed-section-title">🎯 PK階段預測</span>
+                    <span class="mixed-section-subtitle">選擇YES/NO下注</span>
+                </div>
+                <div class="multi-option-grid" id="mixedPkGrid">
+                    <!-- 動態生成PK中的選項 -->
+                </div>
+                <div class="amount-input-group" id="pkAmountGroup">
+                    <div class="quick-amount-buttons">
+                        <button class="quick-btn" onclick="setMultiOptionQuickAmount(100)">100</button>
+                        <button class="quick-btn" onclick="setMultiOptionQuickAmount(500)">500</button>
+                        <button class="quick-btn" onclick="setMultiOptionQuickAmount(1000)">1K</button>
+                    </div>
+                    <div class="input-with-balance">
+                        <input type="number" class="amount-input" id="mixedPkAmount" placeholder="輸入下注金額" min="1" step="1">
+                        <div class="balance-display">
+                            <span class="balance-label">餘額:</span>
+                            <span class="balance-amount" id="mixedPkBalance">10,000$</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" onclick="placeMixedBet('pk')" style="width: 100%;">確認PK下注</button>
+                </div>
+            </div>
+            
+            <!-- Trade階段選項 -->
+            <div id="tradeSectionMulti" class="mixed-section">
+                <div class="mixed-section-header">
+                    <span class="mixed-section-title">📈 Trade階段預測</span>
+                    <span class="mixed-section-subtitle">基於市場價格交易</span>
+                </div>
+                <div class="multi-lmsr-grid" id="mixedTradeGrid">
+                    <!-- 動態生成Trade中的選項 -->
+                </div>
+                <div class="amount-input-group" id="tradeAmountGroup">
+                    <div class="quick-amount-buttons">
+                        <button class="quick-btn" onclick="setMixedTradeQuickAmount(10)">10</button>
+                        <button class="quick-btn" onclick="setMixedTradeQuickAmount(50)">50</button>
+                        <button class="quick-btn" onclick="setMixedTradeQuickAmount(100)">100</button>
+                    </div>
+                    <div class="input-with-balance">
+                        <input type="number" class="amount-input" id="mixedTradeAmount" placeholder="輸入交易數量" min="1" step="1">
+                        <div class="balance-display">
+                            <span class="balance-label">餘額:</span>
+                            <span class="balance-amount" id="mixedTradeBalance">10,000$</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- 多選項Trade交易界面 -->
         <div id="multiOptionOuter" class="trading-section multi-option-trading">
-            <div class="section-title">多選項LMSR交易</div>
+            <div class="section-title">多項獨立預測交易</div>
             
             <!-- 交易數量輸入 -->
             <div class="amount-input-group">
@@ -2719,48 +3868,109 @@
             },
             {
                 id: 4,
-                title: "2024年世界盃冠軍預測",
-                category: "sports",
-                categoryName: "體育賽事",
-                avatar: "⚽",
-                options: ["巴西", "阿根廷", "法國", "德國", "其他"],
-                innerPool: {
-                    option0Amount: 300,  // 巴西
-                    option1Amount: 250,  // 阿根廷
-                    option2Amount: 200,  // 法國
-                    option3Amount: 150,  // 德國
-                    option4Amount: 100,  // 其他
-                    totalAmount: 1000
-                },
-                outerPool: {
-                    // 取最小選項(其他100)的50%作為底池
-                    basePool: 50,
-                    // 多選項Trade使用平均分配作為初始流動性
-                    option0Amount: 120,  // 巴西初始份額
-                    option1Amount: 100,  // 阿根廷初始份額
-                    option2Amount: 80,   // 法國初始份額
-                    option3Amount: 60,   // 德國初始份額
-                    option4Amount: 40,   // 其他初始份額
-                    totalAmount: 400,
-                    tradingFeeToInner: 0
-                },
-                isOuter: true,
-                endTime: "2024-12-31",
-                status: "outer",
-                description: "預測2024年世界盃足球賽的冠軍隊伍。選擇你認為最有可能奪冠的國家隊。",
+                title: "以太坊2025年價格預測",
+                category: "crypto",
+                categoryName: "加密貨幣",
+                avatar: "⧫",
+                options: ["突破8000美元", "達到10000美元", "創歷史新高", "回調至3000美元"],
+                // 所有選項都已完全Pump到外盤，不再有innerPools
+                // 外盤池（所有選項都已Pump）
+                outerPools: [
+                    { // 突破8000美元
+                        yesAmount: 400,
+                        noAmount: 200,
+                        totalAmount: 600,
+                        tradingFeeToInner: 8
+                    },
+                    { // 達到10000美元
+                        yesAmount: 300,
+                        noAmount: 300,
+                        totalAmount: 600,
+                        tradingFeeToInner: 12
+                    },
+                    { // 創歷史新高
+                        yesAmount: 250,
+                        noAmount: 350,
+                        totalAmount: 600,
+                        tradingFeeToInner: 15
+                    },
+                    { // 回調至3000美元
+                        yesAmount: 150,
+                        noAmount: 450,
+                        totalAmount: 600,
+                        tradingFeeToInner: 20
+                    }
+                ],
+                endTime: "2025-12-31",
+                status: "outer", // 完全Trade狀態：所有選項都已Pump
+                description: "2025年以太坊價格的多項預測，分析市場趨勢和技術發展對價格的影響。",
                 isPrivate: false,
-                pumpCondition: 1000,
-                myOption0: 50,  // 我在巴西的投注
-                myOption1: 0,
-                myOption2: 0,
-                myOption3: 0,
-                myOption4: 0,
-                // Trade多選項持倉（LMSR代幣）
-                myOuterOption0: 5,  // 我持有的巴西LMSR代幣
-                myOuterOption1: 2,  // 我持有的阿根廷LMSR代幣
-                myOuterOption2: 0,
-                myOuterOption3: 0,
-                myOuterOption4: 0
+                pumpCondition: 200, // 每個選項的Pump門檻
+                // 我在各選項Trade的持倉 [YES, NO]
+                myOuterPositions: [
+                    [8, 2],   // 突破8000美元：YES 8份, NO 2份
+                    [5, 5],   // 達到10000美元：YES 5份, NO 5份
+                    [3, 7],   // 創歷史新高：YES 3份, NO 7份
+                    [0, 10]   // 回調至3000美元：YES 0份, NO 10份
+                ]
+            },
+            {
+                id: 5,
+                title: "AI技術發展預測",
+                category: "tech",
+                categoryName: "科技創新",
+                avatar: "🤖",
+                options: ["GPT-5會在2025年發布", "自動駕駛全面普及", "量子計算突破", "腦機接口商用化"],
+                // 部分選項已Pump，部分還在PK
+                innerPools: [
+                    null, // GPT-5會在2025年發布 - 已Pump
+                    { // 自動駕駛全面普及 - 未Pump
+                        yesAmount: 120,
+                        noAmount: 80,
+                        totalAmount: 200
+                    },
+                    { // 量子計算突破 - 未Pump
+                        yesAmount: 90,
+                        noAmount: 60,
+                        totalAmount: 150
+                    },
+                    null // 腦機接口商用化 - 已Pump
+                ],
+                outerPools: [
+                    { // GPT-5會在2025年發布 - 已Pump
+                        yesAmount: 300,
+                        noAmount: 300,
+                        totalAmount: 600,
+                        tradingFeeToInner: 12
+                    },
+                    null, // 自動駕駛全面普及 - 未Pump
+                    null, // 量子計算突破 - 未Pump
+                    { // 腦機接口商用化 - 已Pump
+                        yesAmount: 150,
+                        noAmount: 450,
+                        totalAmount: 600,
+                        tradingFeeToInner: 15
+                    }
+                ],
+                endTime: "2025-12-31",
+                status: "mixed", // 混合狀態
+                description: "AI技術在未來幾年的發展預測，包含多個技術方向的獨立判斷。",
+                isPrivate: false,
+                pumpCondition: 200,
+                // 我在各選項PK的持倉 [YES, NO]
+                myInnerPositions: [
+                    [0, 0],   // GPT-5會在2025年發布：已Pump
+                    [15, 5],  // 自動駕駛全面普及：YES 15, NO 5
+                    [10, 0],  // 量子計算突破：YES 10, NO 0
+                    [0, 0]    // 腦機接口商用化：已Pump
+                ],
+                // 我在各選項Trade的持倉 [YES, NO]
+                myOuterPositions: [
+                    [5, 5],   // GPT-5會在2025年發布：YES 5份, NO 5份
+                    [0, 0],   // 自動駕駛全面普及：未Pump
+                    [0, 0],   // 量子計算突破：未Pump
+                    [0, 8]    // 腦機接口商用化：YES 0份, NO 8份
+                ]
             },
             {
                 id: 7,
@@ -2865,31 +4075,69 @@
             const waterfall = document.getElementById('topicWaterfall');
             waterfall.innerHTML = '';
 
-            sampleTopics.filter(topic => topic.status === 'outer').forEach(topic => {
+            sampleTopics.filter(topic => topic.status === 'outer' || topic.status === 'mixed').forEach(topic => {
                 const card = document.createElement('div');
                 card.className = 'topic-card';
                 card.onclick = () => showTopicDetail(topic.id);
                 
                 // 计算Trade总獎金池
-                const outerTotalPool = topic.outerPool.basePool + topic.outerPool.totalAmount;
                 const isMultiOption = topic.options && topic.options.length > 2;
+                let outerTotalPool = 0;
                 
                 // 計算領先選項
                 let leadingOption = 'YES';
                 let leadingPercentage = '50.0';
                 
-                if (isMultiOption) {
-                    // 多選項Trade（未來擴展）
+                if (isMultiOption && topic.status === 'mixed') {
+                    // 多選項混合狀態：計算所有已Pump選項的總池
+                    if (topic.outerPools) {
+                        topic.outerPools.forEach((pool, index) => {
+                            if (pool) {
+                                outerTotalPool += pool.totalAmount || 0;
+                            }
+                        });
+                    }
+                    
+                    // 找出資金最多的已Pump選項
+                    let maxPool = 0;
+                    let maxOptionIndex = 0;
+                    topic.outerPools?.forEach((pool, index) => {
+                        if (pool && pool.totalAmount > maxPool) {
+                            maxPool = pool.totalAmount;
+                            maxOptionIndex = index;
+                        }
+                    });
+                    
+                    if (maxPool > 0) {
+                        leadingOption = topic.options[maxOptionIndex];
+                        const maxPoolData = topic.outerPools[maxOptionIndex];
+                        const yesAmount = maxPoolData.yesAmount || 0;
+                        const totalAmount = maxPoolData.totalAmount || 1;
+                        leadingPercentage = ((yesAmount / totalAmount) * 100).toFixed(1);
+                        if (yesAmount < (maxPoolData.noAmount || 0)) {
+                            leadingPercentage = (((maxPoolData.noAmount || 0) / totalAmount) * 100).toFixed(1);
+                        }
+                    }
+                } else if (isMultiOption && topic.status === 'outer') {
+                    // 多選項完全Trade狀態
+                    if (topic.outerPools) {
+                        topic.outerPools.forEach((pool) => {
+                            if (pool) {
+                                outerTotalPool += pool.totalAmount || 0;
+                            }
+                        });
+                    }
                     leadingOption = topic.options[0] || '選項1';
-                    leadingPercentage = '20.0';  // 簡單平均
+                    leadingPercentage = '25.0';  // 簡單平均
                 } else {
                     // 二元選項
-                    const yesAmount = topic.outerPool.yesAmount || 0;
-                    const totalAmount = topic.outerPool.totalAmount || 1;
+                    outerTotalPool = (topic.outerPool?.basePool || 0) + (topic.outerPool?.totalAmount || 0);
+                    const yesAmount = topic.outerPool?.yesAmount || 0;
+                    const totalAmount = topic.outerPool?.totalAmount || 1;
                     leadingPercentage = ((yesAmount / totalAmount) * 100).toFixed(1);
-                    if (yesAmount < (topic.outerPool.noAmount || 0)) {
+                    if (yesAmount < (topic.outerPool?.noAmount || 0)) {
                         leadingOption = 'NO';
-                        leadingPercentage = (((topic.outerPool.noAmount || 0) / totalAmount) * 100).toFixed(1);
+                        leadingPercentage = (((topic.outerPool?.noAmount || 0) / totalAmount) * 100).toFixed(1);
                     }
                 }
                 
@@ -3064,7 +4312,7 @@
         function updateTradingInterface() {
             if (!currentTopic) return;
             
-            const isOuter = currentTopic.status === 'outer';
+            const isOuter = currentTopic.status === 'outer' || currentTopic.status === 'mixed';
             const tradingTitle = document.getElementById('tradingTitle');
             const tradingSubtitle = document.getElementById('tradingSubtitle');
             const statusBadge = document.getElementById('detailStatus');
@@ -3072,14 +4320,21 @@
             const outerTrading = document.getElementById('outerTrading');
             const multiOptionTrading = document.getElementById('multiOptionTrading');
             const multiOptionOuter = document.getElementById('multiOptionOuter');
+            const multiOptionMixed = document.getElementById('multiOptionMixed');
             const centerKlineSection = document.getElementById('centerKlineSection');
+            const centerOptionsSection = document.getElementById('centerOptionsSection');
+            const centerTradeOptionsSection = document.getElementById('centerTradeOptionsSection');
             const isMultiOption = currentTopic.options && currentTopic.options.length > 2;
 
-            // 隱藏所有交易界面
+            // 隱藏所有交易界面和中央區域
             innerTrading.style.display = 'none';
             outerTrading.style.display = 'none';
             if (multiOptionTrading) multiOptionTrading.style.display = 'none';
             if (multiOptionOuter) multiOptionOuter.style.display = 'none';
+            if (multiOptionMixed) multiOptionMixed.style.display = 'none';
+            if (centerKlineSection) centerKlineSection.style.display = 'none';
+            if (centerOptionsSection) centerOptionsSection.style.display = 'none';
+            if (centerTradeOptionsSection) centerTradeOptionsSection.style.display = 'none';
 
             if (isOuter) {
                 // Trade状态
@@ -3089,8 +4344,25 @@
                 statusBadge.className = 'status-badge status-trade';
                 
                 if (isMultiOption) {
-                    if (multiOptionOuter) multiOptionOuter.style.display = 'block';
-                    updateMultiLMSRInterface();
+                    // 檢查多選項的狀態
+                    const status = getMultiOptionStatus();
+                    if (status === 'mixed') {
+                        // 混合狀態：表現得像完全Trade狀態，但只顯示已Pump選項
+                        tradingTitle.textContent = 'LMSR交易';
+                        tradingSubtitle.textContent = '基于市场價格的预测市场交易';
+                        statusBadge.textContent = 'Trade';
+                        statusBadge.className = 'status-badge status-trade';
+                        if (centerTradeOptionsSection) centerTradeOptionsSection.style.display = 'block';
+                        if (multiOptionOuter) multiOptionOuter.style.display = 'block';
+                        updateTradeOptionsInterface(); // 這會過濾掉未Pump選項
+                        updateMultiLMSRInterface();
+                    } else {
+                        // 全部已Trade - 顯示中央選項區域和右側交易器
+                        if (centerTradeOptionsSection) centerTradeOptionsSection.style.display = 'block';
+                        if (multiOptionOuter) multiOptionOuter.style.display = 'block';
+                        updateTradeOptionsInterface();
+                        updateMultiLMSRInterface();
+                    }
                 } else {
                     outerTrading.style.display = 'block';
                     updateLMSRPrices();
@@ -3114,14 +4386,22 @@
                 statusBadge.className = 'status-badge status-pk';
                 
                 if (isMultiOption) {
-                    tradingTitle.textContent = '多選項預測';
-                    tradingSubtitle.textContent = '選擇最佳答案，預見未來';
+                    tradingTitle.textContent = '多項獨立預測';
+                    tradingSubtitle.textContent = '每項都可選擇YES/NO';
+                    // 顯示中央選項區域和右側交易器
+                    if (centerOptionsSection) centerOptionsSection.style.display = 'block';
                     if (multiOptionTrading) multiOptionTrading.style.display = 'block';
+                    // 隱藏右側的獎金池詳情，因為每個選項都是獨立的
+                    const poolDetailsSection = document.getElementById('poolDetailsSection');
+                    if (poolDetailsSection) poolDetailsSection.style.display = 'none';
                     updateMultiOptionInterface();
                 } else {
                     tradingTitle.textContent = '預測對決';
                     tradingSubtitle.textContent = '選擇立場，預見未來';
                     innerTrading.style.display = 'block';
+                    // 顯示右側的獎金池詳情
+                    const poolDetailsSection = document.getElementById('poolDetailsSection');
+                    if (poolDetailsSection) poolDetailsSection.style.display = 'block';
                     updatePKInterface();
                 }
                 
@@ -3396,37 +4676,532 @@
             }
         }
 
-        // 更新多選項PK界面
+        // 更新多選項PK界面 - 顯示中央選項列表
         function updateMultiOptionInterface() {
             if (!currentTopic || !currentTopic.options) return;
             
-            const grid = document.getElementById('multiOptionGrid');
+            // 更新中央選項列表區域
+            const listContainer = document.getElementById('optionListContainer');
+            if (listContainer) {
+                listContainer.innerHTML = '';
+                
+                currentTopic.options.forEach((option, index) => {
+                    // 獲取該選項的資金池數據
+                    const pool = currentTopic.innerPools ? currentTopic.innerPools[index] : null;
+                    const yesAmount = pool ? pool.yesAmount : 0;
+                    const noAmount = pool ? pool.noAmount : 0;
+                    const totalAmount = pool ? pool.totalAmount : 0;
+                    
+                    const yesPercentage = totalAmount > 0 ? ((yesAmount / totalAmount) * 100).toFixed(1) : '50.0';
+                    const noPercentage = totalAmount > 0 ? ((noAmount / totalAmount) * 100).toFixed(1) : '50.0';
+                    
+                    // 檢查該選項是否已Pump
+                    const isPumped = currentTopic.outerPools && currentTopic.outerPools[index];
+                    const statusText = isPumped ? '已Pump' : 'PK中';
+                    
+                    // 計算Pump進度
+                    const pumpThreshold = currentTopic.pumpCondition || 200;
+                    const pumpProgress = Math.min((totalAmount / pumpThreshold) * 100, 100);
+                    const remainingAmount = Math.max(0, pumpThreshold - totalAmount);
+                    
+                    const listItem = document.createElement('div');
+                    listItem.className = 'option-list-item';
+                    listItem.setAttribute('data-option-index', index);
+                    
+                    listItem.innerHTML = `
+                        <div class="option-header" onclick="toggleOptionExpand(${index})">
+                            <div class="option-header-left">
+                                <div class="option-title">${option}</div>
+                                <div class="option-meta">
+                                    <span>總池: ${totalAmount}$</span>
+                                    <span>狀態: ${statusText}</span>
+                                </div>
+                            </div>
+                            <div class="option-expand-icon">▼</div>
+                        </div>
+                        <div class="option-details">
+                            <div class="option-pool-display">
+                                <div class="pool-choice yes ${isPumped ? 'disabled' : ''}" data-choice="yes" onclick="${isPumped ? '' : `selectOptionChoice(${index}, 'yes')`}">
+                                    <div class="pool-choice-label">YES</div>
+                                    <div class="pool-choice-amount">${yesAmount}$</div>
+                                    <div class="pool-choice-percentage">${yesPercentage}%</div>
+                                    ${isPumped ? '<div class="disabled-overlay">已Pump</div>' : ''}
+                                </div>
+                                <div class="pool-choice no ${isPumped ? 'disabled' : ''}" data-choice="no" onclick="${isPumped ? '' : `selectOptionChoice(${index}, 'no')`}">
+                                    <div class="pool-choice-label">NO</div>
+                                    <div class="pool-choice-amount">${noAmount}$</div>
+                                    <div class="pool-choice-percentage">${noPercentage}%</div>
+                                    ${isPumped ? '<div class="disabled-overlay">已Pump</div>' : ''}
+                                </div>
+                            </div>
+                            <div class="option-progress-section">
+                                <div class="option-progress-header">
+                                    <span class="option-progress-label">Pump進度</span>
+                                    <span class="option-progress-value">${isPumped ? '已Pump' : `還需 ${remainingAmount}$`}</span>
+                                </div>
+                                <div class="center-progress-bar">
+                                    <div class="center-progress-fill" style="width: ${pumpProgress}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    listContainer.appendChild(listItem);
+                });
+            }
+            
+            // 默認選中第一個選項的YES並展開
+            if (currentTopic.options && currentTopic.options.length > 0) {
+                setTimeout(() => {
+                    toggleOptionExpand(0);
+                    selectOptionChoice(0, 'yes');
+                }, 100);
+            } else {
+                // 重置右側交易器為無選擇狀態
+                resetRightTrader();
+            }
+        }
+
+        // 切換選項展開/收起
+        function toggleOptionExpand(optionIndex) {
+            const listItem = document.querySelector(`[data-option-index="${optionIndex}"]`);
+            if (listItem) {
+                const isExpanded = listItem.classList.contains('expanded');
+                
+                // 收起所有其他選項
+                document.querySelectorAll('.option-list-item').forEach(item => {
+                    item.classList.remove('expanded');
+                });
+                
+                // 展開當前選項
+                if (!isExpanded) {
+                    listItem.classList.add('expanded');
+                }
+            }
+        }
+        
+        // 選擇選項的YES/NO
+        function selectOptionChoice(optionIndex, choice) {
+            // 檢查選項是否已Pump
+            const isPumped = currentTopic.outerPools && currentTopic.outerPools[optionIndex];
+            if (isPumped) {
+                alert('該選項已Pump，無法在內盤下注。請到外盤進行交易。');
+                return;
+            }
+            
+            selectedMultiOption = optionIndex;
+            selectedBinaryChoice = choice;
+            
+            // 更新選項列表中的選擇狀態
+            document.querySelectorAll('.pool-choice').forEach(choiceEl => {
+                choiceEl.classList.remove('selected');
+            });
+            
+            const selectedChoice = document.querySelector(`[data-option-index="${optionIndex}"] .pool-choice.${choice}`);
+            if (selectedChoice) {
+                selectedChoice.classList.add('selected');
+            }
+            
+            // 更新右側交易器
+            updateRightTrader(optionIndex, choice);
+        }
+        
+        // 更新右側交易器
+        function updateRightTrader(optionIndex, choice) {
+            const option = currentTopic.options[optionIndex];
+            const pool = currentTopic.innerPools ? currentTopic.innerPools[optionIndex] : null;
+            const yesAmount = pool ? pool.yesAmount : 0;
+            const noAmount = pool ? pool.noAmount : 0;
+            const totalAmount = pool ? pool.totalAmount : 0;
+            
+            const yesPercentage = totalAmount > 0 ? ((yesAmount / totalAmount) * 100).toFixed(1) : '50.0';
+            const noPercentage = totalAmount > 0 ? ((noAmount / totalAmount) * 100).toFixed(1) : '50.0';
+            
+            // 檢查該選項是否已Pump
+            const isPumped = currentTopic.outerPools && currentTopic.outerPools[optionIndex];
+            const statusClass = isPumped ? 'pumped' : 'pk';
+            const statusText = isPumped ? '已上線' : 'PK中';
+            
+            // 更新右側詳細界面內容
+            document.getElementById('selectedOptionTitle').textContent = option;
+            document.getElementById('selectedOptionStatus').className = `option-status ${statusClass}`;
+            document.getElementById('selectedOptionStatus').textContent = statusText;
+            document.getElementById('pumpProgress').textContent = 
+                `距離上線: ${Math.max(0, currentTopic.pumpCondition - totalAmount)} $`;
+            
+            // 更新YES/NO數據
+            document.getElementById('yesAmount').textContent = `${yesAmount} $`;
+            document.getElementById('yesPercentage').textContent = `${yesPercentage}%`;
+            document.getElementById('yesIndicator').style.width = `${yesPercentage}%`;
+            
+            document.getElementById('noAmount').textContent = `${noAmount} $`;
+            document.getElementById('noPercentage').textContent = `${noPercentage}%`;
+            document.getElementById('noIndicator').style.width = `${noPercentage}%`;
+            
+            // 更新資金池信息
+            document.getElementById('optionTotalPool').textContent = `${totalAmount} $`;
+            const participants = Math.floor(totalAmount / 50) + Math.floor(Math.random() * 5);
+            document.getElementById('optionParticipants').textContent = `${participants} 人`;
+            
+            // 設置YES/NO選擇狀態
+            document.querySelectorAll('#selectedOptionDetail .binary-choice').forEach(choiceEl => {
+                choiceEl.classList.remove('selected');
+            });
+            
+            if (choice === 'yes') {
+                document.getElementById('yesChoice').classList.add('selected');
+            } else if (choice === 'no') {
+                document.getElementById('noChoice').classList.add('selected');
+            }
+            
+            // 顯示右側詳細界面
+            document.getElementById('noOptionSelected').style.display = 'none';
+            document.getElementById('selectedOptionDetail').style.display = 'block';
+        }
+
+        // 重置右側交易器
+        function resetRightTrader() {
+            const noSelectionDiv = document.getElementById('noOptionSelected');
+            const detailDiv = document.getElementById('selectedOptionDetail');
+            
+            if (noSelectionDiv) noSelectionDiv.style.display = 'flex';
+            if (detailDiv) detailDiv.style.display = 'none';
+            
+            // 重置選擇狀態
+            selectedMultiOption = null;
+            selectedBinaryChoice = null;
+        }
+
+        // 選擇中央選項 - 顯示該選項的詳細界面
+        function selectCenterOption(optionIndex) {
+            selectedMultiOption = optionIndex;
+            
+            // 更新中央選項卡片的active狀態
+            const centerCards = document.querySelectorAll('.center-option-card');
+            centerCards.forEach((card, index) => {
+                if (index === optionIndex) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+            
+            // 顯示右側選項詳情
+            showOptionDetail(optionIndex);
+        }
+
+        // 選擇多選項 - 顯示該選項的詳細界面
+        function selectMultiOption(optionIndex) {
+            selectedMultiOption = optionIndex;
+            selectedBinaryChoice = null;
+            
+            // 更新選項按鈕狀態
+            document.querySelectorAll('.option-item-btn').forEach((btn, index) => {
+                if (index === optionIndex) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // 顯示詳細界面
+            showOptionDetail(optionIndex);
+        }
+
+        // 顯示選項詳細界面
+        function showOptionDetail(optionIndex) {
+            const option = currentTopic.options[optionIndex];
+            const pool = currentTopic.innerPools ? currentTopic.innerPools[optionIndex] : null;
+            const yesAmount = pool ? pool.yesAmount : 0;
+            const noAmount = pool ? pool.noAmount : 0;
+            const totalAmount = pool ? pool.totalAmount : 0;
+            
+            const yesPercentage = totalAmount > 0 ? ((yesAmount / totalAmount) * 100).toFixed(1) : '50.0';
+            const noPercentage = totalAmount > 0 ? ((noAmount / totalAmount) * 100).toFixed(1) : '50.0';
+            
+            // 檢查該選項是否已Pump
+            const isPumped = currentTopic.outerPools && currentTopic.outerPools[optionIndex];
+            const statusClass = isPumped ? 'pumped' : 'pk';
+            const statusText = isPumped ? '已上線' : 'PK中';
+            
+            // 更新詳細界面內容
+            document.getElementById('selectedOptionTitle').textContent = option;
+            document.getElementById('selectedOptionStatus').className = `option-status ${statusClass}`;
+            document.getElementById('selectedOptionStatus').textContent = statusText;
+            document.getElementById('pumpProgress').textContent = 
+                `距離上線: ${Math.max(0, currentTopic.pumpCondition - totalAmount)} $`;
+            
+            // 更新YES/NO數據
+            document.getElementById('yesAmount').textContent = `${yesAmount} $`;
+            document.getElementById('yesPercentage').textContent = `${yesPercentage}%`;
+            document.getElementById('yesIndicator').style.width = `${yesPercentage}%`;
+            
+            document.getElementById('noAmount').textContent = `${noAmount} $`;
+            document.getElementById('noPercentage').textContent = `${noPercentage}%`;
+            document.getElementById('noIndicator').style.width = `${noPercentage}%`;
+            
+            // 更新資金池信息
+            document.getElementById('optionTotalPool').textContent = `${totalAmount} $`;
+            const participants = Math.floor(totalAmount / 50) + Math.floor(Math.random() * 5);
+            document.getElementById('optionParticipants').textContent = `${participants} 人`;
+            
+            // 隱藏無選擇提示，顯示詳細界面
+            document.getElementById('noOptionSelected').style.display = 'none';
+            document.getElementById('selectedOptionDetail').style.display = 'block';
+            
+            // 清除選擇狀態
+            document.querySelectorAll('#selectedOptionDetail .binary-choice').forEach(choice => {
+                choice.classList.remove('selected');
+            });
+        }
+
+        // 選擇YES/NO
+        function selectOptionBinary(choice) {
+            selectedBinaryChoice = choice;
+            
+            // 更新UI
+            document.querySelectorAll('#selectedOptionDetail .binary-choice').forEach(element => {
+                element.classList.remove('selected');
+            });
+            
+            const selectedElement = document.getElementById(choice + 'Choice');
+            if (selectedElement) {
+                selectedElement.classList.add('selected');
+            }
+        }
+
+        // 獲取多選項狀態
+        function getMultiOptionStatus() {
+            if (!currentTopic || !currentTopic.options || !currentTopic.outerPools) {
+                return 'inner'; // 全部在PK
+            }
+            
+            let pumpedCount = 0;
+            let totalCount = currentTopic.options.length;
+            
+            currentTopic.outerPools.forEach(pool => {
+                if (pool !== null) pumpedCount++;
+            });
+            
+            if (pumpedCount === 0) return 'inner';  // 全部PK
+            if (pumpedCount === totalCount) return 'outer'; // 全部Trade
+            return 'mixed'; // 混合狀態
+        }
+
+        // 更新混合界面
+        function updateMixedInterface() {
+            if (!currentTopic || !currentTopic.options) return;
+            
+            const pkGrid = document.getElementById('mixedPkGrid');
+            const tradeGrid = document.getElementById('mixedTradeGrid');
+            const pkSection = document.getElementById('pkSectionMulti');
+            const tradeSection = document.getElementById('tradeSectionMulti');
+            
+            if (!pkGrid || !tradeGrid) return;
+            
+            pkGrid.innerHTML = '';
+            tradeGrid.innerHTML = '';
+            
+            let hasPkOptions = false;
+            let hasTradeOptions = false;
+            
+            currentTopic.options.forEach((option, index) => {
+                const isPumped = currentTopic.outerPools && currentTopic.outerPools[index];
+                
+                if (isPumped) {
+                    // Trade選項
+                    hasTradeOptions = true;
+                    const outerPool = currentTopic.outerPools[index];
+                    const yesPrice = outerPool.yesAmount / (outerPool.yesAmount + outerPool.noAmount);
+                    const noPrice = 1 - yesPrice;
+                    
+                    const tradeCard = document.createElement('div');
+                    tradeCard.className = 'lmsr-option-card';
+                    tradeCard.innerHTML = `
+                        <div class="option-header">
+                            <div class="option-title">${option}</div>
+                            <span class="option-status pumped">已Pump</span>
+                        </div>
+                        <div class="binary-prices">
+                            <div class="price-item yes" onclick="tradeMixedOption(${index}, 'yes')">
+                                <div class="price-label">YES</div>
+                                <div class="price-value">${(yesPrice * 100).toFixed(1)}%</div>
+                                <button class="trade-btn yes">買入</button>
+                            </div>
+                            <div class="price-item no" onclick="tradeMixedOption(${index}, 'no')">
+                                <div class="price-label">NO</div>
+                                <div class="price-value">${(noPrice * 100).toFixed(1)}%</div>
+                                <button class="trade-btn no">買入</button>
+                            </div>
+                        </div>
+                    `;
+                    tradeGrid.appendChild(tradeCard);
+                } else {
+                    // PK選項
+                    hasPkOptions = true;
+                    const pool = currentTopic.innerPools ? currentTopic.innerPools[index] : null;
+                    const yesAmount = pool ? pool.yesAmount : 0;
+                    const noAmount = pool ? pool.noAmount : 0;
+                    const totalAmount = pool ? pool.totalAmount : 0;
+                    
+                    const yesPercentage = totalAmount > 0 ? ((yesAmount / totalAmount) * 100).toFixed(1) : '50.0';
+                    const noPercentage = totalAmount > 0 ? ((noAmount / totalAmount) * 100).toFixed(1) : '50.0';
+                    
+                    const pkCard = document.createElement('div');
+                    pkCard.className = 'multi-option-binary-card';
+                    pkCard.innerHTML = `
+                        <div class="option-header">
+                            <div class="option-title">${option}</div>
+                            <span class="option-status pk">PK中</span>
+                        </div>
+                        <div class="binary-choices">
+                            <div class="binary-choice yes ${selectedMultiOption === index && selectedBinaryChoice === 'yes' ? 'selected' : ''}" 
+                                 onclick="selectMixedBinary(${index}, 'yes')">
+                                <div class="choice-label">YES</div>
+                                <div class="choice-amount">${yesAmount} $</div>
+                                <div class="choice-percentage">${yesPercentage}%</div>
+                                <div class="choice-indicator" style="width: ${yesPercentage}%"></div>
+                            </div>
+                            <div class="binary-choice no ${selectedMultiOption === index && selectedBinaryChoice === 'no' ? 'selected' : ''}" 
+                                 onclick="selectMixedBinary(${index}, 'no')">
+                                <div class="choice-label">NO</div>
+                                <div class="choice-amount">${noAmount} $</div>
+                                <div class="choice-percentage">${noPercentage}%</div>
+                                <div class="choice-indicator" style="width: ${noPercentage}%"></div>
+                            </div>
+                        </div>
+                        <div class="option-footer">
+                            <span class="total-pool">總池: ${totalAmount} $</span>
+                            <span class="pump-progress">距離上線: ${Math.max(0, currentTopic.pumpCondition - totalAmount)} $</span>
+                        </div>
+                    `;
+                    pkGrid.appendChild(pkCard);
+                }
+            });
+            
+            // 顯示/隱藏相應section
+            if (pkSection) pkSection.style.display = hasPkOptions ? 'block' : 'none';
+            if (tradeSection) tradeSection.style.display = hasTradeOptions ? 'block' : 'none';
+        }
+
+        // 混合界面的選擇函數
+        function selectMixedBinary(optionIndex, choice) {
+            selectedMultiOption = optionIndex;
+            selectedBinaryChoice = choice;
+            
+            // 更新UI
+            document.querySelectorAll('#mixedPkGrid .binary-choice').forEach(element => {
+                element.classList.remove('selected');
+            });
+            
+            const selectedElement = document.querySelector(
+                `#mixedPkGrid .binary-choice.${choice}[onclick*="selectMixedBinary(${optionIndex}"]`
+            );
+            if (selectedElement) {
+                selectedElement.classList.add('selected');
+            }
+        }
+
+        // 更新Trade選項界面 - 顯示中央選項卡片
+        function updateTradeOptionsInterface() {
+            if (!currentTopic || !currentTopic.options || !currentTopic.outerPools) return;
+            
+            const grid = document.getElementById('tradeOptionGrid');
             if (!grid) return;
             
             grid.innerHTML = '';
             
+            // 只顯示已Pump的選項
             currentTopic.options.forEach((option, index) => {
-                const amount = currentTopic.innerPool[`option${index}Amount`] || 0;
-                const percentage = currentTopic.innerPool.totalAmount > 0 ? 
-                    ((amount / currentTopic.innerPool.totalAmount) * 100).toFixed(1) : '0.0';
-                const participants = Math.floor(amount / 50) + Math.floor(Math.random() * 5); // 模擬參與人數
+                const outerPool = currentTopic.outerPools[index];
+                
+                if (!outerPool) return; // 跳過未Pump的選項
+                
+                // 計算YES和NO的價格百分比
+                const totalYes = outerPool.yesAmount || 0;
+                const totalNo = outerPool.noAmount || 0;
+                const totalPool = totalYes + totalNo;
+                
+                const yesPrice = totalPool > 0 ? (totalYes / totalPool) : 0.5;
+                const noPrice = totalPool > 0 ? (totalNo / totalPool) : 0.5;
                 
                 const card = document.createElement('div');
-                card.className = 'option-card';
-                card.onclick = () => selectMultiOption(index);
+                card.className = 'trade-option-card';
+                card.setAttribute('data-option-index', index);
+                card.onclick = () => selectTradeOption(index);
+                
                 card.innerHTML = `
-                    <div class="option-header">
-                        <div class="option-name">${option}</div>
+                    <div class="trade-option-header">
+                        <div class="trade-option-title">${option}</div>
+                        <span class="trade-option-status">已Pump</span>
                     </div>
-                    <div class="option-stats">
-                        <div class="option-amount">${amount} $</div>
-                        <div class="option-percentage">${percentage}%</div>
-                        <div class="option-participants">${participants}人支持</div>
+                    <div class="trade-option-prices">
+                        <div class="trade-price-item yes" onclick="selectTradeChoice(${index}, 'yes', event)">
+                            <div class="trade-price-label">YES</div>
+                            <div class="trade-price-value">${(yesPrice * 100).toFixed(1)}%</div>
+                        </div>
+                        <div class="trade-price-item no" onclick="selectTradeChoice(${index}, 'no', event)">
+                            <div class="trade-price-label">NO</div>
+                            <div class="trade-price-value">${(noPrice * 100).toFixed(1)}%</div>
+                        </div>
                     </div>
-                    <div class="option-indicator" style="width: ${percentage}%"></div>
+                    <div class="trade-option-pool">
+                        總池: ${totalPool.toFixed(0)}$ | YES: ${totalYes.toFixed(0)}$ | NO: ${totalNo.toFixed(0)}$
+                    </div>
                 `;
                 grid.appendChild(card);
             });
+            
+            // 默認選中第一個已Pump的選項
+            const firstPumpedIndex = currentTopic.outerPools.findIndex(pool => pool !== null);
+            if (firstPumpedIndex >= 0) {
+                // 為混合狀態設置默認選擇
+                if (currentTopic.status === 'mixed') {
+                    selectedMultiOption = firstPumpedIndex;
+                    selectedBinaryChoice = 'yes';
+                }
+                
+                setTimeout(() => {
+                    selectTradeOption(firstPumpedIndex);
+                    selectTradeChoice(firstPumpedIndex, 'yes');
+                }, 100);
+            }
+        }
+        
+        // 選擇Trade選項
+        function selectTradeOption(optionIndex) {
+            // 更新選項卡片選中狀態
+            document.querySelectorAll('.trade-option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            const selectedCard = document.querySelector(`[data-option-index="${optionIndex}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+            }
+        }
+        
+        // 選擇Trade選項的YES/NO
+        function selectTradeChoice(optionIndex, choice, event) {
+            if (event) event.stopPropagation(); // 防止觸發卡片點擊
+            
+            selectedMultiOption = optionIndex;
+            selectedBinaryChoice = choice;
+            
+            // 更新選擇狀態
+            document.querySelectorAll('.trade-price-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            const selectedItem = document.querySelector(`[data-option-index="${optionIndex}"] .trade-price-item.${choice}`);
+            if (selectedItem) {
+                selectedItem.classList.add('selected');
+            }
+            
+            // 選中對應的卡片
+            selectTradeOption(optionIndex);
+            
+            // 更新右側交易器
+            updateMultiLMSRInterface();
         }
 
         // 更新多選項Trade LMSR界面
@@ -3434,34 +5209,142 @@
             if (!currentTopic || !currentTopic.options) return;
             
             const grid = document.getElementById('multiLmsrGrid');
+            const sectionTitle = document.querySelector('#multiOptionOuter .section-title');
             if (!grid) return;
+            
+            // 檢查是否為混合狀態
+            const isMixed = currentTopic.status === 'mixed';
+            
+            if (isMixed && selectedMultiOption !== undefined && selectedBinaryChoice) {
+                // 混合狀態下，只顯示選中選項的單個交易器
+                const optionIndex = selectedMultiOption;
+                const choice = selectedBinaryChoice;
+                const option = currentTopic.options[optionIndex];
+                const outerPool = currentTopic.outerPools[optionIndex];
+                
+                if (outerPool) {
+                    if (sectionTitle) sectionTitle.textContent = `交易: ${option} - ${choice.toUpperCase()}`;
+                    
+                    // 單個選項的交易界面
+                    grid.innerHTML = `
+                        <div class="single-option-trader">
+                            <div class="option-info">
+                                <h4>${option}</h4>
+                                <span class="selected-choice ${choice}">${choice.toUpperCase()}</span>
+                            </div>
+                            <div class="trading-buttons">
+                                <button class="btn btn-success" onclick="buyMultiLMSR(${optionIndex}, '${choice}')">
+                                    買入 ${choice.toUpperCase()}
+                                    <small class="cost-estimate" id="buyCostEstimate">預計花費: 0$</small>
+                                </button>
+                                <button class="btn btn-outline btn-success" onclick="sellMultiLMSR(${optionIndex}, '${choice}')">
+                                    賣出 ${choice.toUpperCase()}
+                                    <small class="income-estimate" id="sellIncomeEstimate">預計收入: 0$</small>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+            }
             
             grid.innerHTML = '';
             
+            // 只顯示已Pump的選項
             currentTopic.options.forEach((option, index) => {
-                // 簡化的價格計算
-                const basePrice = 1 / currentTopic.options.length;
-                const variance = (Math.random() - 0.5) * 0.3;
-                const price = Math.max(0.05, Math.min(0.95, basePrice + variance));
+                const isPumped = currentTopic.outerPools && currentTopic.outerPools[index];
+                
+                if (!isPumped) return; // 跳過未Pump的選項
+                
+                const outerPool = currentTopic.outerPools[index];
+                
+                // 計算YES和NO的價格
+                const totalYes = outerPool.yesAmount || 0;
+                const totalNo = outerPool.noAmount || 0;
+                const totalPool = totalYes + totalNo;
+                
+                const yesPrice = totalPool > 0 ? totalYes / totalPool : 0.5;
+                const noPrice = totalPool > 0 ? totalNo / totalPool : 0.5;
                 
                 const card = document.createElement('div');
                 card.className = 'lmsr-option-card';
                 card.innerHTML = `
                     <div class="lmsr-option-header">
                         <div class="lmsr-option-name">${option}</div>
-                        <div class="lmsr-option-price">${price.toFixed(3)} $</div>
+                        <span class="option-status pumped">已Pump</span>
                     </div>
-                    <div class="lmsr-option-actions">
-                        <button class="lmsr-mini-btn lmsr-buy-btn" onclick="buyMultiLMSR(${index})">買入</button>
-                        <button class="lmsr-mini-btn lmsr-sell-btn" onclick="sellMultiLMSR(${index})">賣出</button>
+                    <div class="binary-prices">
+                        <div class="price-item yes" onclick="selectMultiLMSRChoice(${index}, 'yes')">
+                            <div class="price-label">YES</div>
+                            <div class="price-value">${(yesPrice * 100).toFixed(1)}%</div>
+                        </div>
+                        <div class="price-item no" onclick="selectMultiLMSRChoice(${index}, 'no')">
+                            <div class="price-label">NO</div>
+                            <div class="price-value">${(noPrice * 100).toFixed(1)}%</div>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(card);
             });
+            
+            // 如果沒有已Pump的選項，顯示提示
+            if (grid.children.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-pumped-options">
+                        <div class="empty-state-icon">📊</div>
+                        <div class="empty-state-title">暫無可交易選項</div>
+                        <div class="empty-state-subtitle">該話題的選項尚未Pump到外盤</div>
+                    </div>
+                `;
+            }
         }
 
-        // 選擇多選項
+        // 選擇多選項LMSR的YES/NO
+        function selectMultiLMSRChoice(optionIndex, choice) {
+            selectedMultiOption = optionIndex;
+            selectedBinaryChoice = choice;
+            
+            // 更新選擇狀態
+            document.querySelectorAll('.price-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            const selectedItem = document.querySelector(`[onclick="selectMultiLMSRChoice(${optionIndex}, '${choice}')"]`);
+            if (selectedItem) {
+                selectedItem.classList.add('selected');
+            }
+            
+            // 更新選項標題顯示
+            const optionName = currentTopic.options[optionIndex];
+            const choiceText = choice.toUpperCase();
+            document.querySelector('#multiOptionOuter .section-title').textContent = 
+                `交易: ${optionName} - ${choiceText}`;
+        }
+
+        // 多選項二元選擇變量
         let selectedMultiOption = null;
+        let selectedBinaryChoice = null;
+
+        // 選擇多選項的二元選擇
+        function selectMultiBinary(optionIndex, choice) {
+            selectedMultiOption = optionIndex;
+            selectedBinaryChoice = choice;
+            
+            // 更新UI - 清除所有選擇
+            document.querySelectorAll('.binary-choice').forEach(element => {
+                element.classList.remove('selected');
+            });
+            
+            // 高亮當前選擇
+            const selectedElement = document.querySelector(
+                `.binary-choice.${choice}[onclick*="selectMultiBinary(${optionIndex}"]`
+            );
+            if (selectedElement) {
+                selectedElement.classList.add('selected');
+            }
+        }
+
+        // 保留舊的選擇函數以兼容性
         function selectMultiOption(optionIndex) {
             selectedMultiOption = optionIndex;
             
@@ -3589,20 +5472,24 @@
             const poolDetailsSection = document.getElementById('poolDetailsSection');
             const isOuter = currentTopic.status === 'outer';
 
-            if (isOuter && currentTopic.outerPool) {
+            const outerDataExists = currentTopic.outerPool || (currentTopic.outerPools && currentTopic.outerPools.some(pool => pool !== null));
+            
+            if (isOuter && outerDataExists) {
                 const isMultiOption = currentTopic.options && currentTopic.options.length > 2;
                 let outerPoolRowsHTML = '';
                 
-                if (isMultiOption) {
+                if (isMultiOption && currentTopic.outerPools) {
                     // 多選項Trade資金池顯示
                     currentTopic.options.forEach((option, index) => {
-                        const amount = currentTopic.outerPool[`option${index}Amount`] || 0;
-                        outerPoolRowsHTML += `
-                            <div class="pool-row">
-                                <span class="pool-label">${option}獎池：</span>
-                                <span class="pool-value">${amount} $</span>
-                            </div>
-                        `;
+                        const pool = currentTopic.outerPools[index];
+                        if (pool) {
+                            outerPoolRowsHTML += `
+                                <div class="pool-row">
+                                    <span class="pool-label">${option}獎池：</span>
+                                    <span class="pool-value">${pool.totalAmount} $</span>
+                                </div>
+                            `;
+                        }
                     });
                 } else {
                     // 二元選項Trade資金池顯示
@@ -3619,32 +5506,34 @@
                 }
                 
                 // Trade状态 - 显示市场信息和价格走势
-                poolDetailsSection.innerHTML = `
-                        <!-- Trade信息 -->
-                        <div class="pool-section">
-                            <div class="pool-section-header">
-                                <span class="pool-section-title">Trade信息</span>
-                                <span class="pool-section-badge trade">LMSR</span>
+                if (currentTopic.outerPool) {
+                    // 單選項話題顯示詳細信息
+                    poolDetailsSection.innerHTML = `
+                            <!-- Trade信息 -->
+                            <div class="pool-section">
+                                <div class="pool-section-header">
+                                    <span class="pool-section-title">Trade信息</span>
+                                    <span class="pool-section-badge trade">LMSR</span>
+                                </div>
+                                <div class="pool-info">
+                                    <div class="pool-row">
+                                        <span class="pool-label">总流水：</span>
+                                        <span class="pool-value">${currentTopic.outerPool.totalVolume || 0} $</span>
+                                    </div>
+                                    <div class="pool-row">
+                                        <span class="pool-label">市場流動性：</span>
+                                        <span class="pool-value">${currentTopic.outerPool.totalAmount} $</span>
+                                    </div>
+                                    <div class="pool-row">
+                                        <span class="pool-label">当前YES价格：</span>
+                                        <span class="pool-value" style="color: #10b981;">${((currentTopic.outerPool.yesAmount / (currentTopic.outerPool.yesAmount + currentTopic.outerPool.noAmount)) * 100).toFixed(1)}%</span>
+                                    </div>
+                                    <div class="pool-row">
+                                        <span class="pool-label">当前NO价格：</span>
+                                        <span class="pool-value" style="color: #ef4444;">${((currentTopic.outerPool.noAmount / (currentTopic.outerPool.yesAmount + currentTopic.outerPool.noAmount)) * 100).toFixed(1)}%</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="pool-info">
-                                <div class="pool-row">
-                                    <span class="pool-label">总流水：</span>
-                                    <span class="pool-value">${currentTopic.outerPool.totalVolume || 0} $</span>
-                                </div>
-                                <div class="pool-row">
-                                    <span class="pool-label">市場流動性：</span>
-                                    <span class="pool-value">${currentTopic.outerPool.totalAmount} $</span>
-                                </div>
-                                <div class="pool-row">
-                                    <span class="pool-label">当前YES价格：</span>
-                                    <span class="pool-value" style="color: #10b981;">${((currentTopic.outerPool.yesAmount / (currentTopic.outerPool.yesAmount + currentTopic.outerPool.noAmount)) * 100).toFixed(1)}%</span>
-                                </div>
-                                <div class="pool-row">
-                                    <span class="pool-label">当前NO价格：</span>
-                                    <span class="pool-value" style="color: #ef4444;">${((currentTopic.outerPool.noAmount / (currentTopic.outerPool.yesAmount + currentTopic.outerPool.noAmount)) * 100).toFixed(1)}%</span>
-                                </div>
-                            </div>
-                        </div>
 
                     <!-- PK獎金池 -->
                     <div class="pool-section">
@@ -3702,6 +5591,28 @@
                         • Trade交易手續費的40%持续回流PK
                     </div>
                 `;
+                } else {
+                    // 多選項話題的簡化顯示
+                    poolDetailsSection.innerHTML = `
+                        <div class="pool-details-container" style="display: block;">
+                            <div class="pool-section-header">
+                                <span class="pool-section-title">多選項Trade</span>
+                                <span class="pool-section-badge trade">LMSR</span>
+                            </div>
+                            <div class="pool-info">
+                                <div class="pool-row">
+                                    <span class="pool-label">已Pump選項：</span>
+                                    <span class="pool-value">${currentTopic.outerPools ? currentTopic.outerPools.filter(pool => pool !== null).length : 0} 個</span>
+                                </div>
+                                <div class="pool-row">
+                                    <span class="pool-label">總選項數：</span>
+                                    <span class="pool-value">${currentTopic.options ? currentTopic.options.length : 0} 個</span>
+                                </div>
+                                ${outerPoolRowsHTML}
+                            </div>
+                        </div>
+                    `;
+                }
             } else {
                 // PK状态 - 显示当前状态和Pump进度
                 const innerTotal = currentTopic.innerPool?.totalAmount || 0;
@@ -3766,7 +5677,13 @@
                 if (isMultiOption) {
                     // 多選項話題顯示
                     currentTopic.options.forEach((option, index) => {
-                        const amount = currentTopic.innerPool[`option${index}Amount`] || 0;
+                        let amount = 0;
+                        if (currentTopic.innerPools && currentTopic.innerPools[index]) {
+                            amount = currentTopic.innerPools[index].totalAmount || 0;
+                        } else if (currentTopic.innerPool) {
+                            // 兼容舊數據結構
+                            amount = currentTopic.innerPool[`option${index}Amount`] || 0;
+                        }
                         poolRowsHTML += `
                             <div class="pool-row">
                                 <span class="pool-label">${option}：</span>
@@ -3867,29 +5784,62 @@
 
             // 更新PK持倉
             if (isMultiOption) {
-                // 多選項PK持倉 - 動態生成內容
+                // 多選項PK持倉 - 按新的YES/NO結構顯示
                 const innerPositionsContent = document.querySelector('#myInnerPositions .pool-info');
                 if (innerPositionsContent) {
                     let positionsHTML = '';
                     let totalInnerValue = 0;
                     
                     currentTopic.options.forEach((option, index) => {
-                        const amount = currentTopic[`myOption${index}`] || 0;
-                        totalInnerValue += amount;
-                        positionsHTML += `
-                            <div class="pool-row">
-                                <span class="pool-label">${option}：</span>
-                                <span class="pool-value">${amount} $</span>
-                            </div>
-                        `;
+                        // 使用新的持倉結構 myInnerPositions[index] = [yes, no]
+                        const positions = currentTopic.myInnerPositions ? currentTopic.myInnerPositions[index] : [0, 0];
+                        const yesPosition = positions[0] || 0;
+                        const noPosition = positions[1] || 0;
+                        const optionTotal = yesPosition + noPosition;
+                        
+                        if (optionTotal > 0) {
+                            totalInnerValue += optionTotal;
+                            positionsHTML += `
+                                <div class="pool-row option-position-header">
+                                    <span class="pool-label">${option}：</span>
+                                    <span class="pool-value">${optionTotal} $</span>
+                                </div>
+                            `;
+                            
+                            if (yesPosition > 0) {
+                                positionsHTML += `
+                                    <div class="pool-row sub-position">
+                                        <span class="pool-label">　└ YES：</span>
+                                        <span class="pool-value yes-position">${yesPosition} $</span>
+                                    </div>
+                                `;
+                            }
+                            
+                            if (noPosition > 0) {
+                                positionsHTML += `
+                                    <div class="pool-row sub-position">
+                                        <span class="pool-label">　└ NO：</span>
+                                        <span class="pool-value no-position">${noPosition} $</span>
+                                    </div>
+                                `;
+                            }
+                        }
                     });
                     
-                    positionsHTML += `
-                        <div class="pool-row">
-                            <span class="pool-label">總計：</span>
-                            <span class="pool-value">${totalInnerValue} $</span>
-                        </div>
-                    `;
+                    if (totalInnerValue > 0) {
+                        positionsHTML += `
+                            <div class="pool-row total-row">
+                                <span class="pool-label">總計：</span>
+                                <span class="pool-value">${totalInnerValue} $</span>
+                            </div>
+                        `;
+                    } else {
+                        positionsHTML = `
+                            <div class="pool-row" style="text-align: center; color: #9ca3af; padding: 1rem;">
+                                <span>暂无PK持仓</span>
+                            </div>
+                        `;
+                    }
                     
                     innerPositionsContent.innerHTML = positionsHTML;
                 }
@@ -4112,13 +6062,16 @@
                 const netAmount = amount - fee;
                 
                 // 计算当前选项的支持比例
-                const totalPool = currentTopic.innerPool?.totalAmount || 0;
-                const optionKey = `option${selectedMultiOption}Amount`;
-                const optionAmount = currentTopic.innerPool?.[optionKey] || 0;
-                const supportRatio = totalPool > 0 ? ((optionAmount / totalPool) * 100).toFixed(1) : '0.0';
+                const selectedPool = currentTopic.innerPools ? currentTopic.innerPools[selectedMultiOption] : null;
+                const totalPool = selectedPool ? selectedPool.totalAmount : 0;
+                const optionAmount = selectedBinaryChoice === 'yes' ? 
+                    (selectedPool ? selectedPool.yesAmount : 0) : 
+                    (selectedPool ? selectedPool.noAmount : 0);
+                const supportRatio = totalPool > 0 ? ((optionAmount / totalPool) * 100).toFixed(1) : '50.0';
                 
                 // 显示確認模态框
-                document.getElementById('confirmOption').innerHTML = `${currentTopic.options[selectedMultiOption]} <span id="confirmRatio">(${supportRatio}%)</span>`;
+                const choiceText = selectedBinaryChoice ? selectedBinaryChoice.toUpperCase() : 'YES';
+                document.getElementById('confirmOption').innerHTML = `${currentTopic.options[selectedMultiOption]} - ${choiceText} <span id="confirmRatio">(${supportRatio}%)</span>`;
                 document.getElementById('confirmNetAmount').textContent = `${netAmount.toFixed(2)} $`;
                 document.getElementById('confirmFee').textContent = `${fee.toFixed(2)} $ (5%)`;
                 document.getElementById('confirmTotalPool').textContent = `${totalPool.toFixed(2)} $`;
@@ -4185,20 +6138,31 @@
             
             // 确保PK数据结构存在并更新数据
             if (isMultiOption) {
-                // 多选项逻辑
-                if (!currentTopic.innerPool) {
-                    currentTopic.innerPool = { totalAmount: 0 };
+                // 多选项逻辑 - 使用新的独立YES/NO池结构
+                if (!currentTopic.innerPools) {
+                    currentTopic.innerPools = [];
                     for (let i = 0; i < currentTopic.options.length; i++) {
-                        currentTopic.innerPool[`option${i}Amount`] = 0;
+                        currentTopic.innerPools[i] = { yesAmount: 0, noAmount: 0, totalAmount: 0 };
                     }
                 }
                 
-                const optionKey = `option${selectedMultiOption}Amount`;
-                const myOptionKey = `myOption${selectedMultiOption}`;
+                if (!currentTopic.myInnerPositions) {
+                    currentTopic.myInnerPositions = [];
+                    for (let i = 0; i < currentTopic.options.length; i++) {
+                        currentTopic.myInnerPositions[i] = [0, 0]; // [yes, no]
+                    }
+                }
                 
-                currentTopic.innerPool[optionKey] = (currentTopic.innerPool[optionKey] || 0) + netAmount;
-                currentTopic.innerPool.totalAmount += netAmount;
-                currentTopic[myOptionKey] = (currentTopic[myOptionKey] || 0) + netAmount;
+                // 更新选中选项的资金池
+                const selectedPool = currentTopic.innerPools[selectedMultiOption];
+                if (selectedBinaryChoice === 'yes') {
+                    selectedPool.yesAmount += netAmount;
+                    currentTopic.myInnerPositions[selectedMultiOption][0] += netAmount;
+                } else {
+                    selectedPool.noAmount += netAmount;
+                    currentTopic.myInnerPositions[selectedMultiOption][1] += netAmount;
+                }
+                selectedPool.totalAmount += netAmount;
             } else {
                 // 二元选项逻辑
                 if (!currentTopic.innerPool) {
@@ -4221,30 +6185,45 @@
                 sampleTopics[topicIndex] = {...currentTopic};
             }
 
-            // 检查是否触发Pump（使用自定義條件，私密話題不觸發）
-            const pumpThreshold = currentTopic.pumpCondition || 1000;
-            if (currentTopic.innerPool.totalAmount >= pumpThreshold && 
-                currentTopic.status === 'inner' && 
-                !currentTopic.isPrivate) {
-                triggerPump();
+            // 检查是否触发Pump
+            if (isMultiOption) {
+                // 多选项：检查当前选项是否达到Pump条件
+                const pumpThreshold = currentTopic.pumpCondition || 1000;
+                const selectedPool = currentTopic.innerPools[selectedMultiOption];
+                
+                if (selectedPool.totalAmount >= pumpThreshold && 
+                    currentTopic.status !== 'ended' && 
+                    !currentTopic.isPrivate) {
+                    triggerMultiOptionPump(selectedMultiOption);
+                } else {
+                    updateTradingInterface();
+                }
             } else {
-                // 如果还是PK，更新界面提示
-                updateTradingInterface();
+                // 二元选项：原逻辑
+                const pumpThreshold = currentTopic.pumpCondition || 1000;
+                if (currentTopic.innerPool.totalAmount >= pumpThreshold && 
+                    currentTopic.status === 'inner' && 
+                    !currentTopic.isPrivate) {
+                    triggerPump();
+                } else {
+                    updateTradingInterface();
+                }
             }
 
             updatePoolDisplay();
             closeModal();
             
             // 计算下注选项的支持比例并显示成功弹窗
-            const totalPool = currentTopic.innerPool.totalAmount;
-            let optionAmount, optionText, supportRatio;
+            let totalPool, optionAmount, optionText, supportRatio;
             
             if (isMultiOption) {
-                const optionKey = `option${selectedMultiOption}Amount`;
-                optionAmount = currentTopic.innerPool[optionKey];
-                optionText = currentTopic.options[selectedMultiOption];
-                supportRatio = totalPool > 0 ? ((optionAmount / totalPool) * 100).toFixed(1) : '0.0';
+                const selectedPool = currentTopic.innerPools[selectedMultiOption];
+                totalPool = selectedPool.totalAmount;
+                optionAmount = selectedBinaryChoice === 'yes' ? selectedPool.yesAmount : selectedPool.noAmount;
+                optionText = `${currentTopic.options[selectedMultiOption]} - ${selectedBinaryChoice.toUpperCase()}`;
+                supportRatio = totalPool > 0 ? ((optionAmount / totalPool) * 100).toFixed(1) : '50.0';
             } else {
+                totalPool = currentTopic.innerPool.totalAmount;
                 optionAmount = selectedOption === 'yes' ? currentTopic.innerPool.yesAmount : currentTopic.innerPool.noAmount;
                 optionText = selectedOption.toUpperCase();
                 supportRatio = totalPool > 0 ? ((optionAmount / totalPool) * 100).toFixed(1) : '0.0';
@@ -4338,6 +6317,57 @@
             // 显示Pump通知
             setTimeout(() => {
                 document.getElementById('pumpModal').classList.add('active');
+            }, 500);
+        }
+
+        // 触发多选项Pump机制（单个选项）
+        function triggerMultiOptionPump(optionIndex) {
+            if (!currentTopic || !currentTopic.innerPools) return;
+            
+            const option = currentTopic.options[optionIndex];
+            const innerPool = currentTopic.innerPools[optionIndex];
+            
+            // 找出下注金額較小的一方
+            const smallerAmount = Math.min(innerPool.yesAmount, innerPool.noAmount);
+            const basePool = smallerAmount * 0.5;
+            
+            // 根据PK獎金比例设置初始虚拟流动性
+            const yesRatio = innerPool.yesAmount / innerPool.totalAmount;
+            const noRatio = innerPool.noAmount / innerPool.totalAmount;
+            
+            // 初始化外盘池数组（如果不存在）
+            if (!currentTopic.outerPools) {
+                currentTopic.outerPools = new Array(currentTopic.options.length).fill(null);
+            }
+            
+            // 为该选项创建外盘流动性
+            currentTopic.outerPools[optionIndex] = {
+                basePool: basePool,
+                yesAmount: yesRatio * basePool * 2,
+                noAmount: noRatio * basePool * 2,
+                totalAmount: basePool * 2,
+                tradingFeeToInner: 0
+            };
+            
+            // 如果有任何选项已Pump，更新话题状态
+            const hasAnyPumped = currentTopic.outerPools.some(pool => pool !== null);
+            if (hasAnyPumped) {
+                const allPumped = currentTopic.outerPools.every(pool => pool !== null);
+                currentTopic.status = allPumped ? 'outer' : 'mixed'; // 全部Pump为outer，部分Pump为mixed
+            }
+            
+            // 更新sampleTopics中的数据
+            const topicIndex = sampleTopics.findIndex(t => t.id === currentTopic.id);
+            if (topicIndex !== -1) {
+                sampleTopics[topicIndex] = {...currentTopic};
+            }
+            
+            // 更新交易界面
+            updateTradingInterface();
+            
+            // 显示选项Pump成功提示
+            setTimeout(() => {
+                alert(`🎉 "${option}"已成功上线到Trade市场！\n\n您可以：\n• 继续在其他选项进行PK\n• 在Trade市场进行LMSR交易`);
             }, 500);
         }
 
@@ -4756,7 +6786,30 @@
 
         // 生成模擬價格數據
         function generatePriceData() {
-            const { yesAmount, noAmount } = currentTopic.outerPool;
+            // 處理多選項話題的價格數據生成
+            let yesAmount = 0, noAmount = 0;
+            
+            if (currentTopic.outerPool) {
+                // 單選項話題
+                yesAmount = currentTopic.outerPool.yesAmount;
+                noAmount = currentTopic.outerPool.noAmount;
+            } else if (currentTopic.outerPools) {
+                // 多選項話題 - 使用第一個已Pump的選項
+                const firstPumpedPool = currentTopic.outerPools.find(pool => pool !== null);
+                if (firstPumpedPool) {
+                    yesAmount = firstPumpedPool.yesAmount;
+                    noAmount = firstPumpedPool.noAmount;
+                } else {
+                    // 如果沒有已Pump的選項，使用默認值
+                    yesAmount = 500;
+                    noAmount = 500;
+                }
+            } else {
+                // 默認值
+                yesAmount = 500;
+                noAmount = 500;
+            }
+            
             const totalAmount = yesAmount + noAmount;
             const baseYesPrice = totalAmount > 0 ? yesAmount / totalAmount : 0.5;
             const baseNoPrice = 1 - baseYesPrice;
@@ -4829,7 +6882,7 @@
             const maxPrice = Math.max(...allYesPrices, ...allNoPrices);
             const priceRange = maxPrice - minPrice || 0.1;
             
-            const chartWidth = chartContainer.clientWidth - 32;
+            const chartWidth = Math.max(100, chartContainer.clientWidth - 32);
             const chartHeight = 200;
             const pointWidth = chartWidth / priceData.length;
             
