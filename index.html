@@ -2608,6 +2608,35 @@
             overflow: hidden;
         }
 
+        /* 圖表按鈕樣式 */
+        .chart-btn {
+            padding: 0.5rem 1rem;
+            margin-left: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .chart-btn.active {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .chart-btn:not(.active) {
+            background: rgba(75, 85, 99, 0.2);
+            border-color: #4b5563;
+            color: #9ca3af;
+        }
+
+        .chart-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
         /* 分享卡片樣式 */
         .share-modal {
             position: fixed;
@@ -3238,7 +3267,23 @@
                         这里显示话题的详细描述内容...
                     </div>
 
-
+                    <!-- Trade模式價格折線圖 -->
+                    <div id="centerKlineSection" style="margin-top: 2rem; display: none;">
+                        <div class="kline-chart-container" style="background: rgba(15, 23, 42, 0.7); border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(148, 163, 184, 0.1);">
+                            <div class="chart-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                                <h4 class="chart-title" style="color: #ffffff; margin: 0; font-size: 1.1rem; font-weight: 600;">📈 YES價格走勢圖</h4>
+                                <div class="chart-controls">
+                                    <button class="chart-btn active" onclick="switchTimeframe('1m')">1分鐘</button>
+                                    <button class="chart-btn" onclick="switchTimeframe('5m')">5分鐘</button>
+                                    <button class="chart-btn" onclick="switchTimeframe('15m')">15分鐘</button>
+                                    <button class="chart-btn" onclick="switchTimeframe('1h')">1小時</button>
+                                </div>
+                            </div>
+                            <div id="centerKlineChart" style="position: relative; height: 250px; width: 100%; background: rgba(30, 41, 59, 0.3); border-radius: 8px;">
+                                <!-- 價格折線圖將在這裡生成 -->
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- 多選項PK選項列表區域 -->
                     <div id="centerOptionsSection" style="margin-top: 2rem; display: none;">
@@ -3865,54 +3910,6 @@
                 myInnerNo: 0,
                 myOuterYes: 0,
                 myOuterNo: 0
-            },
-            {
-                id: 4,
-                title: "以太坊2025年價格預測",
-                category: "crypto",
-                categoryName: "加密貨幣",
-                avatar: "⧫",
-                options: ["突破8000美元", "達到10000美元", "創歷史新高", "回調至3000美元"],
-                // 所有選項都已完全Pump到外盤，不再有innerPools
-                // 外盤池（所有選項都已Pump）
-                outerPools: [
-                    { // 突破8000美元
-                        yesAmount: 400,
-                        noAmount: 200,
-                        totalAmount: 600,
-                        tradingFeeToInner: 8
-                    },
-                    { // 達到10000美元
-                        yesAmount: 300,
-                        noAmount: 300,
-                        totalAmount: 600,
-                        tradingFeeToInner: 12
-                    },
-                    { // 創歷史新高
-                        yesAmount: 250,
-                        noAmount: 350,
-                        totalAmount: 600,
-                        tradingFeeToInner: 15
-                    },
-                    { // 回調至3000美元
-                        yesAmount: 150,
-                        noAmount: 450,
-                        totalAmount: 600,
-                        tradingFeeToInner: 20
-                    }
-                ],
-                endTime: "2025-12-31",
-                status: "outer", // 完全Trade狀態：所有選項都已Pump
-                description: "2025年以太坊價格的多項預測，分析市場趨勢和技術發展對價格的影響。",
-                isPrivate: false,
-                pumpCondition: 200, // 每個選項的Pump門檻
-                // 我在各選項Trade的持倉 [YES, NO]
-                myOuterPositions: [
-                    [8, 2],   // 突破8000美元：YES 8份, NO 2份
-                    [5, 5],   // 達到10000美元：YES 5份, NO 5份
-                    [3, 7],   // 創歷史新高：YES 3份, NO 7份
-                    [0, 10]   // 回調至3000美元：YES 0份, NO 10份
-                ]
             },
             {
                 id: 5,
@@ -5897,7 +5894,8 @@
             }
 
             // 根据状态显示/隐藏Trade持倉
-            if (isOuter && currentTopic.outerPool) {
+            const hasOuterData = currentTopic.outerPool || (currentTopic.outerPools && currentTopic.outerPools.some(pool => pool !== null));
+            if (isOuter && hasOuterData) {
                 myOuterPositions.style.display = 'block';
                 
                 if (isMultiOption) {
@@ -5908,20 +5906,46 @@
                         let totalOuterValue = 0;
                         
                         currentTopic.options.forEach((option, index) => {
-                            const tokens = currentTopic[`myOuterOption${index}`] || 0;
-                            // 簡化的價格計算（基於份額比例）
-                            const optionAmount = currentTopic.outerPool[`option${index}Amount`] || 0;
-                            const price = currentTopic.outerPool.totalAmount > 0 ? 
-                                optionAmount / currentTopic.outerPool.totalAmount : 0;
-                            const value = tokens * price;
-                            totalOuterValue += value;
+                            // 使用正確的數據結構 myOuterPositions[index] = [yes, no]
+                            const positions = currentTopic.myOuterPositions ? currentTopic.myOuterPositions[index] : [0, 0];
+                            const yesTokens = positions[0] || 0;
+                            const noTokens = positions[1] || 0;
+                            const totalTokens = yesTokens + noTokens;
                             
-                            positionsHTML += `
-                                <div class="pool-row">
-                                    <span class="pool-label">${option}代幣：</span>
-                                    <span class="pool-value">${tokens} 個</span>
-                                </div>
-                            `;
+                            if (totalTokens > 0) {
+                                // 計算當前價值（簡化計算）
+                                const outerPool = currentTopic.outerPools ? currentTopic.outerPools[index] : null;
+                                const totalPool = outerPool ? (outerPool.yesAmount + outerPool.noAmount) : 1;
+                                const yesValue = yesTokens * (outerPool ? outerPool.yesAmount / totalPool : 0.5);
+                                const noValue = noTokens * (outerPool ? outerPool.noAmount / totalPool : 0.5);
+                                const optionValue = yesValue + noValue;
+                                totalOuterValue += optionValue;
+                                
+                                positionsHTML += `
+                                    <div class="pool-row option-position-header">
+                                        <span class="pool-label">${option}：</span>
+                                        <span class="pool-value">${totalTokens.toFixed(0)} 個 (${optionValue.toFixed(1)}$)</span>
+                                    </div>
+                                `;
+                                
+                                if (yesTokens > 0) {
+                                    positionsHTML += `
+                                        <div class="pool-row sub-position">
+                                            <span class="pool-label">　└ YES：</span>
+                                            <span class="pool-value yes-position">${yesTokens.toFixed(0)} 個</span>
+                                        </div>
+                                    `;
+                                }
+                                
+                                if (noTokens > 0) {
+                                    positionsHTML += `
+                                        <div class="pool-row sub-position">
+                                            <span class="pool-label">　└ NO：</span>
+                                            <span class="pool-value no-position">${noTokens.toFixed(0)} 個</span>
+                                        </div>
+                                    `;
+                                }
+                            }
                         });
                         
                         positionsHTML += `
@@ -6875,11 +6899,10 @@
             // 清空現有內容
             chartContainer.innerHTML = '';
             
-            // 計算價格範圍
+            // 只計算YES價格範圍
             const allYesPrices = priceData.map(p => p.yesPrice);
-            const allNoPrices = priceData.map(p => p.noPrice);
-            const minPrice = Math.min(...allYesPrices, ...allNoPrices);
-            const maxPrice = Math.max(...allYesPrices, ...allNoPrices);
+            const minPrice = Math.min(...allYesPrices);
+            const maxPrice = Math.max(...allYesPrices);
             const priceRange = maxPrice - minPrice || 0.1;
             
             const chartWidth = Math.max(100, chartContainer.clientWidth - 32);
@@ -6911,84 +6934,72 @@
             const yesLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             yesLine.setAttribute('d', yesPath);
             yesLine.setAttribute('stroke', '#10b981');
-            yesLine.setAttribute('stroke-width', '2');
+            yesLine.setAttribute('stroke-width', '3');
             yesLine.setAttribute('fill', 'none');
             svg.appendChild(yesLine);
             
-            // 繪製NO價格線
-            let noPath = '';
+            // 添加YES價格數據點
             priceData.forEach((point, index) => {
-                const x = (index / (priceData.length - 1)) * chartWidth;
-                const y = chartHeight - ((point.noPrice - minPrice) / priceRange) * chartHeight;
-                
-                if (index === 0) {
-                    noPath += `M ${x} ${y}`;
-                } else {
-                    noPath += ` L ${x} ${y}`;
+                if (index % 2 === 0) { // 每2個點顯示一個
+                    const x = (index / (priceData.length - 1)) * chartWidth;
+                    const yesY = chartHeight - ((point.yesPrice - minPrice) / priceRange) * chartHeight;
+                    
+                    // YES數據點
+                    const yesCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    yesCircle.setAttribute('cx', x);
+                    yesCircle.setAttribute('cy', yesY);
+                    yesCircle.setAttribute('r', '4');
+                    yesCircle.setAttribute('fill', '#10b981');
+                    svg.appendChild(yesCircle);
                 }
+                
             });
             
-            const noLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            noLine.setAttribute('d', noPath);
-            noLine.setAttribute('stroke', '#ef4444');
-            noLine.setAttribute('stroke-width', '2');
-            noLine.setAttribute('fill', 'none');
-            svg.appendChild(noLine);
+            // 添加網格線
+            for (let i = 0; i <= 4; i++) {
+                const y = (i / 4) * chartHeight;
+                const gridLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                gridLine.setAttribute('x1', 0);
+                gridLine.setAttribute('y1', y);
+                gridLine.setAttribute('x2', chartWidth);
+                gridLine.setAttribute('y2', y);
+                gridLine.setAttribute('stroke', 'rgba(148, 163, 184, 0.2)');
+                gridLine.setAttribute('stroke-width', '1');
+                svg.appendChild(gridLine);
+            }
             
-            // 添加數據點
-            priceData.forEach((point, index) => {
-                const x = (index / (priceData.length - 1)) * chartWidth;
-                const yesY = chartHeight - ((point.yesPrice - minPrice) / priceRange) * chartHeight;
-                const noY = chartHeight - ((point.noPrice - minPrice) / priceRange) * chartHeight;
-                
-                // YES數據點
-                const yesCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                yesCircle.setAttribute('cx', x);
-                yesCircle.setAttribute('cy', yesY);
-                yesCircle.setAttribute('r', '3');
-                yesCircle.setAttribute('fill', '#10b981');
-                svg.appendChild(yesCircle);
-                
-                // NO數據點
-                const noCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                noCircle.setAttribute('cx', x);
-                noCircle.setAttribute('cy', noY);
-                noCircle.setAttribute('r', '3');
-                noCircle.setAttribute('fill', '#ef4444');
-                svg.appendChild(noCircle);
-                
-                // 添加時間標籤
-                const timeLabel = document.createElement('div');
-                timeLabel.className = 'line-chart-label';
-                timeLabel.textContent = new Date(point.timestamp).toLocaleTimeString('zh-TW', { 
-                    hour: '2-digit', 
-                    minute: '2-digit' 
-                });
-                timeLabel.style.cssText = `
+            // 添加價格標籤
+            for (let i = 0; i <= 4; i++) {
+                const price = minPrice + (maxPrice - minPrice) * (1 - i / 4);
+                const label = document.createElement('div');
+                label.style.cssText = `
                     position: absolute;
-                    left: ${x + 16}px;
-                    bottom: 0;
-                    font-size: 0.7rem;
+                    left: 0;
+                    top: ${(i / 4) * chartHeight + 10}px;
+                    font-size: 0.75rem;
                     color: #9ca3af;
-                    transform: translateX(-50%);
+                    transform: translateY(-50%);
                 `;
-                chartContainer.appendChild(timeLabel);
-            });
+                label.textContent = `${(price * 100).toFixed(1)}%`;
+                chartContainer.appendChild(label);
+            }
             
-            // 添加圖例
-            const legend = document.createElement('div');
-            legend.style.cssText = 'position: absolute; top: 0.5rem; left: 0.5rem; display: flex; gap: 1rem; font-size: 0.8rem;';
-            legend.innerHTML = `
-                <span style="color: #10b981;">● YES價格</span>
-                <span style="color: #ef4444;">● NO價格</span>
-            `;
-            chartContainer.appendChild(legend);
-            
-            // 添加當前價格指示器
+            // 添加當前YES價格指示器
             const lastPoint = priceData[priceData.length - 1];
             const priceIndicator = document.createElement('div');
-            priceIndicator.className = 'price-indicator';
-            priceIndicator.textContent = `YES: ${lastPoint.yesPrice.toFixed(3)} | NO: ${lastPoint.noPrice.toFixed(3)}`;
+            priceIndicator.style.cssText = `
+                position: absolute;
+                top: 16px;
+                right: 16px;
+                background: rgba(16, 185, 129, 0.2);
+                border: 1px solid #10b981;
+                border-radius: 6px;
+                padding: 0.5rem 1rem;
+                color: #10b981;
+                font-size: 0.875rem;
+                font-weight: 600;
+            `;
+            priceIndicator.textContent = `當前YES價格: ${(lastPoint.yesPrice * 100).toFixed(1)}%`;
             chartContainer.appendChild(priceIndicator);
         }
 
